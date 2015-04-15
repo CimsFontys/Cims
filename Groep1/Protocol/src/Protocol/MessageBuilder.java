@@ -18,8 +18,8 @@ import java.util.logging.Logger;
  *
  * @author Merijn
  */
-public class MessageBuilder {
-    
+public class MessageBuilder 
+{
     
     /**
      * Static variables of types available to send.
