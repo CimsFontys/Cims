@@ -1,23 +1,18 @@
-package Protocol;
-
-import java.net.Socket;
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 
+package cims.startup;
+
 /**
  *
- * @author Merijn
+ * @author Michael
  */
-public class MessageReceiver 
+public enum InfoType 
 {
-    private Socket receiverSocket;
-    
-    public MessageReceiver()
-    {
-        
-    }
+    Fire,
+    Toxic_Gas,
+    Storm,
 }

@@ -40,6 +40,5 @@ public class Message implements Serializable {
     public byte[] getFile()
     {
         return this.file;
-    }
-    
+    }    
 }
