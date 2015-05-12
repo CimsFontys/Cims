@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" fx:id="output" minWidth="361.0" prefHeight="258.9609375" prefWidth="361.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="pts4.gui.ServerGUIController">
+  <children>
+    <TextArea fx:id="input" layoutX="13.0" layoutY="219.0" prefHeight="28.0" prefWidth="255.0" text="textinput" />
+    <Button fx:id="btnChatSend" layoutX="300.0" layoutY="222.0" mnemonicParsing="false" onAction="#btnChat_Click" text="Send" />
+    <ListView fx:id="OutPut" layoutX="14.0" layoutY="14.0" prefHeight="186.0" prefWidth="334.0" />
+  </children>
+</AnchorPane>

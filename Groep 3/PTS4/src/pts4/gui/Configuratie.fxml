@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+  <children>
+    <TabPane layoutX="0.0" layoutY="0.0" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
+      <tabs>
+        <Tab text="Gebruikers">
+          <content>
+            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+              <children>
+                <ListView layoutX="14.0" layoutY="14.0" prefHeight="341.0" prefWidth="200.00009999999747" />
+                <TextField layoutX="386.0" layoutY="14.0" prefWidth="200.0" />
+                <TextField layoutX="386.0" layoutY="50.0" prefWidth="200.0" />
+                <Label layoutX="272.0" layoutY="17.0" text="Gebruikersnaam" />
+                <Label layoutX="291.0" layoutY="53.0" text="Wachtwoord" />
+                <Button layoutX="325.0" layoutY="82.0" mnemonicParsing="false" text="Wachtwoord wijzigen" />
+                <Button layoutX="472.0" layoutY="82.0" mnemonicParsing="false" text="Nieuwe gebruiker" />
+              </children>
+            </AnchorPane>
+          </content>
+        </Tab>
+        <Tab text="Meldkamer configureren">
+          <content>
+            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+              <children>
+                <ComboBox layoutX="57.0" layoutY="18.0" prefHeight="21.0" prefWidth="167.0">
+                  <items>
+                    <FXCollections fx:factory="observableArrayList">
+                      <String fx:value="Item 1" />
+                      <String fx:value="Item 2" />
+                      <String fx:value="Item 3" />
+                    </FXCollections>
+                  </items>
+                </ComboBox>
+                <Label layoutX="14.0" layoutY="18.0" text="Regio:" />
+                <TableView fx:id="tbv1" layoutX="31.0" layoutY="90.0" prefHeight="265.0" prefWidth="246.0">
+                  <columns>
+                    <TableColumn prefWidth="75.0" text="Column X" />
+                    <TableColumn prefWidth="75.0" text="Column X" />
+                  </columns>
+                </TableView>
+                <Label layoutX="17.0" layoutY="56.0" text="Logs:" />
+                <Label layoutX="312.0" layoutY="46.0" text="Naam" />
+                <Label layoutX="312.0" layoutY="73.0" text="Longitude" />
+                <Label layoutX="312.0" layoutY="98.0" text="Lattitude" />
+                <TextField layoutX="382.0" layoutY="43.0" prefWidth="200.0" />
+                <TextField layoutX="382.0" layoutY="70.0" prefWidth="200.0" />
+                <TextField layoutX="382.0" layoutY="96.0" prefWidth="200.0" />
+                <Label layoutX="312.0" layoutY="18.0" text="Voorzieningen:" />
+                <Button layoutX="503.0" layoutY="122.0" mnemonicParsing="false" text="Toevoegen" />
+              </children>
+            </AnchorPane>
+          </content>
+        </Tab>
+        <Tab text="Units">
+          <content>
+            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+          </content>
+        </Tab>
+      </tabs>
+    </TabPane>
+  </children>
+</AnchorPane>
