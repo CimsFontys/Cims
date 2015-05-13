@@ -54,11 +54,16 @@
             </AnchorPane>
           </content>
         </Tab>
-        <Tab text="Units">
+        <Tab text="Diensten toevoegen">
           <content>
             <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
           </content>
         </Tab>
+            <Tab text="Logs">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              </content>
+            </Tab>
       </tabs>
     </TabPane>
   </children>
