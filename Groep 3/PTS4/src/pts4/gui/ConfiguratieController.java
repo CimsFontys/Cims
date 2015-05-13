@@ -8,7 +8,9 @@ package pts4.gui;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ComboBox;
 import pts4.database.IDatabase;
 import pts4.database.SQL;
 
@@ -17,12 +19,19 @@ import pts4.database.SQL;
  * @author Gijs
  */
 public class ConfiguratieController implements Initializable {
+   
+    @FXML
+    private ComboBox CbNoodType;
     
     private IDatabase dbcon;
 
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
-        dbcon = new SQL();
+        CbNoodType.getItems().add("Politiebureau");
+        CbNoodType.getItems().add("Ziekehuizen");
+        CbNoodType.getItems().add("Brandweerkazerne");
+        CbNoodType.getItems().add("Comandopost");
+        
     }
 }
