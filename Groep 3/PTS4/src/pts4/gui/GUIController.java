@@ -115,10 +115,21 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         admin.setServer(this);
         initComboboxes();
         cbUnits.getItems().clear();
+        cbExplosie.getItems().clear();
+        cbBrand.getItems().clear();
+        cbGewelddadig.getItems().clear();
+        cbSpoed.getItems().clear();
+        
         cbProvincies.getItems().setAll(EnumProvincies.values());
         cbProvincies.setValue(EnumProvincies.Nederland);
         cbExplosie.getItems().add("Ja");
         cbExplosie.getItems().add("Nee");
+        cbBrand.getItems().add("Ja");
+        cbBrand.getItems().add("Nee");
+        cbGewelddadig.getItems().add("Ja");
+        cbGewelddadig.getItems().add("Nee");
+        cbSpoed.getItems().add("Ja");
+        cbSpoed.getItems().add("Nee");
     }
 
     private void initComboboxes() {
@@ -211,7 +222,7 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         } catch (Exception e) {
             System.out.println("Incident not added. Check your longitude and latitude.");
         }
-
+        
         tfAddName.setText("");
         tfAddDescription.setText("");
         tfAddLongitude.setText("");

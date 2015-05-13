@@ -142,7 +142,7 @@ public class Administration {
         long yourmilliseconds = System.currentTimeMillis();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy, HH:mm");    
         Date resultdate = new Date(yourmilliseconds);
-        //databaseconn.insertCalamity(i.getLongitude(), i.getLatitude(), i.getId(), i.getName(), i.getDescription(), i.getDate());
+        //databaseconn.insertCalamity(i.getLongitude(), i.getLatitude(), i.getId(), i.getName(), i.getDescription(), i.getDate(), i.getExplosion(), i.getFire(), i.getToxicity(), i.getUrgent(), i.getViolent());
     }
     
     public Server getServer() {

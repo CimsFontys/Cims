@@ -35,7 +35,7 @@ public class Incident {
         this.description = description;
     }
     
-    public Incident(String longitude, String latitude, String name, String description, String toxicSubstances, String explosionDanger, String fire, String numberCasualties, String violent, String urgent)
+    public Incident(String longitude, String latitude, String name, String description, String toxicSubstances, String explosionDanger, String fire, String numberCasualties, String violent, String urgent, int id, Date date)
     {
         this.longitude = longitude;
         this.latitude = latitude;
@@ -47,6 +47,8 @@ public class Incident {
         this.numbercasualties = numberCasualties;
         this.violent = violent;
         this.urgent = urgent;
+        this.id = id;
+        this.date = date;
     }
     
     

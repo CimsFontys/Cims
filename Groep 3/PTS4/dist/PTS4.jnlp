@@ -7,11 +7,8 @@
     <offline-allowed/>
   </information>
   <resources>
-    <jfx:javafx-runtime version="8.0+" href="http://javadl.sun.com/webapps/download/GetFile/javafx-latest/windows-i586/javafx2.jnlp"/>
-  </resources>
-  <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="PTS4.jar" size="57824" download="eager" />
+    <jar href="PTS4.jar" size="57430" download="eager" />
     <jar href="lib/FXMessageBox.jar" size="24662" download="eager" />
     <jar href="lib/commons-logging-1.1.1.jar" size="60686" download="eager" />
     <jar href="lib/jxmapviewer2-2.0.jar" size="105865" download="eager" />
