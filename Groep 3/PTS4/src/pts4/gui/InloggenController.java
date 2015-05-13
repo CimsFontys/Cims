@@ -33,62 +33,15 @@ public class InloggenController implements Initializable
     @FXML TextField tbGebruikersnaam;
     @FXML TextField tbWachtwoord;
     
-    IDatabase dbcon;
     
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
-        //dbcon = new SQL();
+        
     }
     
     public void btnInloggen_Click(ActionEvent event)
     {
-        if (tbGebruikersnaam.getText().equals("meldkamer") && tbWachtwoord.getText().equals("meldkamer"))
-        {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("GUIFX.fxml"));
-                    GUIController controller = new GUIController();
-                    loader.setController(controller);
-                    loader.setRoot(controller);
-                    Parent root;
-                    try 
-                    {
-                        root = (Parent) loader.load();
-                        Scene scene = new Scene(root);
-                        Stage stage = new Stage();
-                        stage.setScene(scene);
-                        stage.show();  
-                    } 
-                    catch (IOException ex) 
-                    {
-                           MessageBox mb = new MessageBox("Er is iets misgegaan. Mogelijk is er geen verbinding met de database.",MessageBoxType.OK_ONLY);
-                           mb.show();
-                    }
-        }
-        else if (tbGebruikersnaam.getText().equals("conf") && tbWachtwoord.getText().equals("conf"))
-        {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("Configuratie.fxml"));
-                    ConfiguratieController controller = new ConfiguratieController();
-                    loader.setController(controller);
-                    loader.setRoot(controller);
-                    Parent root;
-                    try 
-                    {
-                        root = (Parent) loader.load();
-                        Scene scene = new Scene(root);
-                        Stage stage = new Stage();
-                        stage.setScene(scene);
-                        stage.show();  
-
-                    } 
-                    catch (IOException ex) 
-                    {
-                           MessageBox mb = new MessageBox("Er is iets misgegaan. Mogelijk is er geen verbinding met de database.",MessageBoxType.OK_ONLY);
-                           mb.show();
-                    }
-        }
-        else
-        {
-            MessageBox mb = new MessageBox("Account niet bekend of niet goed ingevuld.",MessageBoxType.OK_ONLY);
-        }
+        
     }
 }
