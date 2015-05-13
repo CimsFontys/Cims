@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="793.0" prefWidth="1210.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="pts4.gui.GUIController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="793.0" prefWidth="1210.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pts4.gui.GUIController">
   <children>
     <TabPane layoutX="0.0" layoutY="0.0" prefHeight="793.0" prefWidth="1210.0" tabClosingPolicy="UNAVAILABLE">
       <tabs>
@@ -20,7 +20,7 @@
                     <StackPane fx:id="gmapsstack" prefHeight="512.0" prefWidth="783.0" />
                   </children>
                 </Pane>
-                <ListView id="lvIncidenten" fx:id="lvIncidents2" layoutX="818.0" layoutY="14.0" onMouseClicked="#selectIncident" prefHeight="734.0" prefWidth="369.0" />
+                <ListView id="lvIncidenten" fx:id="lvIncidents2" layoutX="818.0" layoutY="14.0" onMouseClicked="#selectIncident" prefHeight="300.0" prefWidth="369.0" />
                 <TextField id="tfNaam" fx:id="tfName" editable="false" layoutX="101.0" layoutY="524.0" prefWidth="703.0" />
                 <TextField fx:id="tfLongitude" editable="false" layoutX="101.0" layoutY="682.0" prefWidth="312.0" text="" />
                 <TextField id="tfLongitude" fx:id="tfLatitude" editable="false" layoutX="492.0" layoutY="682.0" prefWidth="312.0" text="" />
@@ -29,6 +29,7 @@
                 <Label fx:id="lblLongitude" layoutX="19.0" layoutY="685.0" text="Longitude" />
                 <Label fx:id="lblLatitude" layoutX="434.0" layoutY="685.0" text="Latitude" />
                 <TextArea id="tfAddDescription" fx:id="tfDescription" editable="false" layoutX="101.0" layoutY="557.0" prefHeight="117.0" prefWidth="703.0" wrapText="true" />
+                        <ListView id="lvIncidenten" fx:id="lvIncidents21" layoutX="818.0" layoutY="329.0" onMouseClicked="#selectIncident" prefHeight="378.0" prefWidth="369.0" />
               </children>
             </AnchorPane>
           </content>
