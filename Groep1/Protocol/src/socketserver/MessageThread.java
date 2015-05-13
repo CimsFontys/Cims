@@ -63,6 +63,22 @@ public class MessageThread implements Runnable {
             }
         }
     }
+    
+    public void stop()
+    {
+        if(thread.isAlive())
+        {
+            try
+            {
+                this.shouldStop = true;
+                System.out.println("Message Thread stopped, Communication Finished");
+            }
+            catch(Exception e)
+            {
+                
+            }
+        }
+    }
 
     @Override
     public void run() 

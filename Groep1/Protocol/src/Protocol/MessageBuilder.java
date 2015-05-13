@@ -71,15 +71,10 @@ public class MessageBuilder
         return message;
     }
     
-    public Message buildLoginReply(int ReceiverID)
+    public Message buildLoginReply(String json)
     {
-        StringBuilder sb = new StringBuilder();
-        sb.append(LoginReply).append(token);
-        sb.append(ReceiverID);
-        
         Message message = new Message();
-        message.setText(sb.toString());
-        
+        message.setText(json);
         return message;
     }
     

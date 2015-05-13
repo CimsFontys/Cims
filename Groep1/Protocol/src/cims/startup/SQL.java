@@ -7,6 +7,7 @@
 package cims.startup;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,25 +15,29 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Map;
-
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 /**
  *
  * @author Michael & Merijn 
  */
 public class SQL extends DatabaseConnector implements IDatabase
-{
-    private DatabaseChecker dbChecker = DatabaseChecker.getInstance();
-    
+{    
     public SQL()
     {
         super();
     }
 
+    /**
+     * TESTED AND WORKING
+     */
     @Override
-    public int loginEmergencyService(String username, String password, int id) 
+    public String loginPerson(String username, String password) 
     {
-        String query = "SELECT * FROM emergency_service WHERE USERNAME = ? AND PASSWORD = ? AND IDPERSONAL_TYPE = ?";
+        String query = "SELECT * FROM person WHERE personusername = ? AND personpassword = ?";
         
         try
         {
@@ -40,8 +45,7 @@ public class SQL extends DatabaseConnector implements IDatabase
         }
         catch (Exception e)
         {
-            dbChecker.getMethodHistorydb().add(query);
-            return 0; 
+            return "";
         }
         
         try
@@ -49,7 +53,6 @@ public class SQL extends DatabaseConnector implements IDatabase
             PreparedStatement prest = conn.prepareStatement(query);
             prest.setString(1, username);
             prest.setString(2, password);
-            prest.setInt(3, id);
             
             prest.execute();
             
@@ -57,29 +60,17 @@ public class SQL extends DatabaseConnector implements IDatabase
             
             while(res.next())
             {
-                String usernameResult = res.getString("USERNAME");
-                String passwordResult = res.getString("PASSWORD");
-                int idResult = res.getInt("IDPERSONAL_TYPE");
-                int idEmergencyService = res.getInt("idemergency_service");
+                int personId = res.getInt("personid");
+                int persontypeid = res.getInt("persontypeid");
+                String personconfigurator = res.getString("personconfigurator");
+
+                JsonObjectBuilder jb = Json.createObjectBuilder();
+                jb.add("personid" , personId);
+                jb.add("persontypeid", persontypeid);
                 
-                if(passwordResult.equals(""))
-                {
-                    return 0;
-                }
-                if(usernameResult.equals(""))
-                {
-                    return 0;
-                }
-                if(id != idResult)
-                {
-                    return 0;
-                }
-                if(password.equals(passwordResult) && username.equals(usernameResult) && id == idResult)
-                {
-                     return idEmergencyService;
-                }
+                JsonObject jo = jb.build();
                 
-               return 0;
+                return jo.toString();
             }
         }
         catch(SQLException ee)
@@ -91,11 +82,14 @@ public class SQL extends DatabaseConnector implements IDatabase
             super.disconnectFromDatabase();
         }
         
-        return 0;
+        return "";
     }
 
+    /**
+     * TESTED AND WORKING
+     */
     @Override
-    public boolean insertEmergencyService(int idpersonal_type, String first_name, String last_name, String middle_name, String username, String password, String SSN, String email, Date Birthdate, String phonenumber, String Street, String City, String Postal, String Region) 
+    public boolean insertPerson(int idpersonal_type, String first_name, String last_name, String middle_name, String username, String password, String SSN, String email, Date Birthdate, String phonenumber, String Street, String City, String Postal, String Region, String configurator) 
     {
          if(this.checkRegion(Region) == false)
         {
@@ -117,8 +111,8 @@ public class SQL extends DatabaseConnector implements IDatabase
         }
         try
         {
-            String query = "INSERT INTO emergency_service (first_name, last_name, middle_name, username, password, ssn, email, birthdate, idaddress, phone, idpersonal_type)" 
-                    + " values (?,?,?,?,?,?,?,?,(SELECT idaddress FROM address WHERE street = ? AND city = ? AND postal = ? and idregion = (SELECT idregion FROM region WHERE region = ?)),?,?)";
+            String query = "INSERT INTO person (personfirstname, personlastname, personmiddlename, personusername, personpassword, personssn, personemail, personbirthdate, addressid, personphone, persontypeid, personconfigurator)" 
+                    + " values (?,?,?,?,?,?,?,?,(SELECT addressid FROM address WHERE addressstreet = ? AND addresscity = ? AND addresspostal = ? and regionid = (SELECT regionid FROM region WHERE regionname = ?)),?,?,?)";
             PreparedStatement prest = conn.prepareStatement(query);
             
             java.sql.Timestamp timestamp = new java.sql.Timestamp(Birthdate.getTime());
@@ -137,6 +131,7 @@ public class SQL extends DatabaseConnector implements IDatabase
             prest.setString(12, Region);
             prest.setString(13, phonenumber);
             prest.setInt(14, idpersonal_type);
+            prest.setString(15, configurator);
             
             prest.execute();
             
@@ -150,75 +145,19 @@ public class SQL extends DatabaseConnector implements IDatabase
         {
             super.disconnectFromDatabase();
         }
-    }
+    }   
 
+    /**
+     * TESTED AND WORKING
+     */
     @Override
-    public boolean loginCivilian(String username, String password) 
+    public boolean insertCalamity(String longtitude, String latitude, int personid, String name, String description, Date timestamp, String calamitydanger, String region) 
     {
-        try
+        if(this.checkRegion(region) == false)
         {
-            super.connectToDatabase();
+            this.insertRegion(region);
         }
-        catch (Exception e)
-        {
-            return false;      
-        }
-        
-        try
-        {
-            String query = "SELECT * FROM civilian WHERE USERNAME = ? AND PASSWORD = ?";
-            PreparedStatement prest = conn.prepareStatement(query);
-            prest.setString(1, username);
-            prest.setString(2, password);
-            
-            prest.execute();
-            
-            ResultSet res = prest.getResultSet();
-            
-            while(res.next())
-            {
-                String usernameResult = res.getString("USERNAME");
-                String passwordResult = res.getString("PASSWORD");
-                
-                if(passwordResult.equals(""))
-                {
-                    return false;
-                }
-                if(usernameResult.equals(""))
-                {
-                    return false;
-                }
-                if(password.equals(passwordResult) && username.equals(usernameResult))
-                {
-                    return true;
-                }
-            }
-        }
-        catch(SQLException ee)
-        {
-            
-        }
-        finally
-        {
-            super.disconnectFromDatabase();
-        }
-        
-        return false;
-    }
-
-    @Override
-    public boolean insertCivilian(String first_name, String last_name, String middle_name, String username, String password, String SSN, String email, Date Birthdate, String phonenumber, String Street, String City, String Postal, String Region) 
-    {
-        if(this.checkRegion(Region) == false)
-        {
-            this.insertRegion(Region);
-        }
-        
-        if(this.checkAdress(Street, City, Postal, Region) == false)
-        {
-            this.insertAddress(Street, City, Postal, Region);
-        }
-        
+         
         try
         {
             super.connectToDatabase();
@@ -229,67 +168,22 @@ public class SQL extends DatabaseConnector implements IDatabase
         }
         try
         {
-            String query = "INSERT INTO civilian (first_name, last_name, middle_name, username, password, ssn, email, birthdate, idaddress, phone)" 
-                    + " values (?,?,?,?,?,?,?,?,(SELECT idaddress FROM address WHERE street = ? AND city = ? AND postal = ? and idregion = (SELECT idregion FROM region WHERE region = ?)),?)";
-            PreparedStatement prest = conn.prepareStatement(query);
-            
-            java.sql.Timestamp timestamp = new java.sql.Timestamp(Birthdate.getTime());
-            
-            prest.setString(1, first_name);          
-            prest.setString(2, last_name);  
-            prest.setString(3, middle_name);  
-            prest.setString(4, username);
-            prest.setString(5, password);
-            prest.setString(6, SSN);
-            prest.setString(7, email);
-            prest.setTimestamp(8, timestamp);
-            prest.setString(9, Street);
-            prest.setString(10, City);
-            prest.setString(11, Postal);
-            prest.setString(12, Region);
-            prest.setString(13, phonenumber);
-            
-            prest.execute();
-            
-            return true;
-        }
-        catch(SQLException ee)
-        {
-            return false;
-        }
-        finally
-        {
-            super.disconnectFromDatabase();
-        }
-    }
-
-    @Override
-    public boolean insertCalamity(String geo_long, String geo_lat, int id_emergency_service, String name, String description, Date timestamp) 
-    {
-        try
-        {
-            super.connectToDatabase();
-        }
-        catch(Exception e)
-        {
-            return false;
-        }
-        try
-        {
-            String query = "INSERT INTO calamity (goe_long, goe_lat, idemergency_service, name, description , date)" 
-                    + " values (?,?,?,?,?,?)";
+            String query = "INSERT INTO calamity (calamitylatitude, calamitylongtitude, calamityname, calamitydescription ,  calamitydate , personid, calamitydanger, regionid)" 
+                    + " values (?,?,?,?,?,?, ?, (SELECT regionid FROM region WHERE regionname = ?))";
             PreparedStatement prest = conn.prepareStatement(query);
             
             Calendar calendar = new GregorianCalendar();
 
             java.sql.Timestamp Timestamp = new java.sql.Timestamp(timestamp.getTime());
             
-            prest.setString(1, geo_long); 
-            prest.setString(2, geo_lat); 
-            prest.setInt(3, id_emergency_service);
-            prest.setString(4, name);
-            prest.setString(5, description);
-            prest.setTimestamp(6, Timestamp);
+            prest.setString(1, latitude); 
+            prest.setString(2, longtitude); 
+            prest.setString(3, name);
+            prest.setString(4, description);
+            prest.setTimestamp(5, Timestamp);
+            prest.setInt(6, personid);
+            prest.setString(7, calamitydanger);
+            prest.setString(8, region);
             
             prest.execute();
             
@@ -306,10 +200,8 @@ public class SQL extends DatabaseConnector implements IDatabase
     }
 
     @Override
-    public ArrayList<String> retrieveCalamityWithIES(int id_emergency_service) 
-    {
-        ArrayList<String> calamities = new ArrayList<String>();
-        
+    public String retrieveCalamityWithPersonID(int personid) 
+    {        
         try
         {
             super.connectToDatabase();
@@ -321,9 +213,11 @@ public class SQL extends DatabaseConnector implements IDatabase
         
         try
         {
-            String query = "SELECT * FROM calamity WHERE idemergency_service = ?";
+            int count = 0;
+            JsonArrayBuilder jb = Json.createArrayBuilder();
+            String query = "SELECT * FROM calamity WHERE personid = ?";
             PreparedStatement prest = conn.prepareStatement(query);
-            prest.setInt(1, id_emergency_service);
+            prest.setInt(1, personid);
             
             prest.execute();
             
@@ -331,20 +225,31 @@ public class SQL extends DatabaseConnector implements IDatabase
             
             while(res.next())
             {                
-                int id_calamity = res.getInt("idcalamity");
-                String geo_long = res.getString("goe_long");
-                String geo_lat = res.getString("goe_lat");
-                String name = res.getString("name");
-                String description = res.getString("description");
-                Date date = res.getDate("date");
+                int id_calamity = res.getInt("calamityid");
+                String geo_long = res.getString("calamitylongtitude");
+                String geo_lat = res.getString("calamitylatitude");
+                String name = res.getString("calamityname");
+                String description = res.getString("calamitydescription");
+                Date date = res.getDate("calamitydate");
+                String calamitydanger = res.getString("calamitydanger");
+                int regionid = res.getInt("regionid");
                 
-                String calamity = "-ID_CALAMITY:" + id_calamity + "-GEO_LONG:" + geo_long + "-GEO_LAT:" + geo_lat + "-NAME:" + name + "-DESCRIPTION:" + description + "-DATE:" + date;
-                System.out.println("-ID_CALAMITY:" + id_calamity + "-GEO_LONG:" + geo_long + "-GEO_LAT:" + geo_lat + "-NAME:" + name + "-DESCRIPTION:" + description + "-DATE:" + date);
+                JsonObjectBuilder jb2 = Json.createObjectBuilder();
+                jb2.add("calamityid" , id_calamity);
+                jb2.add("calamitylongtitude" , geo_long);
+                jb2.add("calamitylatitude" , geo_lat);
+                jb2.add("calamityname" , name);
+                jb2.add("calamitydescription" , description);
+                jb2.add("calamitydate" , date.toString());
+                jb2.add("calamitydanger" , calamitydanger);
+                jb2.add("regionid", regionid);
                 
-                calamities.add(calamity);
+                jb.add(jb2);
+                count++;
             }
             
-            return calamities;
+            JsonArray jo = jb.build(); 
+            return jo.toString();
         }
         catch(SQLException ee)
         {
@@ -357,10 +262,8 @@ public class SQL extends DatabaseConnector implements IDatabase
     }
     
     @Override
-    public ArrayList<String> retrieveCalamityWithID(int id)
-    {
-        ArrayList<String> calamities = new ArrayList<String>();
-        
+    public String retrieveCalamityWithID(int id)
+    {        
         try
         {
             super.connectToDatabase();
@@ -372,7 +275,8 @@ public class SQL extends DatabaseConnector implements IDatabase
         
         try
         {
-            String query = "SELECT * FROM calamity WHERE idcalamity = ?";
+            JsonObjectBuilder jb = Json.createObjectBuilder();
+            String query = "SELECT * FROM calamity WHERE calamityid = ?";
             PreparedStatement prest = conn.prepareStatement(query);
             prest.setInt(1, id);
             
@@ -382,34 +286,47 @@ public class SQL extends DatabaseConnector implements IDatabase
             
             while(res.next())
             {                
-                String name = res.getString("name");
-                String description = res.getString("description");
-                String geo_lat = res.getString("geo_lat");
-                String geo_long = res.getString("geo_long");
+                int id_calamity = res.getInt("calamityid");
+                String geo_long = res.getString("calamitylongtitude");
+                String geo_lat = res.getString("calamitylatitude");
+                String name = res.getString("calamityname");
+                String description = res.getString("calamitydescription");
+                Date date = res.getDate("calamitydate");
+                String calamitydanger = res.getString("calamitydanger");
+                String personid = res.getString("personid");
+                int regionid = res.getInt("regionid");
+                                
+                jb.add("calamityid" , id_calamity);
+                jb.add("calamitylongtitude" , geo_long);
+                jb.add("calamitylatitude" , geo_lat);
+                jb.add("calamityname" , name);
+                jb.add("calamitydescription" , description);
+                jb.add("calamitydate" , date.toString());
+                jb.add("calamitydanger" , calamitydanger);
+                jb.add("regionid", regionid);
+                jb.add("personid", personid);
                 
-                calamities.add(name);
-                calamities.add(description);
-                calamities.add(geo_lat);
-                calamities.add(geo_long);
+                JsonObject jo = jb.build();
+                
+                return jo.toString();
             }
             
-            return calamities;
         }
         catch(SQLException ee)
         {
-            return null;
+            return "";
         }
         finally
         {
             super.disconnectFromDatabase();
         }
+        
+        return "";
     }
     
     @Override
-    public ArrayList<String> retrieveAllCalamities() 
-    {
-        ArrayList<String> calamities = new ArrayList<String>();
-        
+    public String retrieveAllCalamities() 
+    {        
         try
         {
             super.connectToDatabase();
@@ -421,6 +338,8 @@ public class SQL extends DatabaseConnector implements IDatabase
         
         try
         {
+            int count = 0;
+            JsonArrayBuilder jb = Json.createArrayBuilder();
             String query = "SELECT * FROM calamity";
             PreparedStatement prest = conn.prepareStatement(query);
             
@@ -430,20 +349,33 @@ public class SQL extends DatabaseConnector implements IDatabase
             
             while(res.next())
             {                
-                int id_calamity = res.getInt("idcalamity");
-                String geo_long = res.getString("goe_long");
-                String geo_lat = res.getString("goe_lat");
-                String name = res.getString("name");
-                String description = res.getString("description");
-                Date date = res.getDate("date");
+                int id_calamity = res.getInt("calamityid");
+                String geo_long = res.getString("calamitylongtitude");
+                String geo_lat = res.getString("calamitylatitude");
+                String name = res.getString("calamityname");
+                String description = res.getString("calamitydescription");
+                Date date = res.getDate("calamitydate");
+                String calamitydanger = res.getString("calamitydanger");
+                int regionid = res.getInt("regionid");
+                int personid = res.getInt("personid");
                 
-                String calamity = "-ID_CALAMITY:" + id_calamity + "-GEO_LONG:" + geo_long + "-GEO_LAT:" + geo_lat + "-NAME:" + name + "-DESCRIPTION:" + description + "-DATE:" + date;
-                System.out.println("-ID_CALAMITY:" + id_calamity + "-GEO_LONG:" + geo_long + "-GEO_LAT:" + geo_lat + "-NAME:" + name + "-DESCRIPTION:" + description + "-DATE:" + date);
+                JsonObjectBuilder jb2 = Json.createObjectBuilder();
+                jb2.add("calamityid" , id_calamity);
+                jb2.add("calamitylongtitude" , geo_long);
+                jb2.add("calamitylatitude" , geo_lat);
+                jb2.add("calamityname" , name);
+                jb2.add("calamitydescription" , description);
+                jb2.add("calamitydate" , date.toString());
+                jb2.add("calamitydanger" , calamitydanger);
+                jb2.add("regionid", regionid);
+                jb2.add("personid", personid);
                 
-                calamities.add(calamity);
+                jb.add(jb2);
+                count++;
             }
             
-            return calamities;
+            JsonArray jo = jb.build(); 
+            return jo.toString();
         }
         catch(SQLException ee)
         {
@@ -1230,7 +1162,7 @@ public class SQL extends DatabaseConnector implements IDatabase
      */
     private void insertRegion(String region) 
     {
-         try
+        try
         {
             super.connectToDatabase();
         }
@@ -1240,7 +1172,7 @@ public class SQL extends DatabaseConnector implements IDatabase
         }
         try
         {
-            String query = "INSERT INTO region (region)" 
+            String query = "INSERT INTO region (regionname)" 
                     + " values (?)";
             PreparedStatement prest = conn.prepareStatement(query);
             
@@ -1276,7 +1208,7 @@ public class SQL extends DatabaseConnector implements IDatabase
         
         try
         {
-            String query = "SELECT * FROM region WHERE region = ?";
+            String query = "SELECT * FROM region WHERE regionname = ?";
             PreparedStatement prest = conn.prepareStatement(query);
             prest.setString(1, region);
             
@@ -1319,7 +1251,7 @@ public class SQL extends DatabaseConnector implements IDatabase
         
         try
         {
-            String query = "SELECT * FROM address WHERE street = ? AND city = ? AND postal = ? AND idregion = (SELECT idregion from region where region = ?)";
+            String query = "SELECT * FROM address WHERE addressstreet = ? AND addresscity = ? AND addresspostal = ? AND regionid = (SELECT regionid from region where regionname = ?)";
             PreparedStatement prest = conn.prepareStatement(query);
             prest.setString(1, Street);
             prest.setString(2, City);
@@ -1363,8 +1295,8 @@ public class SQL extends DatabaseConnector implements IDatabase
         }
         try
         {
-            String query = "INSERT INTO address (street, city, postal, idregion)" 
-                    + " values (?,?,?, (SELECT idregion from region where region = ?))";
+            String query = "INSERT INTO address (addressstreet, addresscity, addresspostal, regionid)" 
+                    + " values (?,?,?, (SELECT regionid from region where regionname = ?))";
             PreparedStatement prest = conn.prepareStatement(query);
             
             prest.setString(1, Street);  
@@ -1507,5 +1439,157 @@ public class SQL extends DatabaseConnector implements IDatabase
         {
             super.disconnectFromDatabase();
         }
+    }
+
+    @Override
+    public String getPersonInformation(int personId) 
+    {
+        String query = "SELECT * FROM person p, address a, region r, persontype pt WHERE p.addressid = a.addressid AND a.regionid = r.regionid AND p.persontypeid = pt.persontypeid AND personid = ?";
+        
+        try
+        {
+            super.connectToDatabase();
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+        
+        try
+        {
+            PreparedStatement prest = conn.prepareStatement(query);
+            prest.setInt(1, personId);
+            
+            prest.execute();
+            
+            ResultSet res = prest.getResultSet();
+            
+            while(res.next())
+            {
+                String firstname = res.getString("personfirstname");
+                String lastname = res.getString("personlastname");
+                String middlename = res.getString("personmiddlename");
+                String username = res.getString("personusername");
+                String password = res.getString("personpassword");
+                String ssn = res.getString("personssn");
+                String email = res.getString("personemail");
+                java.sql.Date birthdayDate = res.getDate("personbirthdate");
+                String birthday = birthdayDate.toString();
+                String date = birthday;
+                String phone = res.getString("personphone");
+                String subscribed = res.getString("personsubscribed");
+                String configurator = res.getString("personconfigurator");
+                String addressstreet = res.getString("addressstreet");
+                String addresscity = res.getString("addresscity");
+                String addresspostal = res.getString("addresspostal");
+                String regionname = res.getString("regionname");
+                String persontype = res.getString("persontype");
+
+                JsonObjectBuilder jb = Json.createObjectBuilder();
+                jb.add("personid" , personId);
+                jb.add("firstname", firstname);
+                jb.add("lastname", lastname);
+                jb.add("middlename", middlename);
+                jb.add("username", username);
+                jb.add("password", password);
+                jb.add("ssn", ssn);
+                jb.add("email", email);
+                jb.add("date", birthday);
+                jb.add("phone", phone);
+                jb.add("subscribed", subscribed);
+                jb.add("configurator", configurator);
+                jb.add("addressstreet", addressstreet);
+                jb.add("addresscity", addresscity);
+                jb.add("addresspostal", addresspostal);
+                jb.add("regionname", regionname);
+                jb.add("persontype", persontype);
+                
+                JsonObject jo = jb.build();
+                
+                return jo.toString();
+            }
+            
+            
+        }
+        catch(SQLException ee)
+        {
+            
+        }
+        finally
+        {
+            super.disconnectFromDatabase();
+        }
+        
+        return null;
+    }
+
+    @Override
+    public String getCalamityFromRegion(int regionId) 
+    {       
+        try
+        {
+            super.connectToDatabase();
+        }
+        catch (Exception e)
+        {
+            return null;     
+        }
+        
+        try
+        {
+            int count = 0;
+            JsonArrayBuilder jb = Json.createArrayBuilder();
+            String query = "SELECT * FROM calamity where regionid = ?";
+            PreparedStatement prest = conn.prepareStatement(query);
+            
+            prest.setInt(1, regionId);
+            
+            prest.execute();
+            
+            ResultSet res = prest.getResultSet();
+                       
+            while(res.next())
+            {                
+                int id_calamity = res.getInt("calamityid");
+                String geo_long = res.getString("calamitylongtitude");
+                String geo_lat = res.getString("calamitylatitude");
+                String name = res.getString("calamityname");
+                String description = res.getString("calamitydescription");
+                Date date = res.getDate("calamitydate");
+                String calamitydanger = res.getString("calamitydanger");
+                int regionid = res.getInt("regionid");
+                int personid = res.getInt("personid");
+                
+                JsonObjectBuilder jb2 = Json.createObjectBuilder();
+                jb2.add("calamityid" , id_calamity);
+                jb2.add("calamitylongtitude" , geo_long);
+                jb2.add("calamitylatitude" , geo_lat);
+                jb2.add("calamityname" , name);
+                jb2.add("calamitydescription" , description);
+                jb2.add("calamitydate" , date.toString());
+                jb2.add("calamitydanger" , calamitydanger);
+                jb2.add("regionid", regionid);
+                jb2.add("personid", personid);
+                
+                jb.add(jb2);
+                count++;
+            }
+            
+            JsonArray jo = jb.build(); 
+            return jo.toString();
+        }
+        catch(SQLException ee)
+        {
+            return null;
+        }
+        finally
+        {
+            super.disconnectFromDatabase();
+        }
+    }
+
+    @Override
+    public ArrayList<String> getCalamityFromRegionDetailed(int regionId) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

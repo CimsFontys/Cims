@@ -54,10 +54,11 @@ public class CIMSServer implements Runnable {
     public static void main(String args[])
             throws Exception {
         ServerSocket serverSocket = new ServerSocket(9000);
-        System.out.println("Listening for Clients");
+        System.out.println("CIMS Communication Server, Starting Up.....");
+        System.out.println("Awaiting Communications");
         while (true) {
             Socket sock = serverSocket.accept();
-            System.out.println("Connected to Client");
+            System.out.println("Connecting to Client on: " + sock.getLocalAddress().toString());
             new Thread(new CIMSServer(sock)).start();
         }
     }
@@ -72,8 +73,9 @@ public class CIMSServer implements Runnable {
             Logger.getLogger(CIMSServer.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        try {
-            while ((message = (Message) ois.readObject()) != null) {
+        try 
+        { 
+            while ((message = (Message) ois.readObject()) != null && csocket != null) {
                 //oos.writeObject("Message Received");
                 System.out.println("Message Received");
 
@@ -82,7 +84,9 @@ public class CIMSServer implements Runnable {
                     String messagetext = message.getText();
                     String[] messagesplit = messagetext.split("-");
 
-                    if (messagesplit[0].equals("login")) {
+                    if (messagesplit[0].equals("login")) 
+                    {
+                        System.out.println("MessageType: " + "Login");
                         //SHIT OM IN TE LOGGEN EN ZET DE ID VAN DE RECEIVER
                         //USER MOET HIER EERST INLOGGEN
                         //ONTLEED MESSAGE
@@ -91,11 +95,11 @@ public class CIMSServer implements Runnable {
                         String password = messagesplit[2];
                         int emergencytype = Integer.parseInt(messagesplit[3]);
                         
-                        receiverID = new SQL().loginEmergencyService(username, password, emergencytype);
-                        System.out.println("receiverID = " + receiverID);
+                        String test = new SQL().loginPerson(username, password);
+                        System.out.println("Reply Message: " + test);
                         
                         Message replyMessage = null;
-                        replyMessage = messageBuilder.buildLoginReply(receiverID);
+                        replyMessage = messageBuilder.buildLoginReply(test);
                         
                         oos.writeObject(replyMessage);
                     }
@@ -122,7 +126,7 @@ public class CIMSServer implements Runnable {
                 //fromClientSocket.close();
             }
         } catch (IOException ex) {
-            Logger.getLogger(CIMSServer.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(CIMSServer.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(CIMSServer.class.getName()).log(Level.SEVERE, null, ex);
         }
