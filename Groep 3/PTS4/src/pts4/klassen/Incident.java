@@ -18,6 +18,12 @@ public class Incident {
     private String description;
     private String longitude;
     private String latitude;
+    private String toxicsubstances;
+    private String explosiondanger;
+    private String fire;
+    private String numbercasualties;
+    private String violent;
+    private String urgent;
     private int id;
     private Date date;
     
@@ -28,6 +34,23 @@ public class Incident {
         this.name = name;
         this.description = description;
     }
+    
+    public Incident(String longitude, String latitude, String name, String description, String toxicSubstances, String explosionDanger, String fire, String numberCasualties, String violent, String urgent)
+    {
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.name = name;
+        this.description = description;
+        this.toxicsubstances = toxicSubstances;
+        this.explosiondanger = explosionDanger;
+        this.fire = fire;
+        this.numbercasualties = numberCasualties;
+        this.violent = violent;
+        this.urgent = urgent;
+    }
+    
+    
+    // Voor de databasee
     public Incident(int Id, String longitude, String latitude, String name, String description, Date date) {
         this.name = name;
         this.description = description;
@@ -61,6 +84,35 @@ public class Incident {
     public Date getDate()
     {
         return this.date;
+    }
+    
+    public String getToxicity() {
+        return this.toxicsubstances;
+    }
+    
+    public String getExplosion()
+    {
+        return this.explosiondanger;
+    }
+    
+    public String getFire()
+    {
+        return this.fire;
+    }
+    
+    public String getCasualties()
+    {
+        return this.numbercasualties;
+    }
+    
+    public String getViolent()
+    {
+        return this.violent;
+    }
+    
+    public String getUrgent()
+    {
+        return this.urgent;
     }
     
     @Override

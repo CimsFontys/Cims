@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="793.0" prefWidth="1210.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pts4.gui.GUIController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="793.0" prefWidth="1210.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="pts4.gui.GUIController">
   <children>
     <TabPane layoutX="0.0" layoutY="0.0" prefHeight="793.0" prefWidth="1210.0" tabClosingPolicy="UNAVAILABLE">
       <tabs>
@@ -20,7 +20,7 @@
                     <StackPane fx:id="gmapsstack" prefHeight="512.0" prefWidth="783.0" />
                   </children>
                 </Pane>
-                <ListView id="lvIncidenten" fx:id="lvIncidents2" layoutX="818.0" layoutY="14.0" onMouseClicked="#selectIncident" prefHeight="300.0" prefWidth="369.0" />
+                <ListView id="lvIncidenten" fx:id="lvIncidents2" layoutX="818.0" layoutY="14.0" onMouseClicked="#selectIncident" prefHeight="734.0" prefWidth="369.0" />
                 <TextField id="tfNaam" fx:id="tfName" editable="false" layoutX="101.0" layoutY="524.0" prefWidth="703.0" />
                 <TextField fx:id="tfLongitude" editable="false" layoutX="101.0" layoutY="682.0" prefWidth="312.0" text="" />
                 <TextField id="tfLongitude" fx:id="tfLatitude" editable="false" layoutX="492.0" layoutY="682.0" prefWidth="312.0" text="" />
@@ -29,7 +29,6 @@
                 <Label fx:id="lblLongitude" layoutX="19.0" layoutY="685.0" text="Longitude" />
                 <Label fx:id="lblLatitude" layoutX="434.0" layoutY="685.0" text="Latitude" />
                 <TextArea id="tfAddDescription" fx:id="tfDescription" editable="false" layoutX="101.0" layoutY="557.0" prefHeight="117.0" prefWidth="703.0" wrapText="true" />
-                        <ListView id="lvIncidenten" fx:id="lvIncidents21" layoutX="818.0" layoutY="329.0" onMouseClicked="#selectIncident" prefHeight="378.0" prefWidth="369.0" />
               </children>
             </AnchorPane>
           </content>
@@ -39,15 +38,59 @@
             <AnchorPane id="Content" fx:id="anchor" minHeight="0.0" minWidth="0.0" prefHeight="617.0" prefWidth="936.0">
               <children>
                 <ListView id="lvIncidenten" fx:id="lvIncidents" layoutX="818.0" layoutY="14.0" onMouseClicked="#goIncident" prefHeight="713.0" prefWidth="369.0" />
-                <TextField id="tfNaam" fx:id="tfAddName" layoutX="96.0" layoutY="14.0" prefWidth="509.0" />
-                <TextField id="tfLongitude" fx:id="tfAddLongitude" layoutX="95.0" layoutY="187.0" prefWidth="312.0" text="" />
-                <TextField id="tfLongitude" fx:id="tfAddLatitude" layoutX="486.0" layoutY="187.0" prefWidth="312.0" text="" />
+                <TextField id="tfNaam" fx:id="tfAddName" layoutX="110.0" layoutY="14.0" prefWidth="495.0" />
+                <TextField id="tfLongitude" fx:id="tfAddLongitude" layoutX="110.0" layoutY="187.0" prefWidth="297.0" text="" />
+                <TextField id="tfLongitude" fx:id="tfAddLatitude" layoutX="539.0" layoutY="187.0" prefWidth="259.0" text="" />
                 <Label id="lbl" fx:id="lblAddName" layoutX="14.0" layoutY="17.0" text="Name" />
                 <Label id="lblBeschrijving" fx:id="lblAddDescription" layoutX="16.0" layoutY="47.0" text="Description" />
                 <Label id="lblLongitude" fx:id="lblAddLongitude" layoutX="13.0" layoutY="190.0" text="Longitude" />
                 <Label id="lblLatitude" fx:id="lblAddLatitude" layoutX="428.0" layoutY="190.0" text="Latitude" />
                 <Button fx:id="btnAddIncident" layoutX="615.0" layoutY="14.0" mnemonicParsing="false" onAction="#addIncident" prefWidth="184.0" text="Add incident" />
-                <TextArea fx:id="tfAddDescription" layoutX="96.0" layoutY="44.0" prefHeight="132.0" prefWidth="703.0" wrapText="true" />
+                <TextArea fx:id="tfAddDescription" layoutX="110.0" layoutY="44.0" prefHeight="132.0" prefWidth="689.0" wrapText="true" />
+                <Label layoutX="13.0" layoutY="219.0" text="Giftige stoffen:" />
+                <Label layoutX="13.0" layoutY="248.0" text="Explosiegevaar:" />
+                <Label layoutX="14.0" layoutY="279.0" text="Brand:" />
+                <Label layoutX="428.0" layoutY="282.0" text="Aantal gewonden:" />
+                <Label layoutX="428.0" layoutY="222.0" text="Gewelddadig:" />
+                <Label layoutX="428.0" layoutY="249.0" text="Spoed:" />
+                <TextField id="tbGiftig" fx:id="tfGiftig" layoutX="110.0" layoutY="216.0" prefWidth="297.0" />
+                <ChoiceBox fx:id="cbExplosie" layoutX="110.0" layoutY="246.0" prefWidth="297.0">
+                  <items>
+                    <FXCollections fx:factory="observableArrayList">
+                      <String fx:value="Item 1" />
+                      <String fx:value="Item 2" />
+                      <String fx:value="Item 3" />
+                    </FXCollections>
+                  </items>
+                </ChoiceBox>
+                <ChoiceBox fx:id="cbBrand" layoutX="110.0" layoutY="279.0" prefWidth="297.0">
+                  <items>
+                    <FXCollections fx:factory="observableArrayList">
+                      <String fx:value="Item 1" />
+                      <String fx:value="Item 2" />
+                      <String fx:value="Item 3" />
+                    </FXCollections>
+                  </items>
+                </ChoiceBox>
+                <ChoiceBox fx:id="cbGewelddadig" layoutX="539.0" layoutY="219.0" prefWidth="259.0">
+                  <items>
+                    <FXCollections fx:factory="observableArrayList">
+                      <String fx:value="Item 1" />
+                      <String fx:value="Item 2" />
+                      <String fx:value="Item 3" />
+                    </FXCollections>
+                  </items>
+                </ChoiceBox>
+                <ChoiceBox fx:id="cbSpoed" layoutX="540.0" layoutY="248.0" prefWidth="259.0">
+                  <items>
+                    <FXCollections fx:factory="observableArrayList">
+                      <String fx:value="Item 1" />
+                      <String fx:value="Item 2" />
+                      <String fx:value="Item 3" />
+                    </FXCollections>
+                  </items>
+                </ChoiceBox>
+                <TextField id="tbAantalGewonden" fx:id="tfAantalGewonden" layoutX="539.0" layoutY="281.0" prefWidth="259.0" />
               </children>
             </AnchorPane>
           </content>

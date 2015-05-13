@@ -24,6 +24,7 @@ import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
@@ -53,6 +54,18 @@ public class GUIController implements Initializable, MapChangeListener<String, C
     TextField tfLongitude;
     @FXML
     TextField tfLatitude;
+    @FXML
+    TextField tfGiftig;
+    @FXML
+    TextField tfAantalGewonden;
+    @FXML
+    ChoiceBox cbExplosie;
+    @FXML
+    ChoiceBox cbBrand;
+    @FXML
+    ChoiceBox cbGewelddadig;
+    @FXML
+    ChoiceBox cbSpoed;
 
     @FXML
     TextField tfAddName;
@@ -104,6 +117,8 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         cbUnits.getItems().clear();
         cbProvincies.getItems().setAll(EnumProvincies.values());
         cbProvincies.setValue(EnumProvincies.Nederland);
+        cbExplosie.getItems().add("Ja");
+        cbExplosie.getItems().add("Nee");
     }
 
     private void initComboboxes() {
