@@ -5,6 +5,7 @@
  */
 
 import cims.startup.SQL;
+import java.io.File;
 import java.util.Date;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -44,7 +45,7 @@ public class DatabaseTests {
 //        SQL sql = new SQL();
 //        Date test = new Date();
 //        
-//        boolean testB = sql.insertPerson(1, "test", "test" ,"test", "test", "test", "test", "test", test, "test", "test", "test", "test", "test", "YES"); 
+//        boolean testB = sql.insertPerson(1, "test2", "test2" ,"test2", "test2", "test2", "test2", "test2", test, "test2", "test2", "test2", "test2", "test2", "YES"); 
 //        assertTrue(testB);
     }
     
@@ -92,5 +93,72 @@ public class DatabaseTests {
     {
         SQL sql = new SQL();
         System.out.println(sql.getCalamityFromRegion(13));
+    }
+    
+    @Test
+    public void testAddLog()
+    {
+        SQL sql = new SQL();
+        boolean test = sql.insertLog(2, "test");
+        assertTrue(test);
+    }
+    
+    @Test
+    public void testGetAllRegions()
+    {
+        SQL sql = new SQL();
+        System.out.println(sql.retrieveRegions());
+    }
+    
+    @Test
+    public void testInsertMessage()
+    {
+//        SQL sql = new SQL();
+//        File file = null;
+//        boolean test = sql.insertMessage(2, 4, "TEST MESSAGE", file);
+//        assertTrue(test);
+    }
+    
+    @Test
+    public void testGetPersonInformation()
+    {
+        SQL sql = new SQL();
+        System.out.println(sql.getPersonInformation(4));
+    }
+    
+    @Test
+    public void testGetLogs()
+    {
+        SQL sql = new SQL();
+        System.out.println(sql.retrieveLogs(2));
+    }
+    
+    @Test
+    public void testGetAllLocations()
+    {   
+        SQL sql = new SQL();
+        System.out.println(sql.retrieveLocations());
+    }
+    
+    @Test
+    public void testInsertLocation()
+    {
+//        SQL sql = new SQL();
+//        boolean test = sql.insertLocation("test", "50", "50", 2);
+//        assertTrue(test);
+    }
+    
+    @Test
+    public void testGetLocationTypes()
+    {
+        SQL sql = new SQL();
+        System.out.println(sql.retrieveLocationTypes());
+    }
+    
+    @Test
+    public void testGetMessages()
+    {
+        SQL sql = new SQL();
+        System.out.println(sql.retrieveMessages(2, 4));
     }
 }

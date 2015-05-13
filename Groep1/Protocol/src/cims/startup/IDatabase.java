@@ -9,7 +9,6 @@ package cims.startup;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Map;
 
 /**
  *
@@ -26,6 +25,11 @@ public interface IDatabase
      */
     public String loginPerson(String username, String password);
     
+    /**
+     * TESTED AND WORKING
+     * @param personId
+     * @return 
+     */
     public String getPersonInformation(int personId);
     
     /**
@@ -35,7 +39,7 @@ public interface IDatabase
      */
     public String getCalamityFromRegion(int regionId);
     
-    public ArrayList<String> getCalamityFromRegionDetailed(int regionId);
+    public String getCalamityFromRegionDetailed(int regionId);
    
     /**
      * TESTED AND WORKING
@@ -92,23 +96,71 @@ public interface IDatabase
      */
     public String retrieveAllCalamities();
     
-    public boolean insertLog(int id_emergency_service, String description);
+    /**
+     * TESTED AND WORKING
+     * @param personid
+     * @param description
+     * @return 
+     */
+    public boolean insertLog(int personid, String description);
     
-    public ArrayList<String> retrieveLogs(int id_emergency_service);
+    /**
+     * TESTED AND WORKING
+     * @param personid
+     * @return 
+     */
+    public String retrieveLogs(int personid);
     
+    /**
+     * TESTED AND WORKING
+     * @param sender_id
+     * @param receiver_id
+     * @param message
+     * @param file
+     * @return 
+     */
     public boolean insertMessage(int sender_id, int receiver_id, String message, File file);
    
-    public ArrayList<String> retrieveMessage(int sender_id, int receiver_id);
+    /**
+     * TESTED AND WORKING
+     * @param sender_id
+     * @param receiver_id
+     * @return 
+     */
+    public String retrieveMessages(int sender_id, int receiver_id);
    
     public boolean insertInformation(int id_calamity, String type, String description, File file, int id_civilian, int id_emergency);
        
     public ArrayList<String> retrieveInformation(int id_calamity);
     
-    public ArrayList<String> retrieveRegions();
+    /**
+     * TESTED AND WORKING
+     * @return 
+     */
+    public String retrieveRegions();
+    
     
     public File retrieveFileWithID(int fileid);
     
-    public boolean insertLocation(String name, String geo_long, String geo_lat, int personal_type);
+    /**
+     * TESTED AND WORKING
+     * @param name
+     * @param geo_long
+     * @param geo_lat
+     * @param locationtypeid
+     * @return 
+     */
+    public boolean insertLocation(String name, String geo_long, String geo_lat, int locationtypeid);
     
-    public ArrayList<String> retrieveLocations();
+    /**
+     * TESTED AND WORKING
+     * @return 
+     */
+    public String retrieveLocations();
+    
+    /**
+     * TESTED AND WORKING
+     * @return 
+     */
+    public String retrieveLocationTypes();
 }

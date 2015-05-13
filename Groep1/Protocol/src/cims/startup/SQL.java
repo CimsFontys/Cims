@@ -388,7 +388,7 @@ public class SQL extends DatabaseConnector implements IDatabase
     }
 
     @Override
-    public boolean insertLog(int id_emergency_service, String description) 
+    public boolean insertLog(int personid, String description) 
     {
         try
         {
@@ -400,7 +400,7 @@ public class SQL extends DatabaseConnector implements IDatabase
         }
         try
         {
-            String query = "INSERT INTO log (time, description, idemergency_service)" 
+            String query = "INSERT INTO log (logdate, logdescription, personid)" 
                     + " values (?,?,?)";
             PreparedStatement prest = conn.prepareStatement(query);
             
@@ -410,7 +410,7 @@ public class SQL extends DatabaseConnector implements IDatabase
             
             prest.setTimestamp(1, timestamp);          
             prest.setString(2, description);
-            prest.setInt(3, id_emergency_service);
+            prest.setInt(3, personid);
             
             prest.execute();
             
@@ -427,10 +427,8 @@ public class SQL extends DatabaseConnector implements IDatabase
     }
 
     @Override
-    public ArrayList<String> retrieveLogs(int id_emergency_service) 
+    public String retrieveLogs(int personid) 
     {
-        ArrayList<String> logs = new ArrayList<String>();
-        
         try
         {
             super.connectToDatabase();
@@ -442,9 +440,11 @@ public class SQL extends DatabaseConnector implements IDatabase
         
         try
         {
-            String query = "SELECT * FROM log WHERE idemergency_service = ?";
+            int count = 0;
+            JsonArrayBuilder jb = Json.createArrayBuilder();
+            String query = "SELECT * FROM log WHERE personid = ?";
             PreparedStatement prest = conn.prepareStatement(query);
-            prest.setInt(1, id_emergency_service);
+            prest.setInt(1, personid);
             
             prest.execute();
             
@@ -452,18 +452,23 @@ public class SQL extends DatabaseConnector implements IDatabase
             
             while(res.next())
             {                
-                int idlog = res.getInt("idlog");
-                Date time = res.getTimestamp("time");
-                String description = res.getString("description");
-                int id_emergency_service2 = res.getInt("idemergency_service");
+                int logid = res.getInt("logid");
+                Date logdate = res.getDate("logdate");
+                String logdescription = res.getString("logdescription");
+                int personid2 = res.getInt("personid");
                 
-                String result = "ID: " + idlog + " Time: " + time.toString() + " Description: " + description + " By: " + id_emergency_service2;
-                System.out.println( "ID: " + idlog + " Time: " + time.toString() + " Description: " + description + " By: " + id_emergency_service2);
+                JsonObjectBuilder jb2 = Json.createObjectBuilder();
+                jb2.add("logid" , logid);
+                jb2.add("logdate" , logdate.toString());
+                jb2.add("logdescription" , logdescription);
+                jb2.add("personid" , personid2);
                 
-                logs.add(result); 
+                jb.add(jb2);
+                count++;
             }
             
-            return logs;
+            JsonArray jo = jb.build(); 
+            return jo.toString();
         }
         catch(SQLException ee)
         {
@@ -784,60 +789,108 @@ public class SQL extends DatabaseConnector implements IDatabase
     @Override
     public boolean insertMessage(int sender_id, int receiver_id, String message, File file) 
     {
-        String absolutefilepath = file.getAbsolutePath();
-        String extension = absolutefilepath.substring(absolutefilepath.lastIndexOf('.'));
-        String name = absolutefilepath.substring(absolutefilepath.lastIndexOf('/') + 1);
-        name = name.substring(0, name.length()-extension.length());
-        String path = absolutefilepath.substring(0, absolutefilepath.length() - name.length() - extension.length());
+        if(file != null)
+        {
+            String absolutefilepath = file.getAbsolutePath();
+            String extension = absolutefilepath.substring(absolutefilepath.lastIndexOf('.'));
+            String name = absolutefilepath.substring(absolutefilepath.lastIndexOf('/') + 1);
+            name = name.substring(0, name.length()-extension.length());
+            String path = absolutefilepath.substring(0, absolutefilepath.length() - name.length() - extension.length());
         
-        int idfile = 0;
-        
-        if(!this.checkFile(path, name, extension))
-        {
-            this.insertFile(name, path, extension);
+            int idfile = 0;
+
+            if(!this.checkFile(path, name, extension))
+            {
+                this.insertFile(name, path, extension);
+            }
+
+            idfile = this.retrieveFileID(path, name, this.retrieveFileTypeID(extension));
+
+            try
+            {
+                super.connectToDatabase();
+            }
+
+            catch(Exception e)
+            {
+                return false;
+            }
+            try
+            {
+                String query = "INSERT INTO message (messagesender, messagereceiver, messagestring, messagefileid, messagedate)" 
+                        + " values (?,?,?,?, ?)";
+                PreparedStatement prest = conn.prepareStatement(query);
+                
+                 Calendar calendar = new GregorianCalendar();
+
+                java.sql.Timestamp timestamp = new java.sql.Timestamp(calendar.getTimeInMillis());
+
+                prest.setInt(1, sender_id);
+                prest.setInt(2, receiver_id);
+                prest.setString(3, message);
+                prest.setInt(4, idfile);
+                prest.setTimestamp(5, timestamp); 
+
+                prest.execute();
+
+                return true;
+            }
+            catch(SQLException ee)
+            {
+                return false;
+            }
+            finally
+            {
+                super.disconnectFromDatabase();
+            }
+        }
+        else if(file == null)
+        {      
+            try
+            {
+                super.connectToDatabase();
+            }
+
+            catch(Exception e)
+            {
+
+            }
+            try
+            {
+                String query = "INSERT INTO message (messagesender, messagereceiver, messagestring, messagedate)" 
+                        + " values (?,?,?,?)";
+                PreparedStatement prest = conn.prepareStatement(query);
+                
+                 
+                 Calendar calendar = new GregorianCalendar();
+
+                java.sql.Timestamp timestamp = new java.sql.Timestamp(calendar.getTimeInMillis());
+
+                prest.setInt(1, sender_id);
+                prest.setInt(2, receiver_id);
+                prest.setString(3, message);
+                prest.setTimestamp(4, timestamp);
+
+                prest.execute();
+
+                return true;
+            }
+            catch(SQLException ee)
+            {
+                return false;
+            }
+            finally
+            {
+                super.disconnectFromDatabase();
+            }
         }
         
-        idfile = this.retrieveFileID(path, name, this.retrieveFileTypeID(extension));
-        
-        try
-        {
-            super.connectToDatabase();
-        }
-        
-        catch(Exception e)
-        {
-            
-        }
-        try
-        {
-            String query = "INSERT INTO message (sender_id, receiver_id, message, idfile)" 
-                    + " values (?,?,?,?)";
-            PreparedStatement prest = conn.prepareStatement(query);
-                        
-            prest.setInt(1, sender_id);
-            prest.setInt(2, receiver_id);
-            prest.setString(3, message);
-            prest.setInt(4, idfile);
-            
-            prest.execute();
-            
-            return true;
-        }
-        catch(SQLException ee)
-        {
-            return false;
-        }
-        finally
-        {
-            super.disconnectFromDatabase();
-        }
+        return false;
     }
 
     @Override
-    public ArrayList<String> retrieveMessage(int sender_id, int receiver_id) 
-    {
-        ArrayList<String> messages = new ArrayList<String>();
-        
+    public String retrieveMessages(int sender_id, int receiver_id) 
+    {       
         try
         {
             super.connectToDatabase();
@@ -849,26 +902,41 @@ public class SQL extends DatabaseConnector implements IDatabase
         
         try
         {
-            String query = "SELECT * FROM message WHERE sender_id = ? AND receiver_id = ? ";
+            int count = 0;
+            JsonArrayBuilder jb = Json.createArrayBuilder();
+            String query = "SELECT * FROM message WHERE messagereceiver = ? and messagesender = ?";
             PreparedStatement prest = conn.prepareStatement(query);
-            prest.setInt(1, sender_id);
-            prest.setInt(2, receiver_id);
             
+            prest.setInt(2, sender_id);
+                prest.setInt(1, receiver_id);
+                
             prest.execute();
             
             ResultSet res = prest.getResultSet();
-            
+                
             while(res.next())
             {                
-                String message = res.getString("message");
-                int fileid = res.getInt("idfile");
+                int messageid = res.getInt("messageid");
+                int messagereceiver = res.getInt("messagereceiver");
+                int messagesender = res.getInt("messagesender");
+                int messagefileid = res.getInt("messagefileid");
+                String messagestring = res.getString("messagestring");
+                Date messagedate = res.getDate("messagedate");
                 
-                String result = "-SENDER_ID:" + sender_id + "-RECEIVER_ID:" + receiver_id + "-MESSAGE:" + message + "-FILEID:" + fileid;
-                
-                messages.add(result);
+                JsonObjectBuilder jb2 = Json.createObjectBuilder();
+                jb2.add("messageid", messageid);
+                jb2.add("messagereceiver", messagereceiver);
+                jb2.add("messagesender", messagesender);
+                jb2.add("messagefileid", messagefileid);
+                jb2.add("messagestring", messagestring);
+                jb2.add("messagedate", messagedate.toString());
+
+                jb.add(jb2);
+                count++;
             }
             
-            return messages;
+            JsonArray jo = jb.build(); 
+            return jo.toString();
         }
         catch(SQLException ee)
         {
@@ -1317,21 +1385,21 @@ public class SQL extends DatabaseConnector implements IDatabase
     }
     
     @Override
-    public ArrayList<String> retrieveRegions() 
-    {
-        ArrayList<String> regions = new ArrayList<String>();
-        
+    public String retrieveRegions() 
+    {        
         try
         {
             super.connectToDatabase();
         }
         catch (Exception e)
         {
-            return null;    
+            return "";    
         }
         
         try
         {
+            int count = 0;
+            JsonArrayBuilder jb = Json.createArrayBuilder();
             String query = "SELECT * FROM region";
             PreparedStatement prest = conn.prepareStatement(query);
             
@@ -1340,13 +1408,21 @@ public class SQL extends DatabaseConnector implements IDatabase
             ResultSet res = prest.getResultSet();
             
             while(res.next())
-            {
-                String region = res.getString("region");
+            {                
+                int regionid = res.getInt("regionid");
+                String regionname = res.getString("regionname");
                 
-                regions.add(region);
+                
+                JsonObjectBuilder jb2 = Json.createObjectBuilder();
+                jb2.add("regionid" , regionid);    
+                jb2.add("regionname", regionname);
+                
+                jb.add(jb2);
+                count++;
             }
             
-            return regions;
+            JsonArray jo = jb.build(); 
+            return jo.toString();
         }
         catch(SQLException ee)
         {
@@ -1359,7 +1435,7 @@ public class SQL extends DatabaseConnector implements IDatabase
     }
     
     @Override
-    public boolean insertLocation(String name, String geo_long, String geo_lat, int personal_type)
+    public boolean insertLocation(String name, String geo_long, String geo_lat, int locationtypeid)
     {
         try
         {
@@ -1371,14 +1447,14 @@ public class SQL extends DatabaseConnector implements IDatabase
         }
         try
         {
-            String query = "INSERT INTO location (name, geo_long, geo_lat, idpersonal_type)" 
+            String query = "INSERT INTO servicelocation (servicelocationlatitude, servicelocationlongtitude, servicelocationname, servicelocationtypeid)" 
                     + " values (?,?,?,?)";
             PreparedStatement prest = conn.prepareStatement(query);
             
-            prest.setString(1, name);  
+            prest.setString(3, name);  
             prest.setString(2, geo_long); 
-            prest.setString(3, geo_lat); 
-            prest.setInt(4, personal_type);
+            prest.setString(1, geo_lat); 
+            prest.setInt(4, locationtypeid);
             
             prest.execute();
             
@@ -1395,10 +1471,8 @@ public class SQL extends DatabaseConnector implements IDatabase
     }
     
     @Override
-    public ArrayList<String> retrieveLocations()
+    public String retrieveLocations()
     {
-        ArrayList<String> locations = new ArrayList<String>();
-        
         try
         {
             super.connectToDatabase();
@@ -1410,26 +1484,38 @@ public class SQL extends DatabaseConnector implements IDatabase
         
         try
         {
-            String query = "SELECT * FROM location";
+            int count = 0;
+            JsonArrayBuilder jb = Json.createArrayBuilder();
+            String query = "SELECT * FROM servicelocation s, servicelocationtype sl WHERE s.servicelocationtypeid = sl.servicelocationtypeid";
             PreparedStatement prest = conn.prepareStatement(query);
             
             prest.execute();
             
             ResultSet res = prest.getResultSet();
-            
+                
             while(res.next())
             {                
-                String name = res.getString("name");
-                String geo_long = res.getString("geo_long");
-                String geo_lat = res.getString("geo_lat");
-                int type = res.getInt("idpersonal_type");
+                int servicelocationid = res.getInt("servicelocationid");
+                String servicelocationlatitude = res.getString("servicelocationlatitude");
+                String servicelocationlongtitude = res.getString("servicelocationlongtitude");
+                String servicelocationname = res.getString("servicelocationname");
+                int servicelocationtypeid = res.getInt("servicelocationtypeid");
+                String servicelocationtype = res.getString("servicelocationtype");
                 
-                String result = "-TYPE:"+ type +"-LOCATION_NAME:" + name + "-LOCATION_LONG:" + geo_long + "-LOCATION_LAT:" + geo_lat;
-                
-                locations.add(result);
+                JsonObjectBuilder jb2 = Json.createObjectBuilder();
+                jb2.add("servicelocationid" , servicelocationid);   
+                jb2.add("servicelocationlatitude", servicelocationlatitude);
+                jb2.add("servicelocationlongtitude", servicelocationlongtitude);
+                jb2.add("servicelocationname", servicelocationname);
+                jb2.add("servicelocationtypeid", servicelocationtypeid);
+                jb2.add("servicelocationtype", servicelocationtype);
+
+                jb.add(jb2);
+                count++;
             }
             
-            return locations;
+            JsonArray jo = jb.build(); 
+            return jo.toString();
         }
         catch(SQLException ee)
         {
@@ -1589,7 +1675,55 @@ public class SQL extends DatabaseConnector implements IDatabase
     }
 
     @Override
-    public ArrayList<String> getCalamityFromRegionDetailed(int regionId) {
+    public String getCalamityFromRegionDetailed(int regionId) 
+    {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public String retrieveLocationTypes() {
+        try
+        {
+            super.connectToDatabase();
+        }
+        catch (Exception e)
+        {
+            return null;     
+        }
+        
+        try
+        {
+            int count = 0;
+            JsonArrayBuilder jb = Json.createArrayBuilder();
+            String query = "SELECT * FROM servicelocationtype";
+            PreparedStatement prest = conn.prepareStatement(query);
+            
+            prest.execute();
+            
+            ResultSet res = prest.getResultSet();
+                
+            while(res.next())
+            {                
+                int servicelocationtypeid = res.getInt("servicelocationtypeid");
+                String servicelocationtype = res.getString("servicelocationtype");
+                
+                JsonObjectBuilder jb2 = Json.createObjectBuilder();
+                jb2.add("servicelocationtypeid", servicelocationtypeid);
+                jb2.add("servicelocationtype", servicelocationtype);
+
+                jb.add(jb2);
+                count++;
+            }
+            
+            JsonArray jo = jb.build(); 
+            return jo.toString();
+        }
+        catch(SQLException ee)
+        {
+            return null;
+        }
+        finally
+        {
+            super.disconnectFromDatabase();
+        }    }
 }

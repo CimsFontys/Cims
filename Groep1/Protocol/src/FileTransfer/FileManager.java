@@ -41,12 +41,20 @@ public class FileManager {
      * @param fileName String of filename + extension Example("test.txt") 
      * @return string with the file paht on the server 
      */
-    public String saveFile(byte[] file, String fileName) throws IOException
+    public String saveFile(byte[] file, String fileName)
     {
         try {
             FileOutputStream fos = new FileOutputStream(LOC + fileName);
-            fos.write(file);
-            fos.close();
+            try {
+                fos.write(file);
+            } catch (IOException ex) {
+                Logger.getLogger(FileManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                fos.close();
+            } catch (IOException ex) {
+                Logger.getLogger(FileManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } catch (FileNotFoundException ex) {
             Logger.getLogger(FileManager.class.getName()).log(Level.SEVERE, null, ex);
         }
