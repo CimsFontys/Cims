@@ -295,16 +295,19 @@ public class MessageBuilder
     
     public Message buildLoginMessage(String username, String password, int type)
     {      
-        JsonObjectBuilder jb = Json.createObjectBuilder();
+        JsonArrayBuilder jb = Json.createArrayBuilder();
+        JsonObjectBuilder jo = Json.createObjectBuilder();
         
-        jb.add("username", username);
-        jb.add("password", password);
-        jb.add("persontype", type);
+        jo.add("username", username);
+        jo.add("password", password);
+        jo.add("persontype", type);
                 
-        JsonObject jo = jb.build();
+        jb.add(jo);
+        
+        JsonArray array = jb.build();
         
         Message message = new Message();
-        message.setText(jo.toString());
+        message.setText(array.toString());
         message.setType(Login);
         
         return message;
