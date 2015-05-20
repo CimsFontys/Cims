@@ -26,6 +26,11 @@ import javax.json.JsonObjectBuilder;
  */
 public class SQL extends DatabaseConnector implements IDatabase
 {    
+    ArrayList<PreparedStatement> statements = new ArrayList<>();
+    Boolean connectiedatabase1 = true;
+    Boolean connectiedatabase2 = true;
+    Boolean updateconndatabase1 = true;
+    Boolean updateconndatabase2 = true;
     public SQL()
     {
         super();
@@ -41,7 +46,14 @@ public class SQL extends DatabaseConnector implements IDatabase
         
         try
         {
-            super.connectToDatabase();
+            if(connectiedatabase1)
+            {
+                connectiedatabase1 = super.connectToDatabase();
+            }
+            else
+            {
+                connectiedatabase2 = super.connectToDatabase2();
+            }
         }
         catch (Exception e)
         {
@@ -103,7 +115,8 @@ public class SQL extends DatabaseConnector implements IDatabase
         
         try
         {
-            super.connectToDatabase();
+                super.connectToDatabase();
+                super.connectToDatabase2();
         }
         catch(Exception e)
         {
@@ -134,6 +147,10 @@ public class SQL extends DatabaseConnector implements IDatabase
             prest.setString(15, configurator);
             
             prest.execute();
+            if(connectiedatabase1 == false || connectiedatabase2 == false)
+            {
+                statements.add(prest);
+            }
             
             return true;
         }
@@ -1726,4 +1743,72 @@ public class SQL extends DatabaseConnector implements IDatabase
         {
             super.disconnectFromDatabase();
         }    }
+    
+    private void insertstatements(PreparedStatement e)
+    {
+        statements.add(e);
+    }
+    
+    public Boolean connectingInsert()
+    {
+        connectiedatabase1 = super.connectToDatabase();
+        connectiedatabase2 = super.connectToDatabase2();
+        if (connectiedatabase1 == false || connectiedatabase2 == false) {
+            updateconndatabase1 = connectiedatabase1;
+            updateconndatabase2 = connectiedatabase2;
+        }  
+        updateStateDatabase();
+        if(connectiedatabase1 && connectiedatabase2)
+        {
+            return true;
+        }
+        return false;
+        
+                
+    }
+    
+    private void connectingSelect()
+    {
+        
+
+        connectiedatabase1 = super.connectToDatabase();
+        if(connectiedatabase1 == false)
+        {   
+            connectiedatabase2 = super.connectToDatabase2();
+            updateconndatabase1 = connectiedatabase1;
+        }
+        updateStateDatabase();
+    }
+    
+    private void updateStateDatabase()
+    {
+        if (updateconndatabase1 == false && connectiedatabase1 == true && statements.size() > 0) {
+            try {
+                updateconndatabase1 = true;
+                super.connectToDatabase();
+                for(PreparedStatement p : statements)
+                {
+                    PreparedStatement prest = p;
+                    prest.execute();
+                }
+                statements.clear();
+            } catch (Exception e) {
+
+            }
+        }
+        if (updateconndatabase2 == false && connectiedatabase2 == true && statements.size() > 0) {
+            try {
+                updateconndatabase2 = true;
+                super.connectToDatabase2();
+                 for(PreparedStatement p : statements)
+                {
+                    PreparedStatement prest = p;
+                    prest.execute();
+                }
+                statements.clear();
+            } catch (Exception e) {
+
+            }
+        }
+    }
 }
