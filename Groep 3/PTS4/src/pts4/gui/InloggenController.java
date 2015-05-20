@@ -12,6 +12,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
+import pts4.database.IDatabase;
+import pts4.database.SQL;
+import se.mbaeumer.fxmessagebox.MessageBox;
+import se.mbaeumer.fxmessagebox.MessageBoxType;
 
 /**
  *
@@ -22,15 +26,17 @@ public class InloggenController implements Initializable
     @FXML TextField tbGebruikersnaam;
     @FXML TextField tbWachtwoord;
     
+    private IDatabase dbcon;
+    
     
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
-        
+        dbcon = new SQL();
     }
     
     public void btnInloggen_Click(ActionEvent event)
     {
-        
+        MessageBox mb = new MessageBox("Vis",MessageBoxType.OK_ONLY);
     }
 }
