@@ -76,13 +76,15 @@ public class SQL extends DatabaseConnector implements IDatabase
                 int persontypeid = res.getInt("persontypeid");
                 String personconfigurator = res.getString("personconfigurator");
 
+                JsonArrayBuilder ja = Json.createArrayBuilder();
                 JsonObjectBuilder jb = Json.createObjectBuilder();
                 jb.add("personid" , personId);
                 jb.add("persontypeid", persontypeid);
                 
-                JsonObject jo = jb.build();
+                ja.add(jb);
+                JsonArray array = ja.build();
                 
-                return jo.toString();
+                return array.toString();
             }
         }
         catch(SQLException ee)
@@ -293,6 +295,7 @@ public class SQL extends DatabaseConnector implements IDatabase
         try
         {
             JsonObjectBuilder jb = Json.createObjectBuilder();
+            JsonArrayBuilder ja = Json.createArrayBuilder();
             String query = "SELECT * FROM calamity WHERE calamityid = ?";
             PreparedStatement prest = conn.prepareStatement(query);
             prest.setInt(1, id);
@@ -323,9 +326,10 @@ public class SQL extends DatabaseConnector implements IDatabase
                 jb.add("regionid", regionid);
                 jb.add("personid", personid);
                 
-                JsonObject jo = jb.build();
+                ja.add(jb);
+                JsonArray array = ja.build();
                 
-                return jo.toString();
+                return array.toString();
             }
             
         }
@@ -1588,6 +1592,7 @@ public class SQL extends DatabaseConnector implements IDatabase
                 String regionname = res.getString("regionname");
                 String persontype = res.getString("persontype");
 
+                JsonArrayBuilder ja = Json.createArrayBuilder();
                 JsonObjectBuilder jb = Json.createObjectBuilder();
                 jb.add("personid" , personId);
                 jb.add("firstname", firstname);
@@ -1607,9 +1612,10 @@ public class SQL extends DatabaseConnector implements IDatabase
                 jb.add("regionname", regionname);
                 jb.add("persontype", persontype);
                 
-                JsonObject jo = jb.build();
+                ja.add(jb);
+                JsonArray array = ja.build();
                 
-                return jo.toString();
+                return array.toString();
             }
             
             
@@ -1694,7 +1700,70 @@ public class SQL extends DatabaseConnector implements IDatabase
     @Override
     public String getCalamityFromRegionDetailed(int regionId) 
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try
+        {
+            super.connectToDatabase();
+        }
+        catch (Exception e)
+        {
+            return null;     
+        }
+        
+        try
+        {
+            int count = 0;
+            JsonArrayBuilder jb = Json.createArrayBuilder();
+            String query = "select * from calamity c, calamityinformation ci, region r where c.calamityid = ci.calamityid AND c.regionid = r.regionid AND c.regionid = ?";
+            PreparedStatement prest = conn.prepareStatement(query);
+            
+            prest.setInt(1, regionId);
+            
+            prest.execute();
+            
+            ResultSet res = prest.getResultSet();
+                       
+            while(res.next())
+            {                
+                int id_calamity = res.getInt("calamityid");
+                String geo_long = res.getString("calamitylongtitude");
+                String geo_lat = res.getString("calamitylatitude");
+                String name = res.getString("calamityname");
+                String description = res.getString("calamitydescription");
+                Date date = res.getDate("calamitydate");
+                String calamitydanger = res.getString("calamitydanger");
+                int regionid = res.getInt("regionid");
+                int personid = res.getInt("personid");
+                String calamityinformationtype = res.getString("calamityinformationtype");
+                String calamityinformationdescription = res.getString("calamityinformationdescription");
+                
+                JsonObjectBuilder jb2 = Json.createObjectBuilder();
+                jb2.add("calamityid" , id_calamity);
+                jb2.add("calamitylongtitude" , geo_long);
+                jb2.add("calamitylatitude" , geo_lat);
+                jb2.add("calamityname" , name);
+                jb2.add("calamitydescription" , description);
+                jb2.add("calamitydate" , date.toString());
+                jb2.add("calamitydanger" , calamitydanger);
+                jb2.add("regionid", regionid);
+                jb2.add("personid", personid);
+                jb2.add("calamityinformationtype", calamityinformationtype);
+                jb2.add("calamityinformationdescription", calamityinformationdescription);
+                
+                jb.add(jb2);
+                count++;
+            }
+            
+            JsonArray jo = jb.build(); 
+            return jo.toString();
+        }
+        catch(SQLException ee)
+        {
+            return null;
+        }
+        finally
+        {
+            super.disconnectFromDatabase();
+        }
     }
 
     @Override

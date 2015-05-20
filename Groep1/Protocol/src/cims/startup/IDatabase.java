@@ -147,7 +147,7 @@ public interface IDatabase
      * @param name
      * @param geo_long
      * @param geo_lat
-     * @param locationtypeid
+     * @param locationtypeid -> 1 = firestation, 2 = policestation, 3 = hospital
      * @return 
      */
     public boolean insertLocation(String name, String geo_long, String geo_lat, int locationtypeid);
