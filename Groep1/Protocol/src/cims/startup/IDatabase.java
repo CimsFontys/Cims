@@ -18,7 +18,7 @@ public interface IDatabase
 {
     
     /**
-     * TESTED AND WORKING
+     * TESTED AND WORKING -> IN MESSAGEBUILDER
      * @param username
      * @param password
      * @return 
@@ -26,14 +26,14 @@ public interface IDatabase
     public String loginPerson(String username, String password);
     
     /**
-     * TESTED AND WORKING
+     * TESTED AND WORKING -> IN MESSAGEBUILDER
      * @param personId
      * @return 
      */
     public String getPersonInformation(int personId);
     
     /**
-     * TESTED AND WORKING
+     * TESTED AND WORKING -> IN MESSAGEBUILDER
      * @param regionId
      * @return 
      */
@@ -42,7 +42,7 @@ public interface IDatabase
     public String getCalamityFromRegionDetailed(int regionId);
    
     /**
-     * TESTED AND WORKING
+     * TESTED AND WORKING -> IN MESSAGEBUILDER
      * @param idpersonal_type
      * @param first_name
      * @param last_name
@@ -63,7 +63,7 @@ public interface IDatabase
     public boolean insertPerson(int idpersonal_type, String first_name, String last_name, String middle_name, String username, String password, String SSN, String email, Date Birthdate, String phonenumber, String Street, String City, String Postal, String Region, String configurator);
     
     /**
-     * TESTED AND WORKING
+     * TESTED AND WORKING -> IN MESSAGEBUILDER
      * @param geo_long
      * @param geo_lat
      * @param personid
@@ -77,27 +77,27 @@ public interface IDatabase
     public boolean insertCalamity(String geo_long, String geo_lat, int personid, String name, String description, Date timestamp, String calamitydanger, String region);
     
     /**
-     * TESTED AND WORKING
+     * TESTED AND WORKING -> IN MESSAGEBUILDER
      * @param personid
      * @return 
      */
     public String retrieveCalamityWithPersonID(int personid);
     
     /**
-     * TESTED AND WORKING
+     * TESTED AND WORKING -> IN MESSAGEBUILDER
      * @param id
      * @return 
      */
     public String retrieveCalamityWithID(int id);
     
     /**
-     * TESTED AND WORKING
+     * TESTED AND WORKING -> IN MESSAGEBUILDER
      * @return 
      */
     public String retrieveAllCalamities();
     
     /**
-     * TESTED AND WORKING
+     * TESTED AND WORKING -> IN MESSAGEBUILDER
      * @param personid
      * @param description
      * @return 
@@ -105,14 +105,14 @@ public interface IDatabase
     public boolean insertLog(int personid, String description);
     
     /**
-     * TESTED AND WORKING
+     * TESTED AND WORKING -> IN MESSAGEBUILDER
      * @param personid
      * @return 
      */
     public String retrieveLogs(int personid);
     
     /**
-     * TESTED AND WORKING
+     * TESTED AND WORKING -> IN MESSAGEBUILDER
      * @param sender_id
      * @param receiver_id
      * @param message
@@ -122,7 +122,7 @@ public interface IDatabase
     public boolean insertMessage(int sender_id, int receiver_id, String message, File file);
    
     /**
-     * TESTED AND WORKING
+     * TESTED AND WORKING -> IN MESSAGEBUILDER
      * @param sender_id
      * @param receiver_id
      * @return 
@@ -134,7 +134,7 @@ public interface IDatabase
     public ArrayList<String> retrieveInformation(int id_calamity);
     
     /**
-     * TESTED AND WORKING
+     * TESTED AND WORKING -> IN MESSAGEBUILDER
      * @return 
      */
     public String retrieveRegions();
@@ -143,7 +143,7 @@ public interface IDatabase
     public File retrieveFileWithID(int fileid);
     
     /**
-     * TESTED AND WORKING
+     * TESTED AND WORKING -> IN MESSAGEBUILDER
      * @param name
      * @param geo_long
      * @param geo_lat
@@ -153,13 +153,13 @@ public interface IDatabase
     public boolean insertLocation(String name, String geo_long, String geo_lat, int locationtypeid);
     
     /**
-     * TESTED AND WORKING
+     * TESTED AND WORKING -> IN MESSAGEBUILDER
      * @return 
      */
     public String retrieveLocations();
     
     /**
-     * TESTED AND WORKING
+     * TESTED AND WORKING -> IN MESSAGEBUILDER
      * @return 
      */
     public String retrieveLocationTypes();

@@ -7,7 +7,6 @@
 import FileTransfer.FileManager;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.After;
@@ -54,11 +53,7 @@ public class FileTest {
         FileManager fm = FileManager.getInstance();
         String path = "";
         byte[] bFile = new byte[] {74,69,32,77,79,69,68,69,82};
-        try {
-            path = fm.saveFile(bFile, "test.txt");
-        } catch (IOException ex) {
-            Logger.getLogger(FileTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        path = fm.saveFile(bFile, "test.txt");
         File file = new File(path);
         assertTrue(file.exists());
         byte[] bFileLoad = null;

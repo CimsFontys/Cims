@@ -16,6 +16,15 @@ public class Message implements Serializable {
     
     String text;
     byte[] file;
+    String type;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
     
     public Message()
     {

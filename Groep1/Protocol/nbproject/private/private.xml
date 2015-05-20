@@ -3,11 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Michael/Documents/GitHub/Cims/Groep1/Protocol/src/cims/startup/InfoType.java</file>
-            <file>file:/C:/Users/Michael/Documents/GitHub/Cims/Groep1/Protocol/test/DatabaseTests.java</file>
-            <file>file:/C:/Users/Michael/Documents/GitHub/Cims/Groep1/Protocol/src/cims/startup/IDatabase.java</file>
-            <file>file:/C:/Users/Michael/Documents/GitHub/Cims/Groep1/Protocol/src/FileTransfer/FileManager.java</file>
-            <file>file:/C:/Users/Michael/Documents/GitHub/Cims/Groep1/Protocol/src/cims/startup/SQL.java</file>
+            <file>file:/C:/Users/Michael/Documents/GitHub/Cims/Groep1/Protocol/src/socketserver/CIMSServer.java</file>
+            <file>file:/C:/Users/Michael/Documents/GitHub/Cims/Groep1/Protocol/src/Protocol/MessageBuilder.java</file>
             <file>file:/C:/Users/Michael/Documents/GitHub/Cims/Groep1/Protocol/src/cims/startup/DatabaseConnector.java</file>
         </group>
     </open-files>

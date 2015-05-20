@@ -13,19 +13,19 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 /**
  *
  * @author Michael
  */
-public class CIMSServer implements Runnable {
-
+public class CIMSServer implements Runnable 
+{
     int receiverID = 0;
     Socket csocket;
     MessageBuilder messageBuilder;
@@ -37,14 +37,24 @@ public class CIMSServer implements Runnable {
     static ObjectOutputStream oos = null;
     ObjectInputStream ois = null;
     OutputStream os = null;
+    
+    ArrayList<String> requestedMessages;
+    ArrayList<String> connectedClients;
 
     CIMSServer(Socket csocket) 
     {
         this.csocket = csocket;
         toSend = new ArrayList<Message>();
+        requestedMessages = new ArrayList<String>();
+        connectedClients = new ArrayList<String>();
         administration = ThreadAdministration.getInstance();
         administration.addClient(this);
         messageBuilder = new MessageBuilder();
+    }
+    
+    public ArrayList<String> getRequestedMessages()
+    {
+        return this.requestedMessages;
     }
 
     public void addMessage(Message message) {
@@ -52,11 +62,13 @@ public class CIMSServer implements Runnable {
     }
 
     public static void main(String args[])
-            throws Exception {
+    throws Exception 
+    {       
         ServerSocket serverSocket = new ServerSocket(9000);
         System.out.println("CIMS Communication Server, Starting Up.....");
         System.out.println("Awaiting Communications");
-        while (true) {
+        while (true) 
+        {
             Socket sock = serverSocket.accept();
             System.out.println("Connecting to Client on: " + sock.getLocalAddress().toString());
             new Thread(new CIMSServer(sock)).start();
@@ -64,7 +76,8 @@ public class CIMSServer implements Runnable {
     }
 
     @Override
-    public void run() {
+    public void run() 
+    {
         try {
             oos = new ObjectOutputStream(csocket.getOutputStream());
             ois = new ObjectInputStream(csocket.getInputStream());
@@ -75,7 +88,8 @@ public class CIMSServer implements Runnable {
 
         try 
         { 
-            while ((message = (Message) ois.readObject()) != null && csocket != null) {
+            while ((message = (Message) ois.readObject()) != null && csocket != null) 
+            {
                 //oos.writeObject("Message Received");
                 System.out.println("Message Received");
 
@@ -87,6 +101,7 @@ public class CIMSServer implements Runnable {
                     if (messagesplit[0].equals("login")) 
                     {
                         System.out.println("MessageType: " + "Login");
+                        System.out.println("Requested By: " + csocket.toString());
                         //SHIT OM IN TE LOGGEN EN ZET DE ID VAN DE RECEIVER
                         //USER MOET HIER EERST INLOGGEN
                         //ONTLEED MESSAGE
@@ -107,8 +122,100 @@ public class CIMSServer implements Runnable {
                     {
                         //RETURN ERRORMESSAGE USER NIET INGELOGD
                     }
-
-                } else {
+                    if(messagesplit[0].equals("retrieveallcalamities"))
+                    { 
+                        System.out.println("MessageType: " + "Retrieve All Calamities");
+                        System.out.println("Requested By: " + csocket.toString());
+                    }
+                    else
+                    {
+                    }
+                    if(messagesplit[0].equals("retrievepersoninformation"))
+                    {
+                    }
+                    else
+                    {
+                    }
+                    if(messagesplit[0].equals("insertperson"))
+                    {
+                    }
+                    else
+                    {
+                    }
+                    if(messagesplit[0].equals("insertcalamity"))
+                    {
+                    }
+                    else
+                    {
+                    }
+                    if(messagesplit[0].equals("retrievealllocations"))
+                    {
+                    }
+                    else
+                    {
+                    }
+                    if(messagesplit[0].equals("retrievealllocationtypes"))
+                    {
+                    }
+                    else
+                    {
+                    }
+                    if(messagesplit[0].equals("insertlocation"))
+                    {
+                    }
+                    else
+                    {
+                    }
+                    if(messagesplit[0].equals("retrieveallregions"))
+                    {
+                    }
+                    else
+                    {
+                    }
+                    if(messagesplit[0].equals("retrievecalamitiesfromregion"))
+                    {
+                    }
+                    else
+                    {
+                    }
+                    if(messagesplit[0].equals("retrievecalamitiesfrompersonid"))
+                    {
+                    }
+                    else
+                    {
+                    }
+                    if(messagesplit[0].equals("retrievecalamitywithid"))
+                    {
+                    }
+                    else
+                    {
+                    }
+                    if(messagesplit[0].equals("insertlog"))
+                    {
+                    }
+                    else
+                    {
+                    }
+                    if(messagesplit[0].equals("retrievelogs"))
+                    {
+                    }
+                    else
+                    {
+                    }
+                    if(messagesplit[0].equals("insertmessage"))
+                    {
+                    }
+                    else
+                    {
+                    }
+                    if(messagesplit[0].equals("retrievemessages"))
+                    {
+                    }
+                    else
+                    {
+                    }
+                } 
+                else {
                     messageReceiver = new ServerMessageReceiver();
                     Message reply = messageReceiver.processMessage(message);
 
@@ -131,5 +238,4 @@ public class CIMSServer implements Runnable {
             Logger.getLogger(CIMSServer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
 }
