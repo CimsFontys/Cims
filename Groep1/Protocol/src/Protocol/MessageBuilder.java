@@ -23,21 +23,21 @@ import javax.json.*;
  */
 public class MessageBuilder 
 {     
-    public static final String Login = "login";
-    public static final String LoginReply = "loginreply";
-    public static final String RetrieveAllCalamities = "retrieveallcalamities";
-    public static final String RetrieveAllCalamitiesReply = "retrieveallcalamitiesreply";
-    public static final String RetrievePersonInformation = "retrievepersoninformation";
-    public static final String RetrievePersonInformationReply = "retrievepersoninformationreply";
-    public static final String InsertPerson = "insertperson";
+    public static final String Login = "login"; //
+    public static final String LoginReply = "loginreply"; //
+    public static final String RetrieveAllCalamities = "retrieveallcalamities"; //
+    public static final String RetrieveAllCalamitiesReply = "retrieveallcalamitiesreply"; //
+    public static final String RetrievePersonInformation = "retrievepersoninformation"; //
+    public static final String RetrievePersonInformationReply = "retrievepersoninformationreply"; //
+    public static final String InsertPerson = "insertperson"; //
     public static final String InsertCalamity = "insertcalamity";
-    public static final String RetrieveAllLocations = "retrievealllocations";
-    public static final String RetrieveAllLocationsReply = "retrievealllocationsreply";
-    public static final String RetrieveAllLocationTypes = "retrievealllocationtypes";
-    public static final String RetrieveAllLocationTypesReply = "retrievealllocationtypesreply";
+    public static final String RetrieveAllLocations = "retrievealllocations"; //
+    public static final String RetrieveAllLocationsReply = "retrievealllocationsreply"; //
+    public static final String RetrieveAllLocationTypes = "retrievealllocationtypes"; //
+    public static final String RetrieveAllLocationTypesReply = "retrievealllocationtypesreply"; //
     public static final String InsertLocation = "insertlocation";
-    public static final String RetrieveAllRegions = "retrieveallregions";
-    public static final String RetrieveAllRegionsReply = "retrieveallregionsreply";
+    public static final String RetrieveAllRegions = "retrieveallregions"; //
+    public static final String RetrieveAllRegionsReply = "retrieveallregionsreply"; //
     public static final String RetrieveCalamitiesFromRegion = "retrievecalamitiesfromregion";
     public static final String RetrieveCalamitiesFromRegionReply = "retrievecalamitiesfromregionreply";
     public static final String RetrieveCalamitiesFromPersonID = "retrievecalamitiesfrompersonid";
@@ -45,10 +45,10 @@ public class MessageBuilder
     public static final String RetrieveCalamityWithID = "retrievecalamitywithid";
     public static final String RetrieveCalamityWithIDReply = "retrievecalamitywithidreply";
     public static final String InsertLog = "insertlog";
-    public static final String RetrieveLogs = "retrievelogs";
-    public static final String RetrieveLogsReply = "retrievelogsreply";
+    public static final String RetrieveLogs = "retrievelogs"; //
+    public static final String RetrieveLogsReply = "retrievelogsreply"; //
     public static final String InsertMessage = "insertmessage";
-    public static final String RetrieveMessages = "retrievemessages";
+    public static final String RetrieveMessages = "retrievemessages"; 
     public static final String RetrieveMessagesReply = "retrievemessagesreply";
     
     private static final String token = "-";
@@ -293,14 +293,13 @@ public class MessageBuilder
         return message;
     }
     
-    public Message buildLoginMessage(String username, String password, int type)
+    public Message buildLoginMessage(String username, String password)
     {      
         JsonArrayBuilder jb = Json.createArrayBuilder();
         JsonObjectBuilder jo = Json.createObjectBuilder();
         
         jo.add("username", username);
         jo.add("password", password);
-        jo.add("persontype", type);
                 
         jb.add(jo);
         

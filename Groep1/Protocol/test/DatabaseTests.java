@@ -53,7 +53,7 @@ public class DatabaseTests {
     public void testLoginPerson()
     {
         SQL sql = new SQL();
-        String test = sql.loginPerson("test", "test");
+        String test = sql.loginPerson("michaelvaneck", "cims");
         System.out.println(test);
     }
     

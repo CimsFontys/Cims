@@ -55,13 +55,14 @@ public class MessageThread implements Runnable {
     
     public void start()
     {
-        if (!thread.isAlive()) {
+        
             try {
                 thread.start();
+                System.out.println(thread.isAlive());
             } catch (Exception e) {
                 System.out.println(e.getLocalizedMessage());
             }
-        }
+        
     }
     
     public void stop()
@@ -72,6 +73,9 @@ public class MessageThread implements Runnable {
             {
                 this.shouldStop = true;
                 System.out.println("Message Thread stopped, Communication Finished");
+                this.socket1 = null;
+                this.ois = null;
+                this.oos = null;
             }
             catch(Exception e)
             {
@@ -94,9 +98,10 @@ public class MessageThread implements Runnable {
             {
                 try {
                     oos.writeObject(messages.get(0));
-                    System.out.println("Message Send");
+                    System.out.println("Message Send: " + messages.get(0).getType());
                 } catch (IOException ex) {
                     Logger.getLogger(MessageThread.class.getName()).log(Level.SEVERE, null, ex);
+                    System.out.println("nope");
                 }
                 messages.remove(0);
             }
