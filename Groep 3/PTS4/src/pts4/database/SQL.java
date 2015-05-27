@@ -67,6 +67,7 @@ public class SQL extends DatabaseConnector implements IDatabase
                 JsonObjectBuilder jb = Json.createObjectBuilder();
                 jb.add("personid" , personId);
                 jb.add("persontypeid", persontypeid);
+                jb.add("configurator", personconfigurator);
                 
                 JsonObject jo = jb.build();
                 

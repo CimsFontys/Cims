@@ -32,11 +32,22 @@ public class InloggenController implements Initializable
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
-        dbcon = new SQL();
+          dbcon = new SQL();
     }
     
     public void btnInloggen_Click(ActionEvent event)
     {
-        MessageBox mb = new MessageBox("Vis",MessageBoxType.OK_ONLY);
+        String response = dbcon.loginPerson(tbGebruikersnaam.getText(), tbWachtwoord.getText());
+        if (response.equals(""))
+        {
+            MessageBox mb = new MessageBox("Onjuiste gebruikersnaam en/of wachtwoord.",MessageBoxType.OK_ONLY);
+            mb.show();
+            tbGebruikersnaam.clear();
+            tbWachtwoord.clear();
+        }
+        else
+        {
+            
+        }
     }
 }

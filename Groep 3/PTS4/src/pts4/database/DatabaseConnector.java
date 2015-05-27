@@ -35,9 +35,9 @@ public class DatabaseConnector
     protected void connectToDatabase()
     {
         //IP ADRES FROM DATABASE
-        String url = "jdbc:mysql://145.144.241.199:3306/";
+        String url = "jdbc:mysql://145.144.241.47:3306/";
         //DATABASE NAME
-        String dbName = "mydb";
+        String dbName = "cimsdb";
         //DRIVER & LIBRARY MYSQL DRIVER
         String driver = "com.mysql.jdbc.Driver";
         //CIMS USERNAME DATABASE ACCESS
@@ -75,7 +75,7 @@ public class DatabaseConnector
         
         if (conn != null) 
         {
-
+                System.out.println("Verbinding met database bewerkstelligd op IP: " + url + " - " + dbName);
 	}
         else 
         {

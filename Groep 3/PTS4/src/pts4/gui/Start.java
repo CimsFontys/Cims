@@ -20,6 +20,9 @@ public class Start extends Application {
     public void start(Stage stage) throws Exception {
 
         Parent root = FXMLLoader.load(getClass().getResource("Inloggen.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Inloggen.fxml"));
+        InloggenController controller = new InloggenController();
+        loader.setController(controller);
         Scene scene = new Scene(root);     
         stage.setScene(scene);
         stage.show();
