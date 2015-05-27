@@ -71,6 +71,7 @@ public class Gmaps {
     private Set<MyWaypoint> units;
     private WaypointPainter<Waypoint> waypointPainter;
     private WaypointPainter<MyWaypoint> waypointPainter2;
+    private Boolean unitAanmaak = true;
     
 
     public void open() {
@@ -155,9 +156,29 @@ public class Gmaps {
  
             @Override
             public void mouseClicked(MouseEvent me) {
-              
+              if (unitAanmaak == true)
+              {
+                  String type = "Politie";
+                  Color kleur = null;
+                  String id = null;
+                  if (type.equals("Politie"))
+                  {
+                      kleur = Color.cyan;
+                      id = "P";
+                  }
+                  if (type.equals("Ambulance"))
+                  {
+                      kleur = Color.YELLOW;
+                      id = "A";
+                  }
+                  if (type.equals("Brandweer"))
+                  {
+                      kleur = Color.RED;
+                      id = "B";
+                  }
+                  
                GeoPosition plek = mapViewer.convertPointToGeoPosition(me.getPoint());
-               units.add(new MyWaypoint("F", Color.ORANGE, plek));
+               units.add(new MyWaypoint(id, kleur, plek));
 
 
 		// Create a waypoint painter that takes all the waypoints
@@ -165,7 +186,7 @@ public class Gmaps {
 		waypointPainter2.setRenderer(new FancyWaypointRenderer());
                 teken();
                 //GeoPosition frankfurt = new GeoPosition(mapViewer.convertPointToGeoPosition(me.getLocationOnScreen()));
-                
+              }
             }
         }); // end MouseAdapter
         
