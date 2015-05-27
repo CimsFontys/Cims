@@ -23,7 +23,7 @@ public class MessageSenderThread implements Runnable {
 
     private ReadWrite rw;
     
-    private boolean running = false;
+    private boolean running = true;
     
     private List<Message> toSend;
     

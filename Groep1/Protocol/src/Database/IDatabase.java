@@ -26,6 +26,12 @@ public interface IDatabase
     public String loginPerson(String username, String password);
     
     /**
+     * 
+     * @return 
+     */
+    public String retrieveAllCalamitiesDetailed();
+    
+    /**
      * TESTED AND WORKING -> IN MESSAGEBUILDER
      * @param personId
      * @return 
@@ -131,7 +137,7 @@ public interface IDatabase
    
     public boolean insertInformation(int id_calamity, String type, String description, File file, int id_civilian, int id_emergency);
        
-    public ArrayList<String> retrieveInformation(int id_calamity);
+    public String retrieveInformation(int id_calamity);
     
     /**
      * TESTED AND WORKING -> IN MESSAGEBUILDER

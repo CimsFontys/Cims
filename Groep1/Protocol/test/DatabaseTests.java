@@ -161,4 +161,19 @@ public class DatabaseTests {
         SQL sql = new SQL();
         System.out.println(sql.retrieveMessages(2, 4));
     }
+    
+    @Test
+    public void testGetDetailedCalamity()
+    {
+        SQL sql = new SQL();
+        System.out.println(sql.retrieveInformation(1));
+    }
+    
+    @Test
+    public void testGetCalamitiesDetailed()
+    {
+        SQL sql = new SQL();
+        System.out.println("GET CALAMITIES DETAILED");
+        System.out.println(sql.retrieveAllCalamitiesDetailed());
+    }
 }
