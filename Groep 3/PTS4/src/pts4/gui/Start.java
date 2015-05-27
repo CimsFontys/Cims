@@ -19,9 +19,9 @@ public class Start extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        Parent root = FXMLLoader.load(getClass().getResource("Inloggen.fxml"));
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Inloggen.fxml"));
-        InloggenController controller = new InloggenController();
+        Parent root = FXMLLoader.load(getClass().getResource("GUIFX.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("GUIFX.fxml"));
+        GUIController controller = new GUIController();
         loader.setController(controller);
         Scene scene = new Scene(root);     
         stage.setScene(scene);

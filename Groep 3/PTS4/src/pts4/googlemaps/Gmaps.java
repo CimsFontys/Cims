@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import static java.util.Collections.list;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javafx.embed.swing.SwingNode;
 import javax.swing.JButton;
@@ -44,6 +45,8 @@ import org.jxmapviewer.input.CenterMapListener;
 import org.jxmapviewer.input.PanKeyListener;
 import org.jxmapviewer.input.PanMouseInputListener;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCenter;
+import org.jxmapviewer.painter.CompoundPainter;
+import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.viewer.DefaultTileFactory;
 import org.jxmapviewer.viewer.DefaultWaypoint;
 import org.jxmapviewer.viewer.GeoPosition;
@@ -65,7 +68,10 @@ public class Gmaps {
     private JXMapViewer mapViewer = new JXMapViewer();
     private JFrame frame = new JFrame("Google Maps");
     private Set<Waypoint> waypoints;
+    private Set<MyWaypoint> units;
     private WaypointPainter<Waypoint> waypointPainter;
+    private WaypointPainter<MyWaypoint> waypointPainter2;
+    
 
     public void open() {
         // Create a TileFactoryInfo for Virtual Earth
@@ -81,13 +87,12 @@ public class Gmaps {
         mapViewer = new JXMapViewer();
         mapViewer.setTileFactory(tileFactory);
 
-        //aanmaken test cases
-        ArrayList<Unit> units = new ArrayList<Unit>();
-        units.add(new Unit("Bob", "Patrol dienst", "Politie", 41.227029, 80.8164));
 
         //Calimiteiten toevoegen.
         waypointPainter = new WaypointPainter<Waypoint>();
+        waypointPainter2 = new WaypointPainter<MyWaypoint>();
         waypoints = new HashSet<Waypoint>();
+        units = new HashSet<MyWaypoint>();
 
         for (Incident object : incidents) {
             GeoPosition plek = new GeoPosition(Double.parseDouble(object.getLatitude()), Double.parseDouble(object.getLongitude()));
@@ -115,7 +120,17 @@ public class Gmaps {
         GeoPosition plek = new GeoPosition(Double.parseDouble(a.getLatitude()), Double.parseDouble(a.getLongitude()));
         waypoints.add(new DefaultWaypoint(plek));
         waypointPainter.setWaypoints(waypoints);
-        mapViewer.setOverlayPainter(waypointPainter);
+        teken();
+    }
+    
+    public void teken()
+    {
+        // Create a compound painter that uses both the route-painter and the waypoint-painter
+		List<Painter<JXMapViewer>> painters = new ArrayList<Painter<JXMapViewer>>();
+		painters.add(waypointPainter2);
+		painters.add(waypointPainter);
+		CompoundPainter<JXMapViewer> painter = new CompoundPainter<JXMapViewer>(painters);
+		mapViewer.setOverlayPainter(painter);
     }
 
     public void createStage() {
@@ -136,7 +151,24 @@ public class Gmaps {
         mapViewer.addMouseWheelListener(new ZoomMouseWheelListenerCenter(mapViewer));
         mapViewer.addKeyListener(new PanKeyListener(mapViewer));
 
-        Combobox();
+        mapViewer.addMouseListener(new MouseAdapter() {
+ 
+            @Override
+            public void mouseClicked(MouseEvent me) {
+              
+               GeoPosition plek = mapViewer.convertPointToGeoPosition(me.getPoint());
+               units.add(new MyWaypoint("F", Color.ORANGE, plek));
+
+
+		// Create a waypoint painter that takes all the waypoints
+		waypointPainter2.setWaypoints(units);
+		waypointPainter2.setRenderer(new FancyWaypointRenderer());
+                teken();
+                //GeoPosition frankfurt = new GeoPosition(mapViewer.convertPointToGeoPosition(me.getLocationOnScreen()));
+                
+            }
+        }); // end MouseAdapter
+        
 
     }
 
@@ -161,7 +193,6 @@ public class Gmaps {
             @Override
             public void run() {
                 open();
-
                 swingNode.setContent(mapViewer);
             }
         });
