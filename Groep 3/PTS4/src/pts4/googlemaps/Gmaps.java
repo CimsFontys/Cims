@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import static java.util.Collections.list;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import javafx.embed.swing.SwingNode;
@@ -75,6 +76,7 @@ public class Gmaps {
     private WaypointPainter<MyWaypoint> waypointPainter2;
     public Boolean unitAanmaak;
     public String id;
+    public int type;
     private GUIController gui;
 
     public Gmaps(GUIController gui) {
@@ -162,17 +164,16 @@ public class Gmaps {
             @Override
             public void mouseClicked(MouseEvent me) {
                 if (unitAanmaak == true) {
-                    String type = "Politie";
                     Color kleur = null;
-                    if (type.equals("Politie")) {
+                    if (type == 1) {
                         kleur = Color.cyan;
 
                     }
-                    if (type.equals("Ambulance")) {
+                    if (type == 2) {
                         kleur = Color.YELLOW;
 
                     }
-                    if (type.equals("Brandweer")) {
+                    if (type == 3) {
                         kleur = Color.RED;
 
                     }
@@ -185,22 +186,21 @@ public class Gmaps {
                             gui.setUnit(plek.getLongitude(), plek.getLatitude());
                         }
                     });
-                           if (units.contains(id))
-                           {
-                               
-                           }
-                           else
-                           {
-                           units.add(new MyWaypoint(id, kleur, plek));
-                           }
 
+                    for (MyWaypoint p : units) {
+                        if (p.getLabel().equals(id)) {
+                            units.remove(p);
+                        }
+                    }
 
+                    units.add(new MyWaypoint(id, kleur, plek));
+                    unitAanmaak = false;
                     // Create a waypoint painter that takes all the waypoints
                     waypointPainter2.setWaypoints(units);
                     waypointPainter2.setRenderer(new FancyWaypointRenderer());
                     teken();
 
-                    unitAanmaak = false;
+                    
                     //GeoPosition frankfurt = new GeoPosition(mapViewer.convertPointToGeoPosition(me.getLocationOnScreen()));
                 }
             }

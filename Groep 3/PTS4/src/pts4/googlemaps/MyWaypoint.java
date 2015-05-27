@@ -42,6 +42,18 @@ public class MyWaypoint extends DefaultWaypoint
 	{
 		return color;
 	}
+        
+        public Boolean getId(String id)
+        {
+            if (id.equals(this.label))
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
 
 	
 }

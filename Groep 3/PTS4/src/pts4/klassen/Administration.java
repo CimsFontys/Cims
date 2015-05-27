@@ -41,6 +41,9 @@ public class Administration {
         units = new ArrayList<>();
         
         units.add(new EmergencyUnit("123", 1));
+        units.add(new EmergencyUnit("1", 2));
+        units.add(new EmergencyUnit("3", 3));
+        units.add(new EmergencyUnit("10", 1));
         pendingIncidents = new ArrayList<>();
         java.sql.Timestamp  sqlDate = new java.sql.Timestamp(new java.util.Date().getTime());
         /*databaseconn = new SQL();

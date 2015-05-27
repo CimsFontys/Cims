@@ -46,6 +46,7 @@ public class Client implements Runnable
         in = new ObjectInputStream(inStream);
         out = new ObjectOutputStream(outStream);
         this.unit = (EmergencyUnit) in.readObject();
+        System.out.println("Naam: " + unit.getNaam() + " Longitude: " + unit.getLongitude() + " Latidude: " + unit.getLatidude());
         File dir = new File("Opnames\\" + unit.getNaam());
         if(!dir.exists())
         {
@@ -147,7 +148,7 @@ public class Client implements Runnable
             } 
             catch (IOException | ClassNotFoundException ex) 
             {
-                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                //Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 Thread.currentThread().interrupt();
                 System.out.println( unit.getNaam() + " is gone");
                 server.removeClient(unit.getNaam());

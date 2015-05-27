@@ -17,13 +17,13 @@ import java.util.logging.Logger;
  *
  * @author Leo
  */
-public class serverThread implements Runnable
+public class ServerThread implements Runnable
 {
     
     private Server server;
     private ArrayList<String> clients;
     
-    public serverThread(Server server)
+    public ServerThread(Server server)
     {
         this.server = server;
     }
@@ -52,7 +52,7 @@ public class serverThread implements Runnable
         } 
         catch (ClassNotFoundException ex) 
         {
-            Logger.getLogger(serverThread.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
