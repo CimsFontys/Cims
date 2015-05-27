@@ -282,7 +282,7 @@ public class CIMSServer implements Runnable {
             System.out.println("CIMS Server: " + "Person Added To System: " + username);
     }
 
-    private void login(Message message) 
+    private synchronized void login(Message message) 
     {        
         StringReader reader = new StringReader(message.getText());
         JsonParser parser = Json.createParser(reader);

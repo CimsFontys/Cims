@@ -135,7 +135,7 @@ public interface IDatabase
      */
     public String retrieveMessages(int sender_id, int receiver_id);
    
-    public boolean insertInformation(int id_calamity, String type, String description, File file, int id_civilian, int id_emergency);
+    public boolean insertInformation(int id_calamity, String calamitytype, String calamitydescription, String filepath, String filename, String fileextension, int personid);
        
     public String retrieveInformation(int id_calamity);
     

@@ -5,8 +5,12 @@
  */
 
 import Database.SQL;
+import FileTransfer.FileManager;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;
@@ -175,5 +179,31 @@ public class DatabaseTests {
         SQL sql = new SQL();
         System.out.println("GET CALAMITIES DETAILED");
         System.out.println(sql.retrieveAllCalamitiesDetailed());
+    }
+    
+    @Test
+    public void testInsertCalamityInformation()
+    {
+        SQL sql = new SQL();
+        int calamityid = 2;
+        int personid = 2;
+        String calamityinformationtype = "Toxic";
+        String calamityinformationdescription = "BIG TOXIC SHITSZLE";
+        
+        String filename = "";
+        String filepath = "";
+        String fileextension = "";
+        
+        FileManager fm = FileManager.getInstance();
+        filepath = "";
+        byte[] bFile = new byte[] {74,69,32,77,79,69,68,69,82};
+        filepath = fm.saveFile(bFile, "test.txt");
+        File file = new File(filepath);
+        filename = file.getName();
+        fileextension = filename.substring(filename.lastIndexOf("."));
+        assertTrue(file.exists());
+        
+        filename = "";
+        sql.insertInformation(calamityid, calamityinformationtype, calamityinformationdescription, filepath, filename, fileextension, personid);
     }
 }
