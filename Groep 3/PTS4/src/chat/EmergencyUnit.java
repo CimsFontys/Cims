@@ -16,14 +16,14 @@ public class EmergencyUnit implements Serializable
     private String naam;
     private int type;
     private double longitude;
-    private double latidude;
+    private double latitude;
     
-    public EmergencyUnit(String naam, int type)
+    public EmergencyUnit(String naam, int type, double longitude, double latitude)
     {
         this.naam = naam;
         this.type = type;
         this.longitude = longitude;
-        this.latidude = latidude;       
+        this.latitude = latitude;       
     }
 
     public String getNaam() 
@@ -43,7 +43,7 @@ public class EmergencyUnit implements Serializable
 
     public double getLatidude() 
     {
-        return latidude;
+        return latitude;
     }
 
     public void setLongitude(double longitude) 
@@ -53,7 +53,7 @@ public class EmergencyUnit implements Serializable
 
     public void setLatidude(double latidude) 
     {
-        this.latidude = latidude;
+        this.latitude = latidude;
     }
     
     @Override
