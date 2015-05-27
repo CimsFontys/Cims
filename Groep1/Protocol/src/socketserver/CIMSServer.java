@@ -46,7 +46,8 @@ public class CIMSServer implements Runnable {
     ArrayList<String> requestedMessages;
     ArrayList<String> connectedClients;
 
-    CIMSServer(Socket csocket) {
+    CIMSServer(Socket csocket) 
+    {
         this.csocket = csocket;
         toSend = new ArrayList<Message>();
         requestedMessages = new ArrayList<String>();
@@ -68,7 +69,7 @@ public class CIMSServer implements Runnable {
         System.out.println("Awaiting Communications");
         while (true) {
             Socket sock = serverSocket.accept();
-            System.out.println("Connecting to Client on: " + sock.getLocalAddress().toString());
+            System.out.println("Connecting to Client on: " + sock.getRemoteSocketAddress().toString());
             new Thread(new CIMSServer(sock)).start();
         }
     }
@@ -164,7 +165,6 @@ public class CIMSServer implements Runnable {
                 } else {
                     event = parser.next();
                 }
-
             }
             SQL retrieve = new SQL();
             String response = retrieve.getPersonInformation(personid);

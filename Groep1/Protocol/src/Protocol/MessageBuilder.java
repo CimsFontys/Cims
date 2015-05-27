@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,6 +24,8 @@ import javax.json.*;
  */
 public class MessageBuilder 
 {     
+    public static final String RetrieveCalamityInformation = "retrievecalamityinformation"; //<- NOG DOEN
+    public static final String RetrieveCalamityInformationReply = "retrievecalamityinformationreply"; //<- NOG DOEN
     public static final String Login = "login"; //
     public static final String LoginReply = "loginreply"; //
     public static final String RetrieveAllCalamities = "retrieveallcalamities"; //
@@ -358,7 +361,7 @@ public class MessageBuilder
         return message;
     }
     
-    public Message buildInsertPerson(int persontypeid, String first_name, String last_name, String middle_name, String username, String password, String SSN, String email, Date Birthdate, String phonenumber, String Street, String City, String Postal, String Region, String configurator)
+    public Message buildInsertPerson(int persontypeid, String first_name, String last_name, String middle_name, String username, String password, String SSN, String email, LocalDate Birthdate, String phonenumber, String Street, String City, String Postal, String Region, String configurator)
     {
         JsonObjectBuilder jb = Json.createObjectBuilder();
         

@@ -1201,10 +1201,8 @@ public class SQL extends DatabaseConnector implements IDatabase
     }
     
     @Override
-    public ArrayList<String> retrieveInformation(int id_calamity)
-    {
-        ArrayList<String> information = new ArrayList<String>();
-        
+    public String retrieveInformation(int id_calamity)
+    {        
         try
         {
             super.connectToDatabase();
@@ -1216,7 +1214,7 @@ public class SQL extends DatabaseConnector implements IDatabase
         
         try
         {
-            String query = "SELECT * FROM INFORMATION I, INFORMATION_TYPE II WHERE idcalamity = ?";
+            String query = "select * from region r, calamity c, calamityinformation i where c.calamityid = i.calamityid AND c.regionid = r.regionid AND c.calamityid = ?";
             PreparedStatement prest = conn.prepareStatement(query);
             prest.setInt(1, id_calamity);
             
@@ -1226,16 +1224,40 @@ public class SQL extends DatabaseConnector implements IDatabase
             
             while(res.next())
             {                
-                String description = res.getString("description");
-                int idfile = res.getInt("idfile");
-                String type = res.getString("type");
+                int calamityid = res.getInt("calamityid");
+                String calamitylatitude = res.getString("calamitylatitude");
+                String calamitylongtitude = res.getString("calamitylongtitude");
+                String calamityname = res.getString("calamityname");
+                String calamitydescription = res.getString("calamitydescription");
+                java.sql.Date birthdayDate = res.getDate("calamitydate");
+                String birthday = birthdayDate.toString();
+                String calamitydate = birthday;
+                int personid = res.getInt("personid");
+                String calamitydanger = res.getString("calamitydanger");
+                String calamityinformationtype = res.getString("calamityinformationtype");
+                String calamityinformationdescription = res.getString("calamityinformationdescription");
+                String regionname = res.getString("regionname");
+
+                JsonArrayBuilder ja = Json.createArrayBuilder();
+                JsonObjectBuilder jb = Json.createObjectBuilder();
+                jb.add("calamityid" , calamityid);
+                jb.add("calamitylatitude", calamitylatitude);
+                jb.add("calamitylongtitude", calamitylongtitude);
+                jb.add("calamityname", calamityname);
+                jb.add("calamitydescription", calamitydescription);
+                jb.add("calamitydate", calamitydate);
+                jb.add("personid", personid);
+                jb.add("calamitydanger", calamitydanger);
+                jb.add("calamityinformationtype", calamityinformationtype);
+                jb.add("calamityinformationdescription", calamityinformationdescription);
+                jb.add("regionname", regionname);
                 
-                String result = "-CALAMITY_ID:" + id_calamity + "-DESCRIPTION:" + description + "-TYPE:" + type + "-FILEID:" + idfile;
+                ja.add(jb);
+                JsonArray array = ja.build();
                 
-                information.add(result);
+                return array.toString();
             }
-            
-            return information;
+           
         }
         catch(SQLException ee)
         {
@@ -1245,6 +1267,8 @@ public class SQL extends DatabaseConnector implements IDatabase
         {
             super.disconnectFromDatabase();
         }
+        
+        return "";
     }
 
     /**

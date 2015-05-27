@@ -11,7 +11,9 @@ import CommunicationClient.MessageListener;
 import Protocol.Message;
 import Protocol.MessageBuilder;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -21,6 +23,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -39,15 +42,13 @@ public class DemoFXController implements Initializable, MessageListener
     private Stage currentstage;
     
     private ComManager commManager = ComManager.getInstance();
-    private List<String> messageOutput;
-    private ObservableList<String> observable = FXCollections.observableArrayList();
     
-    @FXML private ListView<String> listview_output;
     @FXML private TextField textfield_username;
     @FXML private TextField textfield_password;
     @FXML private Button button_login;
     @FXML private Button button_add;
     @FXML private Button button_calamities;
+    @FXML private Button button_getlogs;
     @FXML private TextField textfield_register_persontype;
     @FXML private TextField textfield_register_firstname;
     @FXML private TextField textfield_register_middlename;
@@ -62,13 +63,23 @@ public class DemoFXController implements Initializable, MessageListener
     @FXML private TextField textfield_register_postal;
     @FXML private TextField textfield_register_region;
     @FXML private TextField textfield_register_configurator;
+    @FXML private TextField textfield_personid;
+    @FXML private DatePicker datepicker_birthdate;
     
     @Override
     public void initialize(URL location, ResourceBundle resources) 
     {
         commManager.addListener(this);
-        listview_output = new ListView<String>(observable);
-        messageOutput = new ArrayList<>();
+    }
+    
+    public void getLogs()
+    {
+        String personidText = textfield_personid.getText();
+        int personid = Integer.parseInt(personidText);
+        
+        MessageBuilder mb = new MessageBuilder();
+        Message message = mb.buildRetrieveLogs(personid);
+        commManager.sendMessage(message);
     }
     
     public void login()
@@ -83,6 +94,7 @@ public class DemoFXController implements Initializable, MessageListener
     
     public void insertPerson()
     {
+        LocalDate birthdate = this.datepicker_birthdate.getValue();
         String persontypeText = textfield_register_persontype.getText();
         int persontype = Integer.parseInt(persontypeText);
         String firstname = textfield_register_firstname.getText();
@@ -100,7 +112,7 @@ public class DemoFXController implements Initializable, MessageListener
         String configutor = textfield_register_configurator.getText();
         
         MessageBuilder mb = new MessageBuilder();
-        Message message = mb.buildInsertPerson(persontype, firstname, lastname, middlename, username, password, SSN, email, null, phone, street, city, postal, region, configutor);
+        Message message = mb.buildInsertPerson(persontype, firstname, lastname, middlename, username, password, SSN, email, birthdate, phone, street, city, postal, region, configutor);
         commManager.sendMessage(message);
     }   
     
@@ -114,18 +126,7 @@ public class DemoFXController implements Initializable, MessageListener
     @Override
     public void proces(Message message) 
     {
-        messageOutput.add(message.getType());
-        messageOutput.add(message.getText());
-        showOutput();
-        
-        System.out.println("MessageType: " +message.getType());
+        System.out.println("MessageType: " + message.getType());
         System.out.println("ServerReply: " + message.getText());
-    }
-    
-    public void showOutput()
-    {
-        observable.addAll(messageOutput);
-        listview_output.setItems(observable);
-    }   
-    
+    }    
 }
