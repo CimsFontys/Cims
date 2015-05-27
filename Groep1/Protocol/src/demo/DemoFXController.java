@@ -6,6 +6,10 @@
 
 package demo;
 
+import CommunicationClient.ComManager;
+import CommunicationClient.MessageListener;
+import Protocol.Message;
+import Protocol.MessageBuilder;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -21,7 +25,7 @@ import socketserver.ClientConnector;
  *
  * @author Michael
  */
-public class DemoFXController implements Initializable
+public class DemoFXController implements Initializable, MessageListener
 {
     private Parent root;
     private Scene scene;
@@ -30,6 +34,8 @@ public class DemoFXController implements Initializable
     private Stage currentstage;
     
     private ClientConnector clientConnector;
+    
+    private ComManager commManager = ComManager.getInstance();
     
     @FXML private TextField textfield_username;
     @FXML private TextField textfield_password;
@@ -40,6 +46,7 @@ public class DemoFXController implements Initializable
     public void initialize(URL location, ResourceBundle resources) 
     {
         clientConnector = new ClientConnector();
+        commManager.addListener(this);
     }
     
     public void login()
@@ -47,11 +54,21 @@ public class DemoFXController implements Initializable
         String username = textfield_username.getText();
         String password = textfield_password.getText();
         
-        clientConnector.buildLoginMessage(username, password);
+        MessageBuilder mb = new MessageBuilder();
+        Message message = mb.buildLoginMessage(username, password);
+        commManager.sendMessage(message);
+        
     }
     
     public void allCalamities()
     {
-        clientConnector.buildRetrieveAllCalamities();
+        MessageBuilder mb = new MessageBuilder();
+        Message message = mb.buildRetrieveAllCalamitiesMessage();
+        commManager.sendMessage(message);
+    }
+
+    @Override
+    public void proces(Message message) {
+        System.out.println(message.getText()); //To change body of generated methods, choose Tools | Templates.
     }
 }

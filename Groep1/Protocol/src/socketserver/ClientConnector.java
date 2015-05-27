@@ -5,6 +5,7 @@
  */
 package socketserver;
 
+import CommunicationClient.MessageListener;
 import Protocol.Message;
 import Protocol.MessageBuilder;
 import java.io.IOException;
