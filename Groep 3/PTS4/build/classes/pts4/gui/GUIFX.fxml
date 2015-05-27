@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.collections.*?>
@@ -7,7 +8,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="793.0" prefWidth="1210.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="pts4.gui.GUIController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="793.0" prefWidth="1210.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pts4.gui.GUIController">
   <children>
     <TabPane layoutX="0.0" layoutY="0.0" prefHeight="793.0" prefWidth="1210.0" tabClosingPolicy="UNAVAILABLE">
       <tabs>
@@ -20,15 +21,68 @@
                     <StackPane fx:id="gmapsstack" prefHeight="512.0" prefWidth="783.0" />
                   </children>
                 </Pane>
-                <ListView id="lvIncidenten" fx:id="lvIncidents2" layoutX="818.0" layoutY="14.0" onMouseClicked="#selectIncident" prefHeight="734.0" prefWidth="369.0" />
-                <TextField id="tfNaam" fx:id="tfName" editable="false" layoutX="101.0" layoutY="524.0" prefWidth="703.0" />
-                <TextField fx:id="tfLongitude" editable="false" layoutX="101.0" layoutY="682.0" prefWidth="312.0" text="" />
-                <TextField id="tfLongitude" fx:id="tfLatitude" editable="false" layoutX="492.0" layoutY="682.0" prefWidth="312.0" text="" />
-                <Label id="lbl" fx:id="lblName" layoutX="19.0" layoutY="527.0" text="Name" />
-                <Label id="lblBeschrijving" fx:id="lblDescription" layoutX="19.0" layoutY="557.0" text="Description" />
-                <Label fx:id="lblLongitude" layoutX="19.0" layoutY="685.0" text="Longitude" />
-                <Label fx:id="lblLatitude" layoutX="434.0" layoutY="685.0" text="Latitude" />
-                <TextArea id="tfAddDescription" fx:id="tfDescription" editable="false" layoutX="101.0" layoutY="557.0" prefHeight="117.0" prefWidth="703.0" wrapText="true" />
+                <ListView id="lvIncidenten" fx:id="lvIncidents2" layoutX="818.0" layoutY="14.0" onMouseClicked="#selectIncident" prefHeight="741.0" prefWidth="369.0" />
+                        <TabPane layoutX="15.0" layoutY="531.0" prefHeight="219.0" prefWidth="797.0" tabClosingPolicy="UNAVAILABLE">
+                          <tabs>
+                            <Tab text="Incident Information">
+                              <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="190.0" prefWidth="780.0">
+                                       <children>
+                                          <TextArea id="tfAddDescription" fx:id="tfDescription" editable="false" layoutX="96.0" layoutY="37.0" prefHeight="117.0" prefWidth="693.0" wrapText="true" />
+                                          <Label fx:id="lblLatitude" layoutX="429.0" layoutY="165.0" text="Latitude" />
+                                          <Label fx:id="lblLongitude" layoutX="14.0" layoutY="165.0" text="Longitude" />
+                                          <Label id="lblBeschrijving" fx:id="lblDescription" layoutX="14.0" layoutY="37.0" text="Description" />
+                                          <Label id="lbl" fx:id="lblName" layoutX="14.0" layoutY="7.0" text="Name" />
+                                          <TextField id="tfLongitude" fx:id="tfLatitude" editable="false" layoutX="487.0" layoutY="162.0" prefHeight="25.0" prefWidth="302.0" text="" />
+                                          <TextField fx:id="tfLongitude" editable="false" layoutX="96.0" layoutY="162.0" prefWidth="312.0" text="" />
+                                          <TextField id="tfNaam" fx:id="tfName" editable="false" layoutX="96.0" layoutY="4.0" prefHeight="25.0" prefWidth="694.0" />
+                                       </children>
+                                    </AnchorPane>
+                              </content>
+                            </Tab>
+                            <Tab text="Control Information">
+                              <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <ListView id="LVunits" layoutX="14.0" layoutY="-5.0" prefHeight="200.0" prefWidth="783.0" />
+                                          <ComboBox id="cbincident" fx:id="cbincident" layoutX="103.0" layoutY="14.0" prefWidth="150.0" />
+                                          <ComboBox id="cbUnit" fx:id="cbUnit" layoutX="103.0" layoutY="49.0" prefWidth="150.0" />
+                                          <Label layoutX="26.0" layoutY="13.0" text="Incident">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <Label layoutX="26.0" layoutY="48.0" text="Unit">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <TextArea id="txtDescription" fx:id="txtDescription" layoutX="378.0" layoutY="10.0" prefHeight="165.0" prefWidth="394.0" />
+                                          <Label layoutX="275.0" layoutY="13.0" text="Description">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <Button id="btnLocation" fx:id="btnLocation" layoutX="26.0" layoutY="144.0" mnemonicParsing="false" onAction="#giveOrder" prefHeight="25.0" prefWidth="125.0" text="Location" />
+                                          <Button id="btnSubmit" fx:id="btnSubmit" layoutX="220.0" layoutY="144.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="125.0" text="Submit" />
+                                          <TextField id="txtlongitude" layoutX="26.0" layoutY="104.0" prefHeight="25.0" prefWidth="81.0" />
+                                          <TextField id="txtlatitude" layoutX="172.0" layoutY="104.0" prefHeight="25.0" prefWidth="81.0" />
+                                          <Label layoutX="26.0" layoutY="79.0" text="Longitude">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <Label layoutX="172.0" layoutY="79.0" text="Latitude">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </AnchorPane>
+                              </content>
+                            </Tab>
+                          </tabs>
+                        </TabPane>
               </children>
             </AnchorPane>
           </content>

@@ -24,6 +24,7 @@ import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
@@ -66,7 +67,17 @@ public class GUIController implements Initializable, MapChangeListener<String, C
     ChoiceBox cbGewelddadig;
     @FXML
     ChoiceBox cbSpoed;
+    @FXML
+    TextArea txtDescription;
 
+    @FXML
+    TextField txtlongitude;
+    @FXML
+    TextField txtlatitude;
+    @FXML
+    Button btnLocation;
+    @FXML
+    Button btnSubmit;
     @FXML
     TextField tfAddName;
     @FXML
@@ -98,7 +109,10 @@ public class GUIController implements Initializable, MapChangeListener<String, C
     ComboBox cbUnits;
     @FXML
     ComboBox cbProvincies;
-
+    @FXML
+    ComboBox cbincident;
+    @FXML
+    ComboBox cbUnit;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
@@ -135,6 +149,8 @@ public class GUIController implements Initializable, MapChangeListener<String, C
     private void initComboboxes() {
 
         //cbCategory.setItems(FXCollections.observableList(categorylist));
+        cbUnit.setItems(admin.getUnits());
+        cbincident.setItems(admin.getIncidents());
         lvIncidents.setItems(admin.getIncidents());
         lvIncidents2.setItems(admin.getIncidents());
         lvPendingIncidents.setItems(admin.getPendingIncidents());
@@ -167,6 +183,11 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         lvPendingIncidents.setItems(admin.getPendingIncidents());
     }
 
+    public void giveOrder()
+    {
+        g.unitAanmaak = true;
+    }
+    
     public void selectIncident() {
 
         for (Incident a : admin.getIncidents()) {
@@ -191,7 +212,11 @@ public class GUIController implements Initializable, MapChangeListener<String, C
             }
         }
     }
-    
+    public void setUnit(double longitude, double latitude)
+    {
+        txtlongitude.setText(Double.toString(longitude));
+        txtlatitude.setText(Double.toString(latitude));
+    }
     public void acceptIncident() {
 
         for (Incident a : admin.getPendingIncidents()) {

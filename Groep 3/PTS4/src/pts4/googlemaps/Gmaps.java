@@ -32,6 +32,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.MouseInputListener;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -57,6 +58,7 @@ import org.jxmapviewer.viewer.WaypointPainter;
 import pts4.klassen.Administration;
 import static pts4.klassen.Administration.incidents;
 import pts4.klassen.Incident;
+import pts4.gui.GUIController;
 
 /**
  *
@@ -71,7 +73,7 @@ public class Gmaps {
     private Set<MyWaypoint> units;
     private WaypointPainter<Waypoint> waypointPainter;
     private WaypointPainter<MyWaypoint> waypointPainter2;
-    private Boolean unitAanmaak = true;
+    public Boolean unitAanmaak;
     
 
     public void open() {
@@ -84,6 +86,7 @@ public class Gmaps {
         File cacheDir = new File(System.getProperty("user.home") + File.separator + ".jxmapviewer2");
         LocalResponseCache.installResponseCache(info.getBaseURL(), cacheDir, false);
 
+       
         // Setup JXMapViewer
         mapViewer = new JXMapViewer();
         mapViewer.setTileFactory(tileFactory);
@@ -135,7 +138,7 @@ public class Gmaps {
     }
 
     public void createStage() {
-
+        GUIController bla = new GUIController();
         GeoPosition Utrecht = new GeoPosition(52.0907370, 5.1214200);
         /*// Create a waypoint painter that takes all the waypoints
          WaypointPainter<Waypoint> waypointPainter = new WaypointPainter<Waypoint>();
@@ -178,6 +181,13 @@ public class Gmaps {
                   }
                   
                GeoPosition plek = mapViewer.convertPointToGeoPosition(me.getPoint());
+                               Platform.runLater(new Runnable() {
+
+                      @Override
+                      public void run() {
+                          bla.setUnit(plek.getLongitude(), plek.getLatitude());
+                      }
+                  });
                units.add(new MyWaypoint(id, kleur, plek));
 
 
@@ -185,6 +195,8 @@ public class Gmaps {
 		waypointPainter2.setWaypoints(units);
 		waypointPainter2.setRenderer(new FancyWaypointRenderer());
                 teken();
+
+                unitAanmaak = false;
                 //GeoPosition frankfurt = new GeoPosition(mapViewer.convertPointToGeoPosition(me.getLocationOnScreen()));
               }
             }

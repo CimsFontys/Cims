@@ -1,5 +1,6 @@
 package pts4.klassen;
 
+import chat.EmergencyUnit;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Date;
@@ -30,12 +31,16 @@ import pts4.rssfeed.RSSReader;
 public class Administration {
     
     public static ArrayList<Incident> incidents;
+    public static ArrayList<EmergencyUnit> units;
     public ArrayList<Incident> pendingIncidents;
     private Server server;
     private IDatabase databaseconn;
     
     public Administration() throws MalformedURLException {
         incidents = new ArrayList<>();
+        units = new ArrayList<>();
+        
+        units.add(new EmergencyUnit("123", 1));
         pendingIncidents = new ArrayList<>();
         java.sql.Timestamp  sqlDate = new java.sql.Timestamp(new java.util.Date().getTime());
         /*databaseconn = new SQL();
@@ -116,6 +121,10 @@ public class Administration {
 //                }
 //            }
 //        }
+    }
+     public ObservableList<EmergencyUnit> getUnits() {
+        
+        return FXCollections.observableArrayList(units);
     }
     
     public ObservableList<Incident> getIncidents() {
