@@ -21,17 +21,13 @@ public class MessageRecieverThread implements Runnable {
     
     private CommMessageListener listener;
     
-    private ObjectInputStream ois;
+    private ReadWrite rw;
     
     private boolean running = true;
     
-    public MessageRecieverThread(Socket soc, CommMessageListener listener) {
+    public MessageRecieverThread(ReadWrite rw, CommMessageListener listener) {
         this.listener = listener;
-        try {
-            this.ois = new ObjectInputStream(soc.getInputStream());
-        } catch (IOException ex) {
-            Logger.getLogger(MessageRecieverThread.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        this.rw = rw;
     }
     
     public void stop()
@@ -42,16 +38,7 @@ public class MessageRecieverThread implements Runnable {
     @Override
     public void run() {
         while (running) {
-            try {
-                Message message = null;
-                if ((message = (Message) ois.readObject()) != null) {
-                    this.listener.recieved(message);
-                }
-            } catch (IOException ex) {
-                Logger.getLogger(MessageRecieverThread.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(MessageRecieverThread.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            listener.recieved(rw.readMessage());
         }
     }
     

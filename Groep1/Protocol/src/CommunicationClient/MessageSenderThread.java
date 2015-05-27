@@ -21,18 +21,14 @@ import java.util.logging.Logger;
  */
 public class MessageSenderThread implements Runnable {
 
-    private ObjectOutputStream oos;
+    private ReadWrite rw;
     
     private boolean running = false;
     
     private List<Message> toSend;
     
-    public MessageSenderThread(Socket soc) {
-        try {
-            this.oos = new ObjectOutputStream(soc.getOutputStream());
-        } catch (IOException ex) {
-            Logger.getLogger(MessageSenderThread.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public MessageSenderThread(ReadWrite rw) {
+        this.rw = rw;
         this.toSend = new ArrayList<>();
     }
     
@@ -51,12 +47,8 @@ public class MessageSenderThread implements Runnable {
         while(running){
             if (toSend.size() > 0)
             { 
-                try {
-                    this.oos.writeObject(toSend.get(0));
-                    this.toSend.remove(0);
-                } catch (IOException ex) {
-                    Logger.getLogger(MessageSenderThread.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                this.rw.sendMessage(this.toSend.get(0));
+                this.toSend.remove(0);
             }
         }
     }
