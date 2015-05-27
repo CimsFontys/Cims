@@ -55,4 +55,9 @@ public class EmergencyUnit implements Serializable
     {
         this.latidude = latidude;
     }
+    
+    @Override
+    public String toString() {
+        return this.naam;
+    }
 }

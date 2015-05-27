@@ -6,8 +6,10 @@
 
 package pts4.chatserver;
 
-import chat.Message;
-import pts4.gui.ServerGUIController;
+import chat.AudioMessage;
+import chat.EmergencyUnit;
+import chat.ChatMessage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -31,26 +33,31 @@ public class Client implements Runnable
 {
     private ObjectInputStream  in;
     private ObjectOutputStream out;
-    private String naam;
+    private EmergencyUnit unit;
     private Server server;
-    private ArrayList<Message> messages;
-    private ObservableList<Message> observableMessages;
+    private ArrayList<ChatMessage> messages;
+    private ObservableList<ChatMessage> observableMessages;
     
     public Client(Socket incoming, Server server) throws IOException, ClassNotFoundException
     {
         OutputStream outStream = incoming.getOutputStream();
         InputStream inStream = incoming.getInputStream();
-
+        
         in = new ObjectInputStream(inStream);
         out = new ObjectOutputStream(outStream);
-        this.naam = (String) in.readObject();
-        System.out.println(naam);
+        this.unit = (EmergencyUnit) in.readObject();
+        File dir = new File("Opnames\\" + unit.getNaam());
+        if(!dir.exists())
+        {
+            dir.mkdir();
+        }
+        System.out.println(unit.getNaam());
         this.server = server;
-        messages = new ArrayList<Message>();
+        messages = new ArrayList<ChatMessage>();
         observableMessages = observableList(messages);
     }
     
-    public void sendMessage(Message message)
+    public void sendMessage(ChatMessage message)
     {
         try 
         {
@@ -89,12 +96,24 @@ public class Client implements Runnable
         } 
     }
     
-    public String getNaam()
+    public void addMessageToObservable(ChatMessage message)
     {
-        return this.naam;
+        Platform.runLater(new Runnable() 
+        {
+            @Override
+            public void run() 
+            {
+                observableMessages.add(message);
+            }
+        });
     }
     
-    public ObservableList<Message> getMessages()
+    public String getNaam()
+    {
+        return unit.getNaam();
+    }
+    
+    public ObservableList<ChatMessage> getMessages()
     {
         return this.observableMessages;
     }
@@ -106,17 +125,20 @@ public class Client implements Runnable
         {
             try 
             {
-                Message message = (Message) in.readObject();
+                ChatMessage message = (ChatMessage) in.readObject();
                 System.out.println("bericht ontvangen");
                 if(message.getOntvanger().equals("Meldkamer"))
                 {
-                    Platform.runLater(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            observableMessages.add(message);
-                        }
-                    });
+                    if(message instanceof AudioMessage)
+                    {
+                        AudioMessage audiomessage = (AudioMessage) message;
+                        Thread t = new Thread(new WriteFileThread(audiomessage, this));
+                        t.start();
+                    }
+                    else
+                    {
+                        addMessageToObservable(message);
+                    }
                 }
                 else
                 {
@@ -127,8 +149,8 @@ public class Client implements Runnable
             {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 Thread.currentThread().interrupt();
-                System.out.println( naam + " is gone");
-                server.removeClient(this.naam);
+                System.out.println( unit.getNaam() + " is gone");
+                server.removeClient(unit.getNaam());
             }
         }
     }

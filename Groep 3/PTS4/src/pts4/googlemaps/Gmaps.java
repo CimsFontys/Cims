@@ -74,7 +74,12 @@ public class Gmaps {
     private WaypointPainter<Waypoint> waypointPainter;
     private WaypointPainter<MyWaypoint> waypointPainter2;
     public Boolean unitAanmaak;
-    
+    public String id;
+    private GUIController gui;
+
+    public Gmaps(GUIController gui) {
+        this.gui = gui;
+    }
 
     public void open() {
         // Create a TileFactoryInfo for Virtual Earth
@@ -86,11 +91,9 @@ public class Gmaps {
         File cacheDir = new File(System.getProperty("user.home") + File.separator + ".jxmapviewer2");
         LocalResponseCache.installResponseCache(info.getBaseURL(), cacheDir, false);
 
-       
         // Setup JXMapViewer
         mapViewer = new JXMapViewer();
         mapViewer.setTileFactory(tileFactory);
-
 
         //Calimiteiten toevoegen.
         waypointPainter = new WaypointPainter<Waypoint>();
@@ -119,26 +122,25 @@ public class Gmaps {
          mapViewer.setOverlayPainter(waypointPainter);*/
         // Display the viewer in a JFrame
     }
-    
+
     public void addIncidentOnMap(Incident a) {
         GeoPosition plek = new GeoPosition(Double.parseDouble(a.getLatitude()), Double.parseDouble(a.getLongitude()));
         waypoints.add(new DefaultWaypoint(plek));
         waypointPainter.setWaypoints(waypoints);
         teken();
     }
-    
-    public void teken()
-    {
+
+    public void teken() {
         // Create a compound painter that uses both the route-painter and the waypoint-painter
-		List<Painter<JXMapViewer>> painters = new ArrayList<Painter<JXMapViewer>>();
-		painters.add(waypointPainter2);
-		painters.add(waypointPainter);
-		CompoundPainter<JXMapViewer> painter = new CompoundPainter<JXMapViewer>(painters);
-		mapViewer.setOverlayPainter(painter);
+        List<Painter<JXMapViewer>> painters = new ArrayList<Painter<JXMapViewer>>();
+        painters.add(waypointPainter2);
+        painters.add(waypointPainter);
+        CompoundPainter<JXMapViewer> painter = new CompoundPainter<JXMapViewer>(painters);
+        mapViewer.setOverlayPainter(painter);
     }
 
     public void createStage() {
-        GUIController bla = new GUIController();
+
         GeoPosition Utrecht = new GeoPosition(52.0907370, 5.1214200);
         /*// Create a waypoint painter that takes all the waypoints
          WaypointPainter<Waypoint> waypointPainter = new WaypointPainter<Waypoint>();
@@ -156,52 +158,53 @@ public class Gmaps {
         mapViewer.addKeyListener(new PanKeyListener(mapViewer));
 
         mapViewer.addMouseListener(new MouseAdapter() {
- 
+
             @Override
             public void mouseClicked(MouseEvent me) {
-              if (unitAanmaak == true)
-              {
-                  String type = "Politie";
-                  Color kleur = null;
-                  String id = null;
-                  if (type.equals("Politie"))
-                  {
-                      kleur = Color.cyan;
-                      id = "P";
-                  }
-                  if (type.equals("Ambulance"))
-                  {
-                      kleur = Color.YELLOW;
-                      id = "A";
-                  }
-                  if (type.equals("Brandweer"))
-                  {
-                      kleur = Color.RED;
-                      id = "B";
-                  }
-                  
-               GeoPosition plek = mapViewer.convertPointToGeoPosition(me.getPoint());
-                               Platform.runLater(new Runnable() {
+                if (unitAanmaak == true) {
+                    String type = "Politie";
+                    Color kleur = null;
+                    if (type.equals("Politie")) {
+                        kleur = Color.cyan;
 
-                      @Override
-                      public void run() {
-                          bla.setUnit(plek.getLongitude(), plek.getLatitude());
-                      }
-                  });
-               units.add(new MyWaypoint(id, kleur, plek));
+                    }
+                    if (type.equals("Ambulance")) {
+                        kleur = Color.YELLOW;
+
+                    }
+                    if (type.equals("Brandweer")) {
+                        kleur = Color.RED;
+
+                    }
+
+                    GeoPosition plek = mapViewer.convertPointToGeoPosition(me.getPoint());
+                    Platform.runLater(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            gui.setUnit(plek.getLongitude(), plek.getLatitude());
+                        }
+                    });
+                           if (units.contains(id))
+                           {
+                               
+                           }
+                           else
+                           {
+                           units.add(new MyWaypoint(id, kleur, plek));
+                           }
 
 
-		// Create a waypoint painter that takes all the waypoints
-		waypointPainter2.setWaypoints(units);
-		waypointPainter2.setRenderer(new FancyWaypointRenderer());
-                teken();
+                    // Create a waypoint painter that takes all the waypoints
+                    waypointPainter2.setWaypoints(units);
+                    waypointPainter2.setRenderer(new FancyWaypointRenderer());
+                    teken();
 
-                unitAanmaak = false;
-                //GeoPosition frankfurt = new GeoPosition(mapViewer.convertPointToGeoPosition(me.getLocationOnScreen()));
-              }
+                    unitAanmaak = false;
+                    //GeoPosition frankfurt = new GeoPosition(mapViewer.convertPointToGeoPosition(me.getLocationOnScreen()));
+                }
             }
         }); // end MouseAdapter
-        
 
     }
 

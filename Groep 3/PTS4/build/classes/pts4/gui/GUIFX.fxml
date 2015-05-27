@@ -57,7 +57,7 @@
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <TextArea id="txtDescription" fx:id="txtDescription" layoutX="378.0" layoutY="10.0" prefHeight="165.0" prefWidth="394.0" />
+                                          <TextArea id="txtDescription" fx:id="txtDescription" layoutX="378.0" layoutY="10.0" prefHeight="165.0" prefWidth="394.0" wrapText="true" />
                                           <Label layoutX="275.0" layoutY="13.0" text="Description">
                                              <font>
                                                 <Font size="18.0" />
@@ -65,14 +65,14 @@
                                           </Label>
                                           <Button id="btnLocation" fx:id="btnLocation" layoutX="26.0" layoutY="144.0" mnemonicParsing="false" onAction="#giveOrder" prefHeight="25.0" prefWidth="125.0" text="Location" />
                                           <Button id="btnSubmit" fx:id="btnSubmit" layoutX="220.0" layoutY="144.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="125.0" text="Submit" />
-                                          <TextField id="txtlongitude" layoutX="26.0" layoutY="104.0" prefHeight="25.0" prefWidth="81.0" />
-                                          <TextField id="txtlatitude" layoutX="172.0" layoutY="104.0" prefHeight="25.0" prefWidth="81.0" />
+                                          <TextField fx:id="txtlongitude" layoutX="26.0" layoutY="104.0" prefHeight="25.0" prefWidth="127.0" />
+                                          <TextField fx:id="txtlatitude" layoutX="220.0" layoutY="104.0" prefHeight="25.0" prefWidth="125.0" />
                                           <Label layoutX="26.0" layoutY="79.0" text="Longitude">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <Label layoutX="172.0" layoutY="79.0" text="Latitude">
+                                          <Label layoutX="221.0" layoutY="79.0" text="Latitude">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>

@@ -5,7 +5,9 @@
  */
 package pts4.chatserver;
 
-import chat.Message;
+import Audio.AudioHandler;
+import chat.AudioMessage;
+import chat.ChatMessage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -20,13 +22,14 @@ import javafx.collections.ObservableMap;
  * @author pieter
  */
 
-import pts4.gui.ServerGUIController;
 public class Server
 {
     private Map<String, Client> clients;
     private ArrayList<String> clientNames;
-    private serverThread st;
+    private ServerThread st;
     private transient ObservableMap<String, Client> observableClients;
+    private AudioHandler handler;
+    private String naam;
     
     public Server(MapChangeListener<String,Client> mcl) 
     {
@@ -34,29 +37,53 @@ public class Server
         observableClients = observableMap(clients);
         clientNames = new ArrayList<String>();
         clientNames.add("Meldkamer");
-        st = new serverThread(this);
+        st = new ServerThread(this);
         Thread t = new Thread(st);
         t.start();
         observableClients.addListener(mcl);
+        this.naam = "Meldkamer";
+        handler = new AudioHandler();
+    }
+    
+    public void startRecrding()
+    {
+        handler.startRecording();
+    }
+    
+    public void stopRecording()
+    {
+        handler.stopRecording();
+    }
+    
+    public void sendAudioMessage(String ontvanger)
+    {
+        AudioMessage audiomessage = new AudioMessage("Audiobericht ontvagen van: " + this.naam, this.naam, ontvanger, handler.getAudiofile());
+        audiomessage.setAudiopath(handler.getPath());
+        sendMessage(audiomessage);
     }
     
     public synchronized void removeClient(String client)
     {
-        Platform.runLater(new Runnable() {
-
+        Platform.runLater(new Runnable() 
+        {
             @Override
             public void run() {
                 observableClients.remove(client);
+                clientNames.remove(client);
                 sendClientName(client);
             }
         });        
     }
     
-    public synchronized void sendMessage(Message message)
+    public synchronized void sendMessage(ChatMessage message)
     {
         System.out.println("ik stuur een bericht naar: " + message.getOntvanger());
-        clients.get(message.getOntvanger()).sendMessage(message);
-        
+        Client c = clients.get(message.getOntvanger());
+        if(message.getAfzender().equals("Meldkamer"))
+        {
+            c.addMessageToObservable(message);
+        }
+        c.sendMessage(message);        
     }
     
     public void sendClientName(String name)
@@ -73,10 +100,11 @@ public class Server
     
     public void putClient(Client client)
     {
-        Platform.runLater(new Runnable() {
-
+        Platform.runLater(new Runnable() 
+        {
             @Override
-            public void run() {
+            public void run() 
+            {
                 client.sendClients(clientNames);
                 clientNames.add(client.getNaam());  
                 sendClientName(client.getNaam());
