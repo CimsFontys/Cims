@@ -35,21 +35,21 @@ public class MessageBuilder
     public static final String RetrieveAllLocationsReply = "retrievealllocationsreply"; //
     public static final String RetrieveAllLocationTypes = "retrievealllocationtypes"; //
     public static final String RetrieveAllLocationTypesReply = "retrievealllocationtypesreply"; //
-    public static final String InsertLocation = "insertlocation";
+    public static final String InsertLocation = "insertlocation"; //
     public static final String RetrieveAllRegions = "retrieveallregions"; //
     public static final String RetrieveAllRegionsReply = "retrieveallregionsreply"; //
-    public static final String RetrieveCalamitiesFromRegion = "retrievecalamitiesfromregion";
-    public static final String RetrieveCalamitiesFromRegionReply = "retrievecalamitiesfromregionreply";
-    public static final String RetrieveCalamitiesFromPersonID = "retrievecalamitiesfrompersonid";
-    public static final String RetrieveCalamitiesFromPersonIDReply = "retrievecalamitiesfrompersonidreply";
-    public static final String RetrieveCalamityWithID = "retrievecalamitywithid";
-    public static final String RetrieveCalamityWithIDReply = "retrievecalamitywithidreply";
-    public static final String InsertLog = "insertlog";
+    public static final String RetrieveCalamitiesFromRegion = "retrievecalamitiesfromregion";  //
+    public static final String RetrieveCalamitiesFromRegionReply = "retrievecalamitiesfromregionreply"; //
+    public static final String RetrieveCalamitiesFromPersonID = "retrievecalamitiesfrompersonid"; //
+    public static final String RetrieveCalamitiesFromPersonIDReply = "retrievecalamitiesfrompersonidreply"; //
+    public static final String RetrieveCalamityWithID = "retrievecalamitywithid"; //
+    public static final String RetrieveCalamityWithIDReply = "retrievecalamitywithidreply"; //
+    public static final String InsertLog = "insertlog"; //
     public static final String RetrieveLogs = "retrievelogs"; //
     public static final String RetrieveLogsReply = "retrievelogsreply"; //
-    public static final String InsertMessage = "insertmessage";
-    public static final String RetrieveMessages = "retrievemessages"; 
-    public static final String RetrieveMessagesReply = "retrievemessagesreply";
+    public static final String InsertMessage = "insertmessage"; //
+    public static final String RetrieveMessages = "retrievemessages"; // 
+    public static final String RetrieveMessagesReply = "retrievemessagesreply"; //
     
     private static final String token = "-";
     

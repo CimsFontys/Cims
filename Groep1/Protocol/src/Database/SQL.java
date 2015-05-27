@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package cims.startup;
+package Database;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -31,6 +31,7 @@ public class SQL extends DatabaseConnector implements IDatabase
     Boolean connectiedatabase2 = true;
     Boolean updateconndatabase1 = true;
     Boolean updateconndatabase2 = true;
+    
     public SQL()
     {
         super();

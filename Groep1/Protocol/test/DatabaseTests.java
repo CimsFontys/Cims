@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-import cims.startup.SQL;
+import Database.SQL;
 import java.io.File;
 import java.util.Date;
 import org.junit.After;

@@ -6,40 +6,28 @@
 
 package socketserver;
 
-import java.util.ArrayList;
-
 /**
  *
  * @author Michael
  */
-public class ThreadAdministration 
-{
-    private static ThreadAdministration INSTANCE;
-    private ArrayList<CIMSServer> threadList;
-    
-    private ThreadAdministration()
+public class ThreadAdministration {
+   
+    private ThreadAdministration() 
     {
-        INSTANCE = this;
-        threadList = new ArrayList<CIMSServer>();
-    }
-    
-    public void addClient(CIMSServer client)
-    {
-        threadList.add(client);
-    }
-    
-    public void removeClient(CIMSServer client)
-    {
-        threadList.remove(client);
-    }
-    
-    public static ThreadAdministration getInstance()
-    {
-        if(INSTANCE == null)
-        {
-            new ThreadAdministration();
-        }
         
-        return INSTANCE;
+    }
+    
+    public static ThreadAdministration getInstance() {
+        return ThreadAdministrationHolder.INSTANCE;
+    }
+    
+    private static class ThreadAdministrationHolder {
+
+        private static final ThreadAdministration INSTANCE = new ThreadAdministration();
+    }
+    
+    public void addClient(CIMSServer server)
+    {
+        
     }
 }

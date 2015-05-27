@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package cims.startup;
+package Database;
 
 
 import java.sql.*;
@@ -37,7 +37,7 @@ public class DatabaseConnector
     {
         //IP ADRES FROM DATABASE
         //String url = "jdbc:mysql://localhost:3306/";
-        String url = "jdbc:mysql://145.144.243.66:3306/";
+        String url = "jdbc:mysql://localhost/";
         //DATABASE NAME
         String dbName = "cimsdb";
         //String dbName = "collectit";

@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package cims.startup;
+package Database;
 
 /**
  *

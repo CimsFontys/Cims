@@ -7,8 +7,7 @@ package socketserver;
 
 import Protocol.Message;
 import Protocol.MessageBuilder;
-import Protocol.ServerMessageReceiver;
-import cims.startup.SQL;
+import Database.SQL;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -36,7 +35,6 @@ public class CIMSServer implements Runnable {
     boolean running = true;
     Socket csocket;
     MessageBuilder messageBuilder;
-    ServerMessageReceiver messageReceiver;
     Message message;
     ArrayList<Message> toSend;
     ThreadAdministration administration;
