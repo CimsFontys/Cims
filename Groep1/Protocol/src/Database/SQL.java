@@ -409,6 +409,75 @@ public class SQL extends DatabaseConnector implements IDatabase
             super.disconnectFromDatabase();
         }
     }
+    
+    @Override
+    public String retrieveAllCalamitiesDetailed() 
+    {        
+        try
+        {
+            super.connectToDatabase();
+        }
+        catch (Exception e)
+        {
+            return null;     
+        }
+        
+        try
+        {
+            int count = 0;
+            JsonArrayBuilder jb = Json.createArrayBuilder();
+            String query = "SELECT * FROM region r, calamity c, calamityinformation ci where c.calamityid = ci.calamityid AND r.regionid = c.regionid";
+            PreparedStatement prest = conn.prepareStatement(query);
+            
+            prest.execute();
+            
+            ResultSet res = prest.getResultSet();
+            
+            while(res.next())
+            {                
+                int id_calamity = res.getInt("calamityid");
+                String geo_long = res.getString("calamitylongtitude");
+                String geo_lat = res.getString("calamitylatitude");
+                String name = res.getString("calamityname");
+                String description = res.getString("calamitydescription");
+                Date date = res.getDate("calamitydate");
+                String calamitydanger = res.getString("calamitydanger");
+                int regionid = res.getInt("regionid");
+                int personid = res.getInt("personid");
+                String calamityinformationtype = res.getString("calamityinformationtype");
+                String calamityinformationdescription = res.getString("calamityinformationdescription");
+                String regionname = res.getString("regionname");
+                
+                JsonObjectBuilder jb2 = Json.createObjectBuilder();
+                jb2.add("calamityid" , id_calamity);
+                jb2.add("calamitylongtitude" , geo_long);
+                jb2.add("calamitylatitude" , geo_lat);
+                jb2.add("calamityname" , name);
+                jb2.add("calamitydescription" , description);
+                jb2.add("calamitydate" , date.toString());
+                jb2.add("calamitydanger" , calamitydanger);
+                jb2.add("regionid", regionid);
+                jb2.add("personid", personid);
+                jb2.add("calamityinformationtype", calamityinformationtype);
+                jb2.add("calamityinformationdescription", calamityinformationdescription);
+                jb2.add("regionname", regionname);
+                
+                jb.add(jb2);
+                count++;
+            }
+            
+            JsonArray jo = jb.build(); 
+            return jo.toString();
+        }
+        catch(SQLException ee)
+        {
+            return null;
+        }
+        finally
+        {
+            super.disconnectFromDatabase();
+        }
+    }
 
     @Override
     public boolean insertLog(int personid, String description) 

@@ -85,6 +85,17 @@ public class CIMSServer implements Runnable {
         }
     }
     
+    private void retrieveAllCalamitiesDetailed(Message message)
+    {
+        if(receiverID != 0)
+        {
+            SQL retrieve = new SQL();
+            String result = retrieve.retrieveAllCalamitiesDetailed();
+            
+            this.addMessage(messageBuilder.buildRetrieveAllCalamitiesDetailedReply(result));
+        }
+    }
+    
     private void retrieveAllLocations(Message message)
     {
         if(receiverID != 0)
@@ -444,6 +455,11 @@ public class CIMSServer implements Runnable {
                                     System.out.println("MessageType: Retrieve Person Information");
                                     System.out.println("Message Requested By: " + csocket.toString());
                                     this.retrievePersonInformation(message);
+                                    break;
+                                case MessageBuilder.RetrieveAllCalamitiesDetailed:
+                                    System.out.println("MessageType: Retrieve All Calamities Detailed");
+                                    System.out.println("Message Requested By: " + csocket.toString());
+                                    this.retrieveAllCalamitiesDetailed(message);
                                     break;
                                 default:
                                     break;

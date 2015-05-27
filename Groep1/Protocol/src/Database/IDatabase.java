@@ -26,6 +26,12 @@ public interface IDatabase
     public String loginPerson(String username, String password);
     
     /**
+     * 
+     * @return 
+     */
+    public String retrieveAllCalamitiesDetailed();
+    
+    /**
      * TESTED AND WORKING -> IN MESSAGEBUILDER
      * @param personId
      * @return 

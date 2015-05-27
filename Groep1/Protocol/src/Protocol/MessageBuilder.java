@@ -24,8 +24,10 @@ import javax.json.*;
  */
 public class MessageBuilder 
 {     
-    public static final String RetrieveCalamityInformation = "retrievecalamityinformation"; //<- NOG DOEN
-    public static final String RetrieveCalamityInformationReply = "retrievecalamityinformationreply"; //<- NOG DOEN
+    public static final String RetrieveCalamityInformation = "retrievecalamityinformation";  //<- NOG DOEN IN CIMS SERVER
+    public static final String RetrieveCalamityInformationReply = "retrievecalamityinformationreply";  //<- NOG DOEN IN CIMS SERVER
+    public static final String RetrieveAllCalamitiesDetailed = "retrieveallcalamitiesdetailed"; // 
+    public static final String RetrieveAllCalamitiesDetailedReply = "retrieveallcalamitiesdetailedreply"; //
     public static final String Login = "login"; //
     public static final String LoginReply = "loginreply"; //
     public static final String RetrieveAllCalamities = "retrieveallcalamities"; //
@@ -68,7 +70,46 @@ public class MessageBuilder
     public MessageBuilder()
     {
         
-    }    
+    }  
+    
+    public Message buildRetrieveCalamityInformation(int calamityid)
+    {
+        JsonObjectBuilder jb = Json.createObjectBuilder();
+        
+        jb.add("calamityid", calamityid);
+            
+        JsonObject jo = jb.build();
+        
+        Message message = new Message();
+        message.setText(jo.toString());
+        message.setType(RetrieveCalamityInformation);
+        
+        return message;
+    }
+    
+    public Message buildRetrieveCalamityInformationReply(String json)
+    {
+        Message message = new Message();
+        message.setText(json);
+        message.setType(RetrieveCalamityInformationReply);
+        
+        return message;
+    }
+    
+    public Message buildRetrieveAllCalamitiesDetailed()
+    {      
+        Message message = new Message();
+        message.setType(RetrieveAllCalamitiesDetailed);
+        return message;
+    }
+    
+    public Message buildRetrieveAllCalamitiesDetailedReply(String json)
+    {
+        Message message = new Message();
+        message.setText(json);
+        message.setType(RetrieveAllCalamitiesDetailedReply);
+        return message;
+    }
     
     public Message buildRetrieveMessages(int senderid, int receiverid)
     {      

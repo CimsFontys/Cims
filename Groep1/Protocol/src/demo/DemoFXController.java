@@ -49,6 +49,7 @@ public class DemoFXController implements Initializable, MessageListener
     @FXML private Button button_add;
     @FXML private Button button_calamities;
     @FXML private Button button_getlogs;
+    @FXML private Button button_calamitiesdetailed;
     @FXML private TextField textfield_register_persontype;
     @FXML private TextField textfield_register_firstname;
     @FXML private TextField textfield_register_middlename;
@@ -120,6 +121,13 @@ public class DemoFXController implements Initializable, MessageListener
     {
         MessageBuilder mb = new MessageBuilder();
         Message message = mb.buildRetrieveAllCalamitiesMessage();
+        commManager.sendMessage(message);
+    }
+    
+    public void allCalamitiesDetailed()
+    {
+        MessageBuilder mb = new MessageBuilder();
+        Message message = mb.buildRetrieveAllCalamitiesDetailed();
         commManager.sendMessage(message);
     }
 
