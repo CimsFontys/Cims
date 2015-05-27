@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -167,6 +168,7 @@ public class SQL extends DatabaseConnector implements IDatabase
             super.disconnectFromDatabase();
         }
     }   
+   
 
     /**
      * TESTED AND WORKING
@@ -573,15 +575,7 @@ public class SQL extends DatabaseConnector implements IDatabase
     }
     
     private boolean insertFile(String name, String path, String extension)
-    {
-        int idfile_type = 0;
-        
-        if(!this.checkFileTypeID(extension))
-        {
-             this.insertFileType(extension);
-        }
-         
-        idfile_type = this.retrieveFileTypeID(extension);
+    {                 
         
         if(name != "" || path != "")
         {
@@ -595,13 +589,13 @@ public class SQL extends DatabaseConnector implements IDatabase
             }
             try
             {
-                String query = "INSERT INTO file (idfile_type, name, path)" 
+                String query = "INSERT INTO file (filename, filepath, fileextension)" 
                         + " values (?,?,?)";
                 PreparedStatement prest = conn.prepareStatement(query);
 
-                prest.setInt(1, idfile_type);
-                prest.setString(2, name);
-                prest.setString(3, path);
+                prest.setString(1, name);
+                prest.setString(2, path);
+                prest.setString(3, extension);
 
                 prest.execute();
 
@@ -625,64 +619,15 @@ public class SQL extends DatabaseConnector implements IDatabase
     
     /**
      * RETURN 0 WHEN FAILS
-     * @param extension
-     * @return 
-     */
-    private int retrieveFileTypeID(String extension)
-    {
-        String filetype = this.getFileType(extension);
-        int filetypeid = 0;
-        
-        if(filetype != "ERROR")
-        {
-            try
-            {
-                super.connectToDatabase();
-            }
-            catch(Exception e)
-            {
-            
-            }
-            try
-            {
-                String query = "SELECT idfile_type FROM file_type WHERE extension = ? AND type = ?";
-                PreparedStatement prest = conn.prepareStatement(query);
-                prest.setString(1, extension);
-                prest.setString(2, filetype);
-
-                prest.execute();
-
-                ResultSet res = prest.getResultSet();
-
-                while(res.next())
-                {                
-                    filetypeid = res.getInt("idfile_type"); 
-                }
-                
-                return filetypeid;
-            }
-            catch(SQLException ee)
-            {
-                return 0;
-            }   
-        }
-        else
-        {
-            return 0;
-        }
-    }
-    
-    /**
-     * RETURN 0 WHEN FAILS
      * @param filepath
      * @param name
      * @return 
      */
-    private int retrieveFileID(String filepath, String name, int idfile_type)
+    private int retrieveFileID(String filepath, String name)
     {
         int fileid = 0;
         
-        if(filepath != "" || name != "" || idfile_type != 0)
+        if(filepath != "" || name != "")
         {
             try
             {
@@ -694,11 +639,10 @@ public class SQL extends DatabaseConnector implements IDatabase
             }
             try
             {
-                String query = "SELECT idfile FROM file WHERE path = ? AND name = ? AND idfile_type = ?";
+                String query = "SELECT fileid FROM file WHERE filepath = ? AND filename = ?";
                 PreparedStatement prest = conn.prepareStatement(query);
                 prest.setString(1, filepath);
                 prest.setString(2, name);
-                prest.setInt(3, idfile_type);
 
                 prest.execute();
 
@@ -706,7 +650,7 @@ public class SQL extends DatabaseConnector implements IDatabase
 
                 while(res.next())
                 {                
-                    fileid = res.getInt("idfile"); 
+                    fileid = res.getInt("fileid"); 
                 }
                 
                 return fileid;
@@ -722,61 +666,8 @@ public class SQL extends DatabaseConnector implements IDatabase
         }
     }
     
-    private boolean checkFileTypeID(String extension)
-    {
-        if(extension != "")
-        {
-            try
-            {
-                super.connectToDatabase();
-            }
-            catch(Exception e)
-            {
-            
-            }
-            try
-            {
-                String query = "SELECT * FROM file_type WHERE extension = ? AND type = ?";
-                PreparedStatement prest = conn.prepareStatement(query);
-                prest.setString(1, extension);
-                prest.setString(2, this.getFileType(extension));
-
-                prest.execute();
-
-                ResultSet res = prest.getResultSet();
-
-                while(res.next())
-                {                
-                    return true;
-                }
-               
-            }
-            catch(SQLException ee)
-            {
-                return false;
-            }   
-        }
-        else
-        {
-            return false;
-        }
-        
-        return false;
-    }
-    
     private boolean checkFile(String filepath, String name, String extension)
-    {
-        int idfile_type = 0;
-        
-        if(this.checkFileTypeID(extension))
-        {
-            idfile_type = this.retrieveFileTypeID(extension);
-        }
-        else
-        {
-            return false;
-        }
-        
+    {                
         if(filepath != "" || name != "" || extension != "")
         {
             try
@@ -793,7 +684,7 @@ public class SQL extends DatabaseConnector implements IDatabase
                 PreparedStatement prest = conn.prepareStatement(query);
                 prest.setString(1, filepath);
                 prest.setString(2, name);
-                prest.setInt(3, idfile_type);
+                prest.setString(3, extension);
 
                 prest.execute();
 
@@ -816,68 +707,6 @@ public class SQL extends DatabaseConnector implements IDatabase
             return false;
         }
     }
-    
-    private boolean insertFileType(String extension)
-    {
-        String filetype = this.getFileType(extension);
-        
-        if(filetype != "ERROR")
-        {
-            try
-            {
-                super.connectToDatabase();
-            }
-            catch(Exception e)
-            {
-            
-            }
-            try
-            {
-                String query = "INSERT INTO file_type (type, extension)" 
-                        + " values (?,?)";
-                PreparedStatement prest = conn.prepareStatement(query);
-
-                prest.setString(1, filetype);
-                prest.setString(2, extension);
-
-                prest.execute();
-
-                return true;
-            }
-            catch(SQLException ee)
-            {
-                return false;
-            }
-            finally
-            {
-                super.disconnectFromDatabase();
-            }
-        }
-        else
-        {
-            return false;
-        }
-    }
-    
-    private String getFileType(String extension)
-    {
-        switch(extension)
-        {
-            case ".jpg":
-                return "Picture";
-            case ".bmp":
-                return "Picture";
-            case ".png":
-                return "Picture";
-            case ".mp3":
-                return "Audio";
-            case ".wav":
-                return "Audio";
-        }
-        
-        return "ERROR";
-    }
-
     @Override
     public boolean insertMessage(int sender_id, int receiver_id, String message, File file) 
     {
@@ -896,7 +725,7 @@ public class SQL extends DatabaseConnector implements IDatabase
                 this.insertFile(name, path, extension);
             }
 
-            idfile = this.retrieveFileID(path, name, this.retrieveFileTypeID(extension));
+            idfile = this.retrieveFileID(path, name);
 
             try
             {
@@ -1085,187 +914,55 @@ public class SQL extends DatabaseConnector implements IDatabase
         }   
     }
 
-    private boolean checkInformationType(String type)
-    {
-        try
-        {
-            super.connectToDatabase();
-        }
-        catch (Exception e)
-        {
-            return false;      
-        }
-        
-        try
-        {
-            String query = "SELECT * FROM information_type WHERE type = ?";
-            PreparedStatement prest = conn.prepareStatement(query);
-            prest.setString(1, type);
-            
-            prest.execute();
-            
-            ResultSet res = prest.getResultSet();
-            
-            while(res.next())
-            {
-                return true;
-            }
-        }
-        catch(SQLException ee)
-        {
-            return false;
-        }
-        finally
-        {
-            super.disconnectFromDatabase();
-        }
-        
-        return false;
-    }
-    
-    private boolean insertInformationType(String type)
-    {
-        try
-        {
-            super.connectToDatabase();
-        }
-        catch(Exception e)
-        {
-            return false;
-        }
-        try
-        {
-            String query = "INSERT INTO information_type (type)" 
-                    + " values (?)";
-            PreparedStatement prest = conn.prepareStatement(query);
-            
-            prest.setString(1, type);  
-            
-            prest.execute();
-            
-            return true;
-        }
-        catch(SQLException ee)
-        {
-            return false;
-        }
-        finally
-        {
-            super.disconnectFromDatabase();
-        }
-    }
     
     @Override
-    public boolean insertInformation(int id_calamity, String type, String description, File file, int id_civilian, int id_emergency) 
-    {
-        String absolutefilepath = file.getAbsolutePath();
-        String extension = absolutefilepath.substring(absolutefilepath.lastIndexOf('.'));
-        String name = absolutefilepath.substring(absolutefilepath.lastIndexOf('/') + 1);
-        name = name.substring(0, name.length()-extension.length());
-        String path = absolutefilepath.substring(0, absolutefilepath.length() - name.length() - extension.length());
+    public boolean insertInformation(int id_calamity, String calamitytype, String calamitydescription, String filepath, String filename, String fileextension, int personid) {
+        int fileid = 0;
+        boolean fileIsNull = false;
         
-        int idfile = 0;
-
-        
-        if(id_emergency != 0)
+        if (filepath.equals("") || filename.equals("") || fileextension.equals("")) 
         {
-            if(!this.checkFile(path, name, extension))
-            {
-                this.insertFile(name, path, extension);
-            }
-
-            idfile = this.retrieveFileID(path, name, this.retrieveFileTypeID(extension));
-            
-            if(!this.checkInformationType(type))
-            {
-                this.insertInformationType(type);
-            }
-            
-            try
-            {
-                super.connectToDatabase();
-            }
-
-            catch(Exception e)
-            {
-                   return false;
-            }
-            try
-            {
-                String query = "INSERT INTO information (idcalamity, idinformation_type, description, idfile, idemergency_service)" 
-                        + " values (?,(SELECT idinformation_type FROM information_type WHERE type = ?),?,?,?)";
-                PreparedStatement prest = conn.prepareStatement(query);
-
-                prest.setInt(1, id_calamity);
-                prest.setString(2, type);
-                prest.setString(3, description);
-                prest.setInt(4, idfile);
-                prest.setInt(5, id_emergency);
-
-                prest.execute();
-
-                return true;
-            }
-            catch(SQLException ee)
-            {
+            fileIsNull = true;
+        } 
+        else {
+            if (this.insertFile(filename, filepath, fileextension)) {
+                fileid = this.retrieveFileID(filepath, filename);
+            } else {
                 return false;
-            }
-            finally
-            {
-                super.disconnectFromDatabase();
             }
         }
-        else if(id_civilian != 0)
-        {
-            if(!this.checkFile(path, name, extension))
-            {
-                this.insertFile(name, path, extension);
-            }
 
-            idfile = this.retrieveFileID(path, name, this.retrieveFileTypeID(extension));
-            
-            if(!this.checkInformationType(type))
-            {
-                this.insertInformationType(type);
-            }
-            
-            try
-            {
-                super.connectToDatabase();
-            }
-
-            catch(Exception e)
-            {
-                return false;
-            }
-            try
-            {
-                String query = "INSERT INTO information (idcalamity, idinformation_type, description, idfile, idcivilian)" 
-                        + " values (?,(SELECT idinformation_type FROM information_type WHERE type = ?),?,?,?)";
-                PreparedStatement prest = conn.prepareStatement(query);
-
-                prest.setInt(1, id_calamity);
-                prest.setString(2, type);
-                prest.setString(3, description);
-                prest.setInt(4, idfile);
-                prest.setInt(5, id_civilian);
-
-                prest.execute();
-
-                return true;
-            }
-            catch(SQLException ee)
-            {
-                return false;
-            }
-            finally
-            {
-                super.disconnectFromDatabase();
-            }
-        }
-        else
-        {
+        try {
+            super.connectToDatabase();
+        } catch (Exception e) {
             return false;
+        }
+        try {
+            String query = "INSERT INTO calamityinformation (calamityid, calamityinformationtype, calamityinformationdescription, fileid, personid)"
+                    + " values (?,?,?,?,?)";
+            PreparedStatement prest = conn.prepareStatement(query);
+
+            prest.setInt(1, id_calamity);
+            prest.setString(2, calamitytype);
+            prest.setString(3, calamitydescription);
+            
+            if(fileIsNull)
+            {
+                prest.setNull(4, Types.INTEGER);
+            }
+            else
+            {
+                prest.setInt(4, fileid);
+            }   
+            prest.setInt(5, personid);
+
+            prest.execute();
+
+            return true;
+        } catch (SQLException ee) {
+            return false;
+        } finally {
+            super.disconnectFromDatabase();
         }
     }
     
