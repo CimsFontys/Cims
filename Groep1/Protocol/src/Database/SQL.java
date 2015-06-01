@@ -19,7 +19,6 @@ import java.util.GregorianCalendar;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 /**
  *
@@ -401,6 +400,88 @@ public class SQL extends DatabaseConnector implements IDatabase
             
             JsonArray jo = jb.build(); 
             return jo.toString();
+        }
+        catch(SQLException ee)
+        {
+            return null;
+        }
+        finally
+        {
+            super.disconnectFromDatabase();
+        }
+    }
+    
+    @Override
+    public String retrieveAllPersons() 
+    {        
+        try
+        {
+            super.connectToDatabase();
+        }
+        catch (Exception e)
+        {
+            return null;     
+        }
+        
+        try
+        {
+            int count = 0;
+            String query = "SELECT * FROM person";
+            PreparedStatement prest = conn.prepareStatement(query);
+            
+            JsonArrayBuilder ja = Json.createArrayBuilder();
+                
+            prest.execute();
+            
+            ResultSet res = prest.getResultSet();
+            
+            while(res.next())
+            {         
+                JsonObjectBuilder jb = Json.createObjectBuilder();
+            
+                int personId = res.getInt("personid");
+                String firstname = res.getString("personfirstname");
+                String lastname = res.getString("personlastname");
+                String middlename = res.getString("personmiddlename");
+                String username = res.getString("personusername");
+                String password = res.getString("personpassword");
+                String ssn = res.getString("personssn");
+                String email = res.getString("personemail");
+                java.sql.Date birthdayDate = res.getDate("personbirthdate");
+                String birthday = birthdayDate.toString();
+                String date = birthday;
+                String phone = res.getString("personphone");
+                String subscribed = res.getString("personsubscribed");
+                String configurator = res.getString("personconfigurator");
+                String addressstreet = res.getString("addressstreet");
+                String addresscity = res.getString("addresscity");
+                String addresspostal = res.getString("addresspostal");
+                String regionname = res.getString("regionname");
+                String persontype = res.getString("persontype");
+                
+                jb.add("personid" , personId);
+                jb.add("firstname", firstname);
+                jb.add("lastname", lastname);
+                jb.add("middlename", middlename);
+                jb.add("username", username);
+                jb.add("password", password);
+                jb.add("ssn", ssn);
+                jb.add("email", email);
+                jb.add("date", birthday);
+                jb.add("phone", phone);
+                jb.add("subscribed", subscribed);
+                jb.add("configurator", configurator);
+                jb.add("addressstreet", addressstreet);
+                jb.add("addresscity", addresscity);
+                jb.add("addresspostal", addresspostal);
+                jb.add("regionname", regionname);
+                jb.add("persontype", persontype);
+                
+                ja.add(jb);     
+            }
+            
+            JsonArray array = ja.build();
+            return array.toString();
         }
         catch(SQLException ee)
         {

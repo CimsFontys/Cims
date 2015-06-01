@@ -136,6 +136,7 @@ public class MessageBuilder
         return message;
     }
 
+    //FILENAME + EXTENSION
     public Message buildInsertMessage(int senderid, int receiverid, String messageS, File file)
     {
         JsonObjectBuilder jb = Json.createObjectBuilder();
