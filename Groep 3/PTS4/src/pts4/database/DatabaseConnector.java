@@ -35,7 +35,7 @@ public class DatabaseConnector
     protected void connectToDatabase()
     {
         //IP ADRES FROM DATABASE
-        String url = "jdbc:mysql://145.144.240.233:3306/";
+        String url = "jdbc:mysql://145.144.242.9:3306/";
         //DATABASE NAME
         String dbName = "cimsdb";
         //DRIVER & LIBRARY MYSQL DRIVER
