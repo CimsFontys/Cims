@@ -118,6 +118,9 @@ public class GUIController implements Initializable, MapChangeListener<String, C
     TextField txtlongitude;
     @FXML
     TextField txtlatitude;
+    @FXML
+    Button btnincident;
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
@@ -127,11 +130,12 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         }
         final SwingNode swingNode = new SwingNode();
 
-        g = new Gmaps(this);
-        g.createSwingContent(swingNode);
-        gmapsstack.getChildren().add(swingNode);
+        
 
         admin.setServer(this);
+        g = new Gmaps(this, admin.getServer());
+        g.createSwingContent(swingNode);
+        gmapsstack.getChildren().add(swingNode);
         initComboboxes();
         cbUnits.getItems().clear();
         cbExplosie.getItems().clear();
@@ -230,6 +234,15 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         }
     }
     
+    public String getUnitDescription()
+    {
+        return txtDescription.getText();
+    }
+    
+    public String getIncidentorder()
+    {
+        return cbincident.getSelectionModel().getSelectedItem().toString();
+    }
     public void setUnit(double Longitude, double Latitude)
     {
         txtlongitude.setText(Double.toString(Longitude));

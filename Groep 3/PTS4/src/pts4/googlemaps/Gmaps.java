@@ -60,6 +60,7 @@ import org.jxmapviewer.viewer.LocalResponseCache;
 import org.jxmapviewer.viewer.TileFactoryInfo;
 import org.jxmapviewer.viewer.Waypoint;
 import org.jxmapviewer.viewer.WaypointPainter;
+import pts4.chatserver.Server;
 import pts4.klassen.Administration;
 import static pts4.klassen.Administration.incidents;
 import pts4.klassen.Incident;
@@ -89,9 +90,11 @@ public class Gmaps {
     private AnimationTimer timer;
     private Integer i = 0;
     public List<Painter<JXMapViewer>> painters;
+    private Server server;
 
-    public Gmaps(GUIController gui) {
+    public Gmaps(GUIController gui, Server server) {
         this.gui = gui;
+        this.server = server;
     }
 
     public void open() {
@@ -261,7 +264,7 @@ public class Gmaps {
                         if (a.getNaam().equals(id)) {
                             GeoPosition plek2 = new GeoPosition(a.getLatidude(), a.getLongitude());
                             ChatMessage chat = new ChatMessage(gui.getIncidentorder() + "\n" + gui.getUnitDescription(), id, "Meldkamer");
-                            
+                            //server.sendMessage(chat);
                             new Animation(plek, plek2, id, orders, units, Gmaps.this, waypointPainter3);
                         }
                     }
