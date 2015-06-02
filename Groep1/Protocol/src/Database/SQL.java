@@ -26,11 +26,12 @@ import javax.json.JsonObjectBuilder;
  */
 public class SQL extends DatabaseConnector implements IDatabase
 {    
-    ArrayList<PreparedStatement> statements = new ArrayList<>();
-    Boolean connectiedatabase1 = true;
-    Boolean connectiedatabase2 = true;
+    ArrayList<String> statements = new ArrayList<>();
     Boolean updateconndatabase1 = true;
     Boolean updateconndatabase2 = true;
+    Boolean allreadyupdated = false;
+    
+    int counter = 0;
     
     public SQL()
     {
@@ -47,14 +48,7 @@ public class SQL extends DatabaseConnector implements IDatabase
         
         try
         {
-            if(connectiedatabase1)
-            {
-                connectiedatabase1 = super.connectToDatabase();
-            }
-            else
-            {
-                connectiedatabase2 = super.connectToDatabase2();
-            }
+            this.connectingSelect();
         }
         catch (Exception e)
         {
@@ -119,8 +113,7 @@ public class SQL extends DatabaseConnector implements IDatabase
         
         try
         {
-                super.connectToDatabase();
-                super.connectToDatabase2();
+                this.connectingInsert();
         }
         catch(Exception e)
         {
@@ -151,9 +144,16 @@ public class SQL extends DatabaseConnector implements IDatabase
             prest.setString(15, configurator);
             
             prest.execute();
-            if(connectiedatabase1 == false || connectiedatabase2 == false)
+           if(!updateconndatabase1 && !allreadyupdated || !updateconndatabase2 && !allreadyupdated)
             {
-                statements.add(prest);
+                String save = "INSERT INTO person (personfirstname, personlastname, personmiddlename, personusername, personpassword, personssn, personemail, personbirthdate, addressid, personphone, persontypeid, personconfigurator)" 
+                    + " values ('" + first_name + "','" + last_name + "','"+ middle_name + "','" + username + "','" + password + "',' " + SSN + "',' " + email + " ',' " + timestamp + "',(SELECT addressid FROM address WHERE addressstreet = '" + Street + "' AND addresscity = '" + City + "'  AND addresspostal =  '" + Postal + "'  and regionid = (SELECT regionid FROM region WHERE regionname = '"+ Region + "')),'" + phonenumber + "',"+ idpersonal_type + " ,'" + configurator + "')";
+                 statements.add(save);
+                allreadyupdated = true;
+            }
+            else if(allreadyupdated)
+            {
+                allreadyupdated = false;
             }
             
             return true;
@@ -164,6 +164,10 @@ public class SQL extends DatabaseConnector implements IDatabase
         }
         finally
         {
+            if(counter == 1)
+            {
+                insertPerson(idpersonal_type,first_name,last_name,middle_name,username,password,SSN,email,Birthdate,phonenumber,Street,City,Postal,Region,configurator);
+            }
             super.disconnectFromDatabase();
         }
     }   
@@ -182,7 +186,7 @@ public class SQL extends DatabaseConnector implements IDatabase
          
         try
         {
-            super.connectToDatabase();
+            this.connectingInsert();
         }
         catch(Exception e)
         {
@@ -208,7 +212,18 @@ public class SQL extends DatabaseConnector implements IDatabase
             prest.setString(8, region);
             
             prest.execute();
-            
+            if(!updateconndatabase1 && !allreadyupdated || !updateconndatabase2 && !allreadyupdated)
+            {
+                String save = "INSERT INTO calamity (calamitylatitude, calamitylongtitude, calamityname, calamitydescription ,  calamitydate , personid, calamitydanger, regionid)" 
+                    + " values ('" + latitude + "','" + longtitude + "','" + name + "','" + description + "','" + Timestamp + "'," + personid
+                    + ",'" + calamitydanger + "',(SELECT regionid FROM region WHERE regionname = '"+ region + "' ))";
+                statements.add(save);
+                allreadyupdated = true;
+            }
+            else if(allreadyupdated)
+            {
+                allreadyupdated = false;
+            }
             return true;
         }
         catch(SQLException ee)
@@ -217,6 +232,10 @@ public class SQL extends DatabaseConnector implements IDatabase
         }
         finally
         {
+            if(counter == 1)
+            {
+                insertCalamity(longtitude,latitude,personid,name,description,timestamp,calamitydanger,region);
+            }
             super.disconnectFromDatabase();
         }
     }
@@ -226,7 +245,7 @@ public class SQL extends DatabaseConnector implements IDatabase
     {        
         try
         {
-            super.connectToDatabase();
+            this.connectingSelect();
         }
         catch (Exception e)
         {
@@ -288,7 +307,7 @@ public class SQL extends DatabaseConnector implements IDatabase
     {        
         try
         {
-            super.connectToDatabase();
+            this.connectingSelect();
         }
         catch (Exception e)
         {
@@ -353,7 +372,7 @@ public class SQL extends DatabaseConnector implements IDatabase
     {        
         try
         {
-            super.connectToDatabase();
+            this.connectingSelect();
         }
         catch (Exception e)
         {
@@ -416,7 +435,7 @@ public class SQL extends DatabaseConnector implements IDatabase
     {        
         try
         {
-            super.connectToDatabase();
+            this.connectingSelect();
         }
         catch (Exception e)
         {
@@ -498,7 +517,7 @@ public class SQL extends DatabaseConnector implements IDatabase
     {        
         try
         {
-            super.connectToDatabase();
+            this.connectingSelect();
         }
         catch (Exception e)
         {
@@ -567,7 +586,7 @@ public class SQL extends DatabaseConnector implements IDatabase
     {
         try
         {
-            super.connectToDatabase();
+            this.connectingInsert();
         }
         catch(Exception e)
         {
@@ -588,7 +607,17 @@ public class SQL extends DatabaseConnector implements IDatabase
             prest.setInt(3, personid);
             
             prest.execute();
-            
+            if(!updateconndatabase1 && !allreadyupdated || !updateconndatabase2 && !allreadyupdated)
+            {
+                String save = "INSERT INTO log (logdate, logdescription, personid)" 
+                    + " values ('" + timestamp + "' , '" + description + "' ," + personid +")";
+                statements.add(save);
+                allreadyupdated = true;
+            }
+            else if(allreadyupdated)
+            {
+                allreadyupdated = false;
+            }
             return true;
         }
         catch(SQLException ee)
@@ -597,6 +626,10 @@ public class SQL extends DatabaseConnector implements IDatabase
         }
         finally
         {
+            if(counter == 1)
+            {
+                insertLog(personid,description) ;
+            }
             super.disconnectFromDatabase();
         }
     }
@@ -606,7 +639,7 @@ public class SQL extends DatabaseConnector implements IDatabase
     {
         try
         {
-            super.connectToDatabase();
+            this.connectingSelect();
         }
         catch (Exception e)
         {
@@ -662,7 +695,7 @@ public class SQL extends DatabaseConnector implements IDatabase
         {
             try
             {
-                super.connectToDatabase();
+                this.connectingInsert();
             }
             catch(Exception e)
             {
@@ -679,6 +712,17 @@ public class SQL extends DatabaseConnector implements IDatabase
                 prest.setString(3, extension);
 
                 prest.execute();
+                if(!updateconndatabase1 && !allreadyupdated || !updateconndatabase2 && !allreadyupdated)
+                {
+                    String save = "INSERT INTO file (filename, filepath, fileextension)" 
+                        + " values ('"+ name + "','" + path + "','" + extension + "')";
+                    statements.add(save);
+                    allreadyupdated = true;
+                }
+                else if(allreadyupdated)
+                {
+                    allreadyupdated = false;
+                }
 
                 return true;
             }
@@ -688,6 +732,10 @@ public class SQL extends DatabaseConnector implements IDatabase
             }
             finally
             {
+                if(counter == 1)
+                {
+                insertFile(name,path,extension) ;
+                }
                 super.disconnectFromDatabase();
             }
             
@@ -712,7 +760,7 @@ public class SQL extends DatabaseConnector implements IDatabase
         {
             try
             {
-                super.connectToDatabase();
+                this.connectingSelect();
             }
             catch(Exception e)
             {
@@ -753,7 +801,7 @@ public class SQL extends DatabaseConnector implements IDatabase
         {
             try
             {
-                super.connectToDatabase();
+                this.connectingSelect();
             }
             catch(Exception e)
             {
@@ -810,7 +858,7 @@ public class SQL extends DatabaseConnector implements IDatabase
 
             try
             {
-                super.connectToDatabase();
+              this.connectingInsert();
             }
 
             catch(Exception e)
@@ -834,7 +882,14 @@ public class SQL extends DatabaseConnector implements IDatabase
                 prest.setTimestamp(5, timestamp); 
 
                 prest.execute();
-
+                 if (!updateconndatabase1 && !allreadyupdated || !updateconndatabase2 && !allreadyupdated) {
+                    String save = "INSERT INTO message (messagesender, messagereceiver, messagestring, messagefileid, messagedate)"
+                        + " values ("+ sender_id +"," + receiver_id + ",'" + message + "'," + idfile + ",'" + timestamp + "' )";
+                    statements.add(save);
+                    allreadyupdated = true;
+                } else if (allreadyupdated) {
+                    allreadyupdated = false;
+                }
                 return true;
             }
             catch(SQLException ee)
@@ -843,6 +898,10 @@ public class SQL extends DatabaseConnector implements IDatabase
             }
             finally
             {
+                if(counter == 1)
+                {
+                    insertMessage(sender_id,receiver_id,message,file); 
+                }
                 super.disconnectFromDatabase();
             }
         }
@@ -874,7 +933,14 @@ public class SQL extends DatabaseConnector implements IDatabase
                 prest.setTimestamp(4, timestamp);
 
                 prest.execute();
-
+                if (!updateconndatabase1 && !allreadyupdated || !updateconndatabase2 && !allreadyupdated) {
+                    String save = "INSERT INTO message (messagesender, messagereceiver, messagestring, messagedate)"
+                        + " values (" + sender_id +"," + receiver_id + ",'" + message + "','" + timestamp +"')";
+                    statements.add(save);
+                    allreadyupdated = true;
+                } else if (allreadyupdated) {
+                    allreadyupdated = false;
+                }
                 return true;
             }
             catch(SQLException ee)
@@ -883,6 +949,10 @@ public class SQL extends DatabaseConnector implements IDatabase
             }
             finally
             {
+                if(counter == 1)
+                {
+                    insertMessage(sender_id,receiver_id,message,file); 
+                }
                 super.disconnectFromDatabase();
             }
         }
@@ -895,7 +965,7 @@ public class SQL extends DatabaseConnector implements IDatabase
     {       
         try
         {
-            super.connectToDatabase();
+            this.connectingSelect();
         }
         catch (Exception e)
         {
@@ -957,7 +1027,7 @@ public class SQL extends DatabaseConnector implements IDatabase
         
         try
         {
-            super.connectToDatabase();
+            this.connectingSelect();
         }
         catch (Exception e)
         {
@@ -1014,7 +1084,7 @@ public class SQL extends DatabaseConnector implements IDatabase
         }
 
         try {
-            super.connectToDatabase();
+            this.connectingInsert();
         } catch (Exception e) {
             return false;
         }
@@ -1038,11 +1108,32 @@ public class SQL extends DatabaseConnector implements IDatabase
             prest.setInt(5, personid);
 
             prest.execute();
-
+           if (!updateconndatabase1 && !allreadyupdated || !updateconndatabase2 && !allreadyupdated) {
+               String save;
+               if(fileIsNull)
+               {
+                save = "INSERT INTO information (idcalamity, idinformation_type, description, idfile, idemergency_service)"
+                        + " values (" + id_calamity + ",'" + calamitytype + "','" + calamitydescription + "'," + fileid + "," + personid + ")";
+               }
+               else
+               {
+                save = "INSERT INTO information (idcalamity, idinformation_type, description, idfile, idemergency_service)"
+                        + " values (" + id_calamity + ",'" + calamitytype + "','" + calamitydescription + "'," + 0 + "," + personid + ")";
+                   
+               }
+               statements.add(save);
+                    allreadyupdated = true;
+                } else if (allreadyupdated) {
+                    allreadyupdated = false;
+                }
             return true;
         } catch (SQLException ee) {
             return false;
         } finally {
+            if(counter == 1)
+                {
+                    insertInformation(id_calamity,calamitytype,calamitydescription,filepath,filename,fileextension,personid)  ;
+                }
             super.disconnectFromDatabase();
         }
     }
@@ -1052,7 +1143,7 @@ public class SQL extends DatabaseConnector implements IDatabase
     {        
         try
         {
-            super.connectToDatabase();
+            this.connectingSelect();
         }
         catch (Exception e)
         {
@@ -1126,7 +1217,7 @@ public class SQL extends DatabaseConnector implements IDatabase
     {
         try
         {
-            super.connectToDatabase();
+            this.connectingInsert();
         }
         catch(Exception e)
         {
@@ -1141,6 +1232,16 @@ public class SQL extends DatabaseConnector implements IDatabase
             prest.setString(1, region);          
             
             prest.execute();
+            if(!updateconndatabase1 && !allreadyupdated || !updateconndatabase2 && !allreadyupdated)
+            {
+                String save = "INSERT INTO region (regionname) values ('" + region + " ')";
+                statements.add(save);
+                allreadyupdated = true;
+            }
+            else if(allreadyupdated)
+            {
+                allreadyupdated = false;
+            }
         }
         catch(SQLException ee)
         {
@@ -1148,6 +1249,10 @@ public class SQL extends DatabaseConnector implements IDatabase
         }
         finally
         {
+            if(counter == 1)
+            {
+                insertRegion(region);
+            }
             super.disconnectFromDatabase();
         }
     }
@@ -1161,7 +1266,7 @@ public class SQL extends DatabaseConnector implements IDatabase
     {
         try
         {
-            super.connectToDatabase();
+            this.connectingSelect();
         }
         catch (Exception e)
         {
@@ -1204,7 +1309,7 @@ public class SQL extends DatabaseConnector implements IDatabase
     {
         try
         {
-            super.connectToDatabase();
+            this.connectingSelect();
         }
         catch (Exception e)
         {
@@ -1249,7 +1354,7 @@ public class SQL extends DatabaseConnector implements IDatabase
     {
         try
         {
-            super.connectToDatabase();
+            this.connectingInsert();
         }
         catch(Exception e)
         {
@@ -1267,6 +1372,17 @@ public class SQL extends DatabaseConnector implements IDatabase
             prest.setString(4, Region); 
             
             prest.execute();
+            if(!updateconndatabase1 && !allreadyupdated || !updateconndatabase2 && !allreadyupdated)
+            {
+                String save = "INSERT INTO address (addressstreet, addresscity, addresspostal, regionid)" 
+                    + " values ('" + Street + "','" + City +  "','" + Postal + "',(SELECT regionid from region where regionname = '" + Region + "'))";
+                statements.add(save);
+                allreadyupdated = true;
+            }
+            else if(allreadyupdated)
+            {
+                allreadyupdated = false;
+            }
         }
         catch(SQLException ee)
         {
@@ -1274,6 +1390,10 @@ public class SQL extends DatabaseConnector implements IDatabase
         }
         finally
         {
+            if(counter == 1)
+            {
+                insertAddress(Street,City,Postal, Region) ;
+            }
             super.disconnectFromDatabase();
         }
     }
@@ -1283,7 +1403,7 @@ public class SQL extends DatabaseConnector implements IDatabase
     {        
         try
         {
-            super.connectToDatabase();
+            this.connectingSelect();
         }
         catch (Exception e)
         {
@@ -1333,7 +1453,7 @@ public class SQL extends DatabaseConnector implements IDatabase
     {
         try
         {
-            super.connectToDatabase();
+            this.connectingInsert();
         }
         catch(Exception e)
         {
@@ -1351,7 +1471,17 @@ public class SQL extends DatabaseConnector implements IDatabase
             prest.setInt(4, locationtypeid);
             
             prest.execute();
-            
+            if(!updateconndatabase1 && !allreadyupdated || !updateconndatabase2 && !allreadyupdated)
+            {
+                 String save = "INSERT INTO servicelocation (servicelocationlatitude, servicelocationlongtitude, servicelocationname, servicelocationtypeid)" 
+                    + " values ('" + name + "', '" + geo_long + "', '" + geo_lat + "',"+ locationtypeid+")";
+                statements.add(save);
+                allreadyupdated = true;
+            }
+            else if(allreadyupdated)
+            {
+                allreadyupdated = false;
+            }
             return true;
         }
         catch(SQLException ee)
@@ -1360,6 +1490,10 @@ public class SQL extends DatabaseConnector implements IDatabase
         }
         finally
         {
+            if(counter == 1)
+            {
+                insertLocation(name,geo_long,geo_lat,locationtypeid);
+            }
             super.disconnectFromDatabase();
         }
     }
@@ -1369,7 +1503,7 @@ public class SQL extends DatabaseConnector implements IDatabase
     {
         try
         {
-            super.connectToDatabase();
+            this.connectingSelect();
         }
         catch (Exception e)
         {
@@ -1428,7 +1562,7 @@ public class SQL extends DatabaseConnector implements IDatabase
         
         try
         {
-            super.connectToDatabase();
+            this.connectingSelect();
         }
         catch (Exception e)
         {
@@ -1510,7 +1644,7 @@ public class SQL extends DatabaseConnector implements IDatabase
     {       
         try
         {
-            super.connectToDatabase();
+            this.connectingSelect();
         }
         catch (Exception e)
         {
@@ -1575,7 +1709,7 @@ public class SQL extends DatabaseConnector implements IDatabase
     {
         try
         {
-            super.connectToDatabase();
+            this.connectingSelect();
         }
         catch (Exception e)
         {
@@ -1643,7 +1777,7 @@ public class SQL extends DatabaseConnector implements IDatabase
     public String retrieveLocationTypes() {
         try
         {
-            super.connectToDatabase();
+            this.connectingSelect();
         }
         catch (Exception e)
         {
@@ -1686,51 +1820,47 @@ public class SQL extends DatabaseConnector implements IDatabase
             super.disconnectFromDatabase();
         }    }
     
-    private void insertstatements(PreparedStatement e)
+    private void insertstatements(String e)
     {
         statements.add(e);
     }
     
-    public Boolean connectingInsert()
+public Boolean connectingInsert()
     {
-        connectiedatabase1 = super.connectToDatabase();
-        connectiedatabase2 = super.connectToDatabase2();
-        if (connectiedatabase1 == false || connectiedatabase2 == false) {
-            updateconndatabase1 = connectiedatabase1;
-            updateconndatabase2 = connectiedatabase2;
-        }  
-        updateStateDatabase();
-        if(connectiedatabase1 && connectiedatabase2)
+        if(counter == 1)
         {
-            return true;
+            updateconndatabase2 = super.connectToDatabase2();
+           counter = 0;
         }
-        return false;
+        else{
+            updateconndatabase1 = super.connectToDatabase();
+            counter++;
+        }
+        updateStateDatabase();
+        return true;
         
                 
     }
     
     private void connectingSelect()
     {
-        
-
-        connectiedatabase1 = super.connectToDatabase();
-        if(connectiedatabase1 == false)
+        if(!super.connectToDatabase() || counter == 1)
         {   
-            connectiedatabase2 = super.connectToDatabase2();
-            updateconndatabase1 = connectiedatabase1;
+            updateconndatabase2 = super.connectToDatabase2();
+            updateconndatabase1 = false;
         }
         updateStateDatabase();
     }
     
     private void updateStateDatabase()
     {
-        if (updateconndatabase1 == false && connectiedatabase1 == true && statements.size() > 0) {
+        if (updateconndatabase1 == false && super.connectToDatabase() == true && statements.size() > 0) {
             try {
                 updateconndatabase1 = true;
                 super.connectToDatabase();
-                for(PreparedStatement p : statements)
+                for(String p : statements)
                 {
-                    PreparedStatement prest = p;
+                    PreparedStatement prest = conn.prepareStatement(p);
                     prest.execute();
                 }
                 statements.clear();
@@ -1738,13 +1868,13 @@ public class SQL extends DatabaseConnector implements IDatabase
 
             }
         }
-        if (updateconndatabase2 == false && connectiedatabase2 == true && statements.size() > 0) {
+        if (updateconndatabase2 == false && super.connectToDatabase2() == true && statements.size() > 0) {
             try {
                 updateconndatabase2 = true;
                 super.connectToDatabase2();
-                 for(PreparedStatement p : statements)
+                for(String p : statements)
                 {
-                    PreparedStatement prest = p;
+                    PreparedStatement prest = conn.prepareStatement(p);
                     prest.execute();
                 }
                 statements.clear();
@@ -1752,5 +1882,7 @@ public class SQL extends DatabaseConnector implements IDatabase
 
             }
         }
+        
+        
     }
 }
