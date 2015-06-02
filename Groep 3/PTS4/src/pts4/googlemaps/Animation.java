@@ -8,6 +8,8 @@ package pts4.googlemaps;
 import chat.EmergencyUnit;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -74,7 +76,6 @@ public class Animation {
                         diflatitude = latitude - goal.getLatitude();
                     }
 
-
                     if (longitude > goal.getLongitude()) {
                         longitude = longitude - 0.001;
                     }
@@ -92,14 +93,14 @@ public class Animation {
                             if (d.getLabel().equals(id)) {
                                 orders.remove(d);
                                 waypointpainter.setWaypoints(orders);
-                                for (EmergencyUnit e : EmergencyUnits)
-                                {
-                                    if (e.getNaam().equals(id))
-                                    {
+                                for (EmergencyUnit e : EmergencyUnits) {
+                                    if (e.getNaam().equals(id)) {
                                         e.setLongitude(longitude);
                                         e.setLatidude(latitude);
+
                                     }
                                 }
+
                                 gmap.tekenRoute();
                             }
                         }
@@ -107,8 +108,13 @@ public class Animation {
                     }
 
                     GeoPosition bla = new GeoPosition(latitude, longitude);
+                    List<GeoPosition> track = Arrays.asList(goal, bla);
+
+                    gmap.routepainter = new RoutePainter(track);
+                    gmap.painters.add(gmap.routepainter);
                     p.setPosition(bla);
                     gmap.tekenRoute();
+                    gmap.painters.remove(gmap.routepainter);
                 }
             }
         }

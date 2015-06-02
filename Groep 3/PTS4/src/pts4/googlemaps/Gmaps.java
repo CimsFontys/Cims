@@ -79,7 +79,7 @@ public class Gmaps {
     private Set<MyWaypoint> orders;
     private WaypointPainter<Waypoint> waypointPainter;
     private WaypointPainter<MyWaypoint> waypointPainter2, waypointPainter3;
-    private RoutePainter routepainter;
+    public RoutePainter routepainter;
     public Boolean unitAanmaak = false;
     public String id;
     public int type;
@@ -87,6 +87,7 @@ public class Gmaps {
     private Timeline timeline;
     private AnimationTimer timer;
     private Integer i = 0;
+    public List<Painter<JXMapViewer>> painters;
 
     public Gmaps(GUIController gui) {
         this.gui = gui;
@@ -113,6 +114,7 @@ public class Gmaps {
         waypoints = new HashSet<Waypoint>();
         units = new HashSet<MyWaypoint>();
         orders = new HashSet<MyWaypoint>();
+        painters = new ArrayList<Painter<JXMapViewer>>();
 
         for (Incident object : incidents) {
             GeoPosition plek = new GeoPosition(Double.parseDouble(object.getLatitude()), Double.parseDouble(object.getLongitude()));
@@ -182,24 +184,24 @@ public class Gmaps {
 
     public void teken() {
         // Create a compound painter that uses both the route-painter and the waypoint-painter
-        List<Painter<JXMapViewer>> painters = new ArrayList<Painter<JXMapViewer>>();
+
         painters.add(waypointPainter2);
         painters.add(waypointPainter);
         painters.add(waypointPainter3);
         CompoundPainter<JXMapViewer> painter = new CompoundPainter<JXMapViewer>(painters);
         mapViewer.setOverlayPainter(painter);
+        
     }
 
     public void tekenRoute() {
 
         // Create a compound painter that uses both the route-painter and the waypoint-painter
-        List<Painter<JXMapViewer>> painters = new ArrayList<Painter<JXMapViewer>>();
         painters.add(waypointPainter2);
         painters.add(waypointPainter);
         painters.add(waypointPainter3);
-        
         CompoundPainter<JXMapViewer> painter = new CompoundPainter<JXMapViewer>(painters);
         mapViewer.setOverlayPainter(painter);
+ 
     }
 
     public void createStage() {
@@ -257,10 +259,6 @@ public class Gmaps {
                     for (EmergencyUnit a : EmergencyUnits) {
                         if (a.getNaam().equals(id)) {
                             GeoPosition plek2 = new GeoPosition(a.getLatidude(), a.getLongitude());
-                            List<GeoPosition> track = Arrays.asList(plek, plek2);
-                            
-                            routepainter = new RoutePainter(track);
-
                             new Animation(plek, plek2, id, orders, units, Gmaps.this, waypointPainter3);
                         }
                     }
@@ -270,7 +268,7 @@ public class Gmaps {
                     
                     waypointPainter3.setWaypoints(orders);
                     waypointPainter3.setRenderer(new FancyWaypointRenderer());
-                    tekenRoute();
+                    teken();
 
                     //GeoPosition frankfurt = new GeoPosition(mapViewer.convertPointToGeoPosition(me.getLocationOnScreen()));
                 }
