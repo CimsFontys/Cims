@@ -21,7 +21,28 @@
                     <StackPane fx:id="gmapsstack" prefHeight="512.0" prefWidth="783.0" />
                   </children>
                 </Pane>
-                <ListView id="lvIncidenten" fx:id="lvIncidents2" layoutX="818.0" layoutY="14.0" onMouseClicked="#selectIncident" prefHeight="741.0" prefWidth="369.0" />
+                        <TabPane layoutX="818.0" layoutY="11.0" prefHeight="739.0" prefWidth="380.0" tabClosingPolicy="UNAVAILABLE">
+                          <tabs>
+                            <Tab text="Incidenten">
+                              <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                  <ListView id="lvIncidenten" fx:id="lvIncidents2" onMouseClicked="#selectIncident" prefHeight="741.0" prefWidth="369.0" />
+                                       </children>
+                                    </AnchorPane>
+                              </content>
+                            </Tab>
+                            <Tab text="Units">
+                              <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <ListView id="lvIncidenten" fx:id="lvunits" onMouseClicked="#selectUnit" prefHeight="741.0" prefWidth="369.0" />
+                                       </children>
+                                    </AnchorPane>
+                              </content>
+                            </Tab>
+                          </tabs>
+                        </TabPane>
                         <TabPane layoutX="15.0" layoutY="531.0" prefHeight="219.0" prefWidth="797.0" tabClosingPolicy="UNAVAILABLE">
                           <tabs>
                             <Tab text="Incident Information">

@@ -5,6 +5,7 @@
  */
 package pts4.googlemaps;
 
+import chat.ChatMessage;
 import chat.EmergencyUnit;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -259,6 +260,8 @@ public class Gmaps {
                     for (EmergencyUnit a : EmergencyUnits) {
                         if (a.getNaam().equals(id)) {
                             GeoPosition plek2 = new GeoPosition(a.getLatidude(), a.getLongitude());
+                            ChatMessage chat = new ChatMessage(gui.getIncidentorder() + "\n" + gui.getUnitDescription(), id, "Meldkamer");
+                            
                             new Animation(plek, plek2, id, orders, units, Gmaps.this, waypointPainter3);
                         }
                     }

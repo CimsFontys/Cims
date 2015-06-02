@@ -5,6 +5,7 @@
  */
 package pts4.gui;
 
+import chat.EmergencyUnit;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -36,6 +37,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import pts4.chatserver.*;
 import pts4.googlemaps.Gmaps;
+import pts4.googlemaps.Unit;
 import pts4.klassen.*;
 import pts4.rssfeed.EnumProvincies;
 
@@ -89,6 +91,8 @@ public class GUIController implements Initializable, MapChangeListener<String, C
     Pane gmaps;
     @FXML
     AnchorPane anchor;
+    @FXML
+    ListView lvunits;
     @FXML
     ListView lvIncidents;
     @FXML
@@ -154,11 +158,12 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         cbincident.setItems(admin.getIncidents());
         lvIncidents.setItems(admin.getIncidents());
         lvIncidents2.setItems(admin.getIncidents());
+        lvunits.setItems(admin.getUnits());
         lvPendingIncidents.setItems(admin.getPendingIncidents());
         lvAcceptedIncidents.setItems(admin.getIncidents());
         
     }
-
+    
     public void goIncident() {
         for (Incident a : admin.getIncidents()) {
             if (a.equals(lvIncidents.getSelectionModel().getSelectedItem())) {
@@ -200,6 +205,16 @@ public class GUIController implements Initializable, MapChangeListener<String, C
                 tfDescription.setText(a.getDescription());
                 tfLongitude.setText(a.getLongitude());
                 tfLatitude.setText(a.getLatitude());
+            }
+        }
+    }
+    
+    public void selectUnit() {
+        for (EmergencyUnit a : admin.getUnits())
+        {
+            if (a.equals(lvunits.getSelectionModel().getSelectedItem()))
+            {
+                g.goIncident(a.getLongitude(), a.getLatidude());
             }
         }
     }
