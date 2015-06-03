@@ -157,7 +157,7 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         cbSpoed.getItems().add("Nee");
     }
 
-    private void initComboboxes() {
+    public void initComboboxes() {
 
         //cbCategory.setItems(FXCollections.observableList(categorylist));
         cbUnit.setItems(admin.getUnits());
@@ -205,7 +205,8 @@ public class GUIController implements Initializable, MapChangeListener<String, C
 
         for (Incident a : admin.getIncidents()) {
             if (a.equals(lvIncidents2.getSelectionModel().getSelectedItem())) {
-                
+                initComboboxes();
+                g.drawUnits();
                 g.goIncident(Double.parseDouble(a.getLongitude()), Double.parseDouble(a.getLatitude()));
                 tfName.setText(a.getName());
                 tfDescription.setText(a.getDescription());
@@ -351,7 +352,7 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         }
     }
     
-    public void btnLogOut_Click(ActionEvent e) throws IOException
+    public void btnLogOut_Click() throws IOException
     {
         Stage currentstage = (Stage) btnLogOut.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Inloggen.fxml"));
