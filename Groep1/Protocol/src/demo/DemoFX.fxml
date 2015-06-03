@@ -49,8 +49,5 @@
       <Text layoutX="247.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PERSONID" />
       <Button fx:id="button_getlogs" layoutX="200.0" layoutY="99.0" mnemonicParsing="false" onAction="#getLogs" prefHeight="25.0" prefWidth="149.0" text="Get Logs" />
       <Button fx:id="button_calamitiesdetailed" layoutX="200.0" layoutY="145.0" mnemonicParsing="false" onAction="#allCalamitiesDetailed" prefHeight="25.0" prefWidth="149.0" text="Get All Calamities Detailed" />
-      <TextField fx:id="textfield_log_personid" layoutX="40.0" layoutY="370.0" text="personid" />
-      <TextField fx:id="textfield_log_text" layoutX="40.0" layoutY="406.0" text="text" />
-      <Button fx:id="button_log_insert" layoutX="40.0" layoutY="445.0" mnemonicParsing="false" onAction="#insertLog" prefHeight="25.0" prefWidth="149.0" text="INSERT LOG" />
    </children>
 </AnchorPane>

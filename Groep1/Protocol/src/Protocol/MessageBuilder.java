@@ -380,7 +380,7 @@ public class MessageBuilder
         return message;
     }
     
-    public Message buildRetrievePersonInformation(int personid)
+    public Message buildPersonInformation(int personid)
     {
         JsonObjectBuilder jb = Json.createObjectBuilder();
         
@@ -395,7 +395,7 @@ public class MessageBuilder
         return message;
     }
     
-    public Message buildRetrievePersonInformationReply(String json)
+    public Message buildPersonInformationReply(String json)
     {
         Message message = new Message();
         message.setText(json);

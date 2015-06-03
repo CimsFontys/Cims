@@ -21,13 +21,13 @@ public class MessageRecieverThread implements Runnable {
     
     private CommMessageListener listener;
     
-    private ObjectInputStream ois;
+    private ReadWrite rw;
     
     private boolean running = true;
     
-    public MessageRecieverThread(ObjectInputStream ois, CommMessageListener listener) {
+    public MessageRecieverThread(ReadWrite rw, CommMessageListener listener) {
         this.listener = listener;
-        this.ois = ois;
+        this.rw = rw;
     }
     
     public void stop()
@@ -38,14 +38,7 @@ public class MessageRecieverThread implements Runnable {
     @Override
     public void run() {
         while (running) {
-            try {
-                Message message = null;
-                if ((message = (Message) ois.readObject()) != null) {
-                    listener.recieved(message);
-                }
-            } catch (IOException | ClassNotFoundException ex) {
-                Logger.getLogger(MessageRecieverThread.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            listener.recieved(rw.readMessage());
         }
     }
     
