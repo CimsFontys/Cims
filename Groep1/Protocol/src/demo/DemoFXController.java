@@ -80,7 +80,7 @@ public class DemoFXController implements Initializable, MessageListener
         
         MessageBuilder mb = new MessageBuilder();
         Message message = mb.buildRetrieveLogs(personid);
-        commManager.sendMessage(message);
+        commManager.addMessage(message);
     }
     
     public void login()
@@ -90,7 +90,7 @@ public class DemoFXController implements Initializable, MessageListener
         
         MessageBuilder mb = new MessageBuilder();
         Message message = mb.buildLoginMessage(username, password);
-        commManager.sendMessage(message);
+        commManager.addMessage(message);
     }
     
     public void insertPerson()
@@ -114,21 +114,21 @@ public class DemoFXController implements Initializable, MessageListener
         
         MessageBuilder mb = new MessageBuilder();
         Message message = mb.buildInsertPerson(persontype, firstname, lastname, middlename, username, password, SSN, email, birthdate, phone, street, city, postal, region, configutor);
-        commManager.sendMessage(message);
+        commManager.addMessage(message);
     }   
     
     public void allCalamities()
     {
         MessageBuilder mb = new MessageBuilder();
         Message message = mb.buildRetrieveAllCalamitiesMessage();
-        commManager.sendMessage(message);
+        commManager.addMessage(message);
     }
     
     public void allCalamitiesDetailed()
     {
         MessageBuilder mb = new MessageBuilder();
         Message message = mb.buildRetrieveAllCalamitiesDetailed();
-        commManager.sendMessage(message);
+        commManager.addMessage(message);
     }
 
     @Override
