@@ -306,6 +306,11 @@ public class Gmaps {
 
     }
 
+    public void sendMessage(String message, String Sender, String Receiver)
+    {
+        ChatMessage chat = new ChatMessage(message, Sender, Receiver);
+        server.sendMessage(chat);
+    }
     public void Combobox() {
         /*JPanel panel = new JPanel();
          panel.setLayout(new GridLayout());

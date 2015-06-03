@@ -101,10 +101,10 @@ public class Animation {
 
                                     }
                                 }
-
                                 gmap.tekenRoute();
                             }
                         }
+                        gmap.sendMessage(id + "Is op locatie gearriveerd", id, "Meldkamer");
                         timer.cancel();
                     }
 
