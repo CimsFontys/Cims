@@ -40,6 +40,8 @@ import pts4.chatserver.*;
 import pts4.googlemaps.Gmaps;
 import pts4.klassen.*;
 import pts4.rssfeed.EnumProvincies;
+import se.mbaeumer.fxmessagebox.MessageBox;
+import se.mbaeumer.fxmessagebox.MessageBoxType;
 
 /**
  *
@@ -49,6 +51,20 @@ public class GUIController implements Initializable, MapChangeListener<String, C
 
     private Administration admin;
     private Gmaps g;
+    @FXML
+    ListView lvActiveIncidents;
+    @FXML
+    ListView lvEndedIncidents;
+    @FXML
+    TextField tfEndName;
+    @FXML
+    TextField tfEndDescription;
+    @FXML
+    TextField tfEndDetails;
+    @FXML
+    TextField tfEndSolvedBy;
+    @FXML
+    Button btnEndIncident;
     @FXML
     Button btnLogOut;
     @FXML
@@ -74,7 +90,8 @@ public class GUIController implements Initializable, MapChangeListener<String, C
     @FXML
     TextArea txtDescription;
 
-
+    @FXML
+    ListView lvunitsactief;
     @FXML
     Button btnLocation;
     @FXML
@@ -122,7 +139,7 @@ public class GUIController implements Initializable, MapChangeListener<String, C
     TextField txtlatitude;
     @FXML
     Button btnincident;
-    
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
@@ -131,8 +148,6 @@ public class GUIController implements Initializable, MapChangeListener<String, C
             Logger.getLogger(GUIController.class.getName()).log(Level.SEVERE, null, ex);
         }
         final SwingNode swingNode = new SwingNode();
-
-        
 
         admin.setServer(this);
         g = new Gmaps(this, admin.getServer());
@@ -144,7 +159,7 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         cbBrand.getItems().clear();
         cbGewelddadig.getItems().clear();
         cbSpoed.getItems().clear();
-        
+
         cbProvincies.getItems().setAll(EnumProvincies.values());
         cbProvincies.setValue(EnumProvincies.Nederland);
         cbExplosie.getItems().add("Ja");
@@ -157,6 +172,33 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         cbSpoed.getItems().add("Nee");
     }
 
+    public void goActiveIncident() {
+
+        for (Incident a : admin.getIncidents()) {
+            if (a.equals(lvActiveIncidents.getSelectionModel().getSelectedItem())) {
+
+                tfEndName.setText(a.getName());
+                tfEndDescription.setText(a.getDescription());
+                tfEndDetails.setText("Explosion: " + a.getExplosion() + ", Fire: " + a.getFire() + ", Toxicity: " + a.getToxicity() + ", Urgent: " + a.getUrgent() + ", Violent: " + a.getViolent());
+            }
+        }
+    }
+
+    public void endIncident() {
+
+        if (!tfEndSolvedBy.getText().isEmpty()) {
+            for (Incident a : admin.getIncidents()) {
+                if (a.equals(lvActiveIncidents.getSelectionModel().getSelectedItem())) {
+
+                    a.setSolvedBy(tfEndSolvedBy.getText());
+                }
+            }
+        } else {
+            MessageBox msg = new MessageBox("Please specify how the incident was solved", MessageBoxType.OK_ONLY);
+            msg.show();
+        }
+    }
+
     public void initComboboxes() {
 
         //cbCategory.setItems(FXCollections.observableList(categorylist));
@@ -167,9 +209,9 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         lvunits.setItems(admin.getUnits());
         lvPendingIncidents.setItems(admin.getPendingIncidents());
         lvAcceptedIncidents.setItems(admin.getIncidents());
-        
+
     }
-    
+
     public void goIncident() {
         for (Incident a : admin.getIncidents()) {
             if (a.equals(lvIncidents.getSelectionModel().getSelectedItem())) {
@@ -181,27 +223,25 @@ public class GUIController implements Initializable, MapChangeListener<String, C
             }
         }
     }
-    
+
     public void setProvincie() throws MalformedURLException {
-        
+
         String selected = cbProvincies.getValue().toString();
         if (selected.equalsIgnoreCase("Nederland")) {
             admin.loadFromRSSFeed();
-        }
-        else {
+        } else {
             admin.loadFromRSSFeed(selected);
         }
         admin.syncAcceptedAndPending();
         lvPendingIncidents.setItems(admin.getPendingIncidents());
     }
 
-    public void giveOrder()
-    {
+    public void giveOrder() {
         g.unitAanmaak = true;
         g.id = cbUnit.getSelectionModel().getSelectedItem().toString();
         g.incidentstring = cbincident.getSelectionModel().getSelectedItem().toString();
     }
-    
+
     public void selectIncident() {
 
         for (Incident a : admin.getIncidents()) {
@@ -216,17 +256,15 @@ public class GUIController implements Initializable, MapChangeListener<String, C
             }
         }
     }
-    
+
     public void selectUnit() {
-        for (Unit a : admin.getUnits())
-        {
-            if (a.equals(lvunits.getSelectionModel().getSelectedItem()))
-            {
+        for (Unit a : admin.getUnits()) {
+            if (a.equals(lvunits.getSelectionModel().getSelectedItem())) {
                 g.goIncident(a.getLongitude(), a.getLatidude());
             }
         }
     }
-    
+
     public void goPendingIncident() {
 
         for (Incident a : admin.getPendingIncidents()) {
@@ -237,22 +275,20 @@ public class GUIController implements Initializable, MapChangeListener<String, C
             }
         }
     }
-    
-    public String getUnitDescription()
-    {
+
+    public String getUnitDescription() {
         return txtDescription.getText();
     }
-    
-    public String getIncidentorder()
-    {
+
+    public String getIncidentorder() {
         return cbincident.getSelectionModel().getSelectedItem().toString();
     }
-    public void setUnit(double Longitude, double Latitude)
-    {
+
+    public void setUnit(double Longitude, double Latitude) {
         txtlongitude.setText(Double.toString(Longitude));
         txtlatitude.setText(Double.toString(Latitude));
     }
-    
+
     public void acceptIncident() {
 
         for (Incident a : admin.getPendingIncidents()) {
@@ -283,7 +319,7 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         } catch (Exception e) {
             System.out.println("Incident not added. Check your longitude and latitude.");
         }
-        
+
         tfAddName.setText("");
         tfAddDescription.setText("");
         tfAddLongitude.setText("");
@@ -352,15 +388,14 @@ public class GUIController implements Initializable, MapChangeListener<String, C
             cbUnits.getItems().remove(change.getValueRemoved().getNaam());
         }
     }
-    
-    public void btnLogOut_Click() throws IOException
-    {
+
+    public void btnLogOut_Click() throws IOException {
         Stage currentstage = (Stage) btnLogOut.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Inloggen.fxml"));
         Parent root = (Parent) fxmlLoader.load();
         Stage stage = new Stage();
-        stage.setScene(new Scene(root));  
-        stage.show();  
+        stage.setScene(new Scene(root));
+        stage.show();
         currentstage.close();
     }
 }

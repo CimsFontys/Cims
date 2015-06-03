@@ -8,7 +8,7 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="793.0" prefWidth="1210.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="pts4.gui.GUIController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="793.0" prefWidth="1210.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pts4.gui.GUIController">
   <children>
     <TabPane layoutX="0.0" layoutY="0.0" prefHeight="793.0" prefWidth="1210.0" tabClosingPolicy="UNAVAILABLE">
       <tabs>
@@ -42,6 +42,15 @@
                         </AnchorPane>
                       </content>
                     </Tab>
+                              <Tab text="Actieve Units">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <ListView id="lvIncidenten" fx:id="lvunitsactief" onMouseClicked="#selectUnit" prefHeight="741.0" prefWidth="369.0" />
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                              </Tab>
                   </tabs>
                 </TabPane>
                 <TabPane layoutX="15.0" layoutY="531.0" prefHeight="219.0" prefWidth="797.0" tabClosingPolicy="UNAVAILABLE">

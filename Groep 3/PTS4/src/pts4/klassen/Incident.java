@@ -26,6 +26,7 @@ public class Incident {
     private String urgent;
     private int id;
     private Date date;
+    private String solvedBy;
     
     public Incident(String longitude, String latitude, String name, String description)
     {
@@ -115,6 +116,10 @@ public class Incident {
     public String getUrgent()
     {
         return this.urgent;
+    }
+    
+    public void setSolvedBy(String solvedBy) {
+        this.solvedBy = solvedBy;
     }
     
     @Override

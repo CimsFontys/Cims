@@ -8,7 +8,7 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="793.0" prefWidth="1210.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="pts4.gui.GUIController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="793.0" prefWidth="1210.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pts4.gui.GUIController">
   <children>
     <TabPane layoutX="0.0" layoutY="0.0" prefHeight="793.0" prefWidth="1210.0" tabClosingPolicy="UNAVAILABLE">
       <tabs>
@@ -42,6 +42,15 @@
                         </AnchorPane>
                       </content>
                     </Tab>
+                              <Tab text="Actieve Units">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <ListView id="lvIncidenten" fx:id="lvunitsactief" onMouseClicked="#selectUnit" prefHeight="741.0" prefWidth="369.0" />
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                              </Tab>
                   </tabs>
                 </TabPane>
                 <TabPane layoutX="15.0" layoutY="531.0" prefHeight="219.0" prefWidth="797.0" tabClosingPolicy="UNAVAILABLE">
@@ -167,8 +176,8 @@
                 <TextArea id="tfAddDescription" editable="false" layoutX="395.0" layoutY="355.0" opacity="1.0" prefHeight="122.0" prefWidth="421.0" wrapText="true" />
                 <Label id="lblIncoming" layoutX="14.0" layoutY="17.0" text="Active incidents" />
                 <Label id="lblIncoming" layoutX="827.0" layoutY="22.0" text="Ended incidents" />
-                <ListView id="lvIncidenten" fx:id="lvEndedIncidents" layoutX="827.0" layoutY="48.0" onMouseClicked="#selectIncident" prefHeight="700.0" prefWidth="369.0" />
-                <ListView id="lvIncidenten" fx:id="lvActiveIncidents" layoutX="14.0" layoutY="48.0" onMouseClicked="#goPendingIncident" prefHeight="700.0" prefWidth="369.0" />
+                <ListView id="lvIncidenten" fx:id="lvEndedIncidents" layoutX="827.0" layoutY="48.0" onMouseClicked="#endIncident" prefHeight="700.0" prefWidth="369.0" />
+                <ListView id="lvIncidenten" fx:id="lvActiveIncidents" layoutX="14.0" layoutY="48.0" onMouseClicked="#goActiveIncident" prefHeight="700.0" prefWidth="369.0" />
                 <Label id="lblBeschrijving" layoutX="392.0" layoutY="106.0" text="Description" />
                 <TextArea id="tfAddDescription" layoutX="392.0" layoutY="129.0" prefHeight="188.0" prefWidth="421.0" wrapText="true" />
                 <TextArea id="tfAddDescription" layoutX="392.0" layoutY="48.0" prefHeight="47.0" prefWidth="420.0" wrapText="true" />

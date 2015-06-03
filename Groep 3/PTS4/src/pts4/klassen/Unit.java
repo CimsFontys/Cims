@@ -19,6 +19,7 @@ public class Unit
     private double longitude;
     private double latitude;
     private String incident;
+    private Boolean actief;
     
     
     public Unit(String naam, int type, double longitude, double latitude)
@@ -26,7 +27,8 @@ public class Unit
         this.naam = naam;
         this.type = type;
         this.longitude = longitude;
-        this.latitude = latitude;       
+        this.latitude = latitude; 
+        this.actief = false;
     }
 
     public String getNaam() 
