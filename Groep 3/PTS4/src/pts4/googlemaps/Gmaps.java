@@ -85,6 +85,8 @@ public class Gmaps {
     public RoutePainter routepainter;
     public Boolean unitAanmaak = false;
     public String id;
+    private Incident incident;
+    public String incidentstring;
     public int type;
     private GUIController gui;
     private Timeline timeline;
@@ -288,6 +290,7 @@ public class Gmaps {
                             GeoPosition plek2 = new GeoPosition(a.getLatidude(), a.getLongitude());
                             ChatMessage chat = new ChatMessage(gui.getIncidentorder() + "\n" + gui.getUnitDescription(), "Meldkamer", id);
                             server.sendMessage(chat);
+                            a.setIncident(incidentstring);
                             new Animation(plek, plek2, id, orders, units, Gmaps.this, waypointPainter3);
                         }
                     }
