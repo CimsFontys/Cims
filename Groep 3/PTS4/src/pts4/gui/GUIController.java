@@ -213,7 +213,7 @@ public class GUIController implements Initializable, MapChangeListener<String, C
     }
     
     public void selectUnit() {
-        for (EmergencyUnit a : admin.getUnits())
+        for (Unit a : admin.getUnits())
         {
             if (a.equals(lvunits.getSelectionModel().getSelectedItem()))
             {

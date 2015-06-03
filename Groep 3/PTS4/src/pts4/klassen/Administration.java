@@ -31,7 +31,7 @@ import pts4.rssfeed.RSSReader;
 public class Administration {
     
     public static ArrayList<Incident> incidents;
-    public static ArrayList<EmergencyUnit> EmergencyUnits;
+    public static ArrayList<Unit> EmergencyUnits;
     public ArrayList<Incident> pendingIncidents;
     private Server server;
     private IDatabase databaseconn;
@@ -39,9 +39,9 @@ public class Administration {
     public Administration() throws MalformedURLException {
         incidents = new ArrayList<>();
         EmergencyUnits = new ArrayList<>();
-        EmergencyUnits.add(new EmergencyUnit("123", 1, 4.79278564453125, 51.888358788429095));
-        EmergencyUnits.add(new EmergencyUnit("1", 2, 5.38330078125, 51.6810708788698));
-        EmergencyUnits.add(new EmergencyUnit("3", 3, 4.55657958984375, 51.813709018585094));
+        EmergencyUnits.add(new Unit("123", 1, 4.79278564453125, 51.888358788429095));
+        EmergencyUnits.add(new Unit("1", 2, 5.38330078125, 51.6810708788698));
+        EmergencyUnits.add(new Unit("3", 3, 4.55657958984375, 51.813709018585094));
         pendingIncidents = new ArrayList<>();
         java.sql.Timestamp  sqlDate = new java.sql.Timestamp(new java.util.Date().getTime());
         /*databaseconn = new SQL();
@@ -123,7 +123,7 @@ public class Administration {
 //            }
 //        }
     }
-     public ObservableList<EmergencyUnit> getUnits() {
+     public ObservableList<Unit> getUnits() {
         
         return FXCollections.observableArrayList(EmergencyUnits);
     }

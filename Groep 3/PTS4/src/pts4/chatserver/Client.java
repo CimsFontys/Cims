@@ -23,6 +23,7 @@ import javafx.application.Platform;
 import static javafx.collections.FXCollections.observableList;
 import javafx.collections.ObservableList;
 import pts4.klassen.Administration;
+import pts4.klassen.Unit;
 
 
 
@@ -49,7 +50,7 @@ public class Client implements Runnable
         this.unit = (EmergencyUnit) in.readObject();
         System.out.println("Naam: " + unit.getNaam() + " Longitude: " + unit.getLongitude() + " Latidude: " + unit.getLatidude());
         File dir = new File("Opnames\\" + unit.getNaam());
-        Administration.EmergencyUnits.add(unit);
+        Administration.EmergencyUnits.add(new Unit(unit.getNaam(), unit.getType(), unit.getLongitude(), unit.getLatidude()));
         
         if(!dir.exists())
         {

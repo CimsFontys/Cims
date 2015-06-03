@@ -66,6 +66,7 @@ import static pts4.klassen.Administration.incidents;
 import pts4.klassen.Incident;
 import pts4.gui.GUIController;
 import static pts4.klassen.Administration.EmergencyUnits;
+import pts4.klassen.Unit;
 
 /**
  *
@@ -127,7 +128,7 @@ public class Gmaps {
         }
         waypointPainter.setWaypoints(waypoints);
         mapViewer.setOverlayPainter(waypointPainter);
-        for (EmergencyUnit a : EmergencyUnits) {
+        for (Unit a : EmergencyUnits) {
             GeoPosition spot = new GeoPosition(a.getLatidude(), a.getLongitude());
             Color color = null;
             if (a.getType() == 1) {
@@ -260,7 +261,7 @@ public class Gmaps {
                         }
                     }
                     orders.add(new MyWaypoint(id, kleur, plek));
-                    for (EmergencyUnit a : EmergencyUnits) {
+                    for (Unit a : EmergencyUnits) {
                         if (a.getNaam().equals(id)) {
                             GeoPosition plek2 = new GeoPosition(a.getLatidude(), a.getLongitude());
                             ChatMessage chat = new ChatMessage(gui.getIncidentorder() + "\n" + gui.getUnitDescription(), id, "Meldkamer");

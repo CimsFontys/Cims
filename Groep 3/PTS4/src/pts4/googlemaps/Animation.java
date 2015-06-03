@@ -19,6 +19,7 @@ import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.WaypointPainter;
 import static pts4.klassen.Administration.EmergencyUnits;
+import pts4.klassen.Unit;
 
 /**
  *
@@ -93,7 +94,7 @@ public class Animation {
                             if (d.getLabel().equals(id)) {
                                 orders.remove(d);
                                 waypointpainter.setWaypoints(orders);
-                                for (EmergencyUnit e : EmergencyUnits) {
+                                for (Unit e : EmergencyUnits) {
                                     if (e.getNaam().equals(id)) {
                                         e.setLongitude(longitude);
                                         e.setLatidude(latitude);
