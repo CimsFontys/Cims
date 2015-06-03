@@ -28,7 +28,11 @@
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="681.0" prefWidth="380.0">
                           <children>
                             <ListView id="lvIncidenten" fx:id="lvIncidents2" layoutX="0.0" layoutY="0.0" onMouseClicked="#selectIncident" prefHeight="681.0" prefWidth="369.0" />
+<<<<<<< HEAD
                             <Button fx:id="btnLogOut" layoutX="196.0" layoutY="683.0" mnemonicParsing="false" onAction="#btnLogOut_Click" prefHeight="25.0" prefWidth="173.0" text="Log Out" />
+=======
+                            <Button fx:id="btnLogOut" layoutX="196.0" layoutY="683.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="173.0" text="Log Out" />
+>>>>>>> origin/master
                           </children>
                         </AnchorPane>
                       </content>

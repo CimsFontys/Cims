@@ -28,6 +28,7 @@ public class DatabaseConnector
     public DatabaseConnector() 
     {
         this.connectToDatabase();
+        this.connectToDatabase2();
     }
        /**
         * Connecting to the MYSQL Database
@@ -36,9 +37,9 @@ public class DatabaseConnector
     {
         //IP ADRES FROM DATABASE
         //String url = "jdbc:mysql://localhost:3306/";
-        String url = "jdbc:mysql://145.144.242.9:3306/";
+        String url = "jdbc:mysql://localhost/";
         //DATABASE NAME
-        String dbName = "cimsdb";   
+        String dbName = "cimsdb";
         //String dbName = "collectit";
         //DRIVER & LIBRARY MYSQL DRIVER
         String driver = "com.mysql.jdbc.Driver";
@@ -51,7 +52,7 @@ public class DatabaseConnector
         {
             try 
             {
-                Class.forName(driver).newInstance();
+                Class.forName(driver);
             }
             catch(Exception e)
             {
@@ -84,9 +85,9 @@ public class DatabaseConnector
         //DRIVER & LIBRARY MYSQL DRIVER
         String driver = "com.mysql.jdbc.Driver";
         //CIMS USERNAME DATABASE ACCESS
-        String userName = "root"; 
+        String userName = "cims"; 
         //CIMS PASSWORD DATABASE ACCESS
-        String password = "root";
+        String password = "cims";
         
         try 
         {
