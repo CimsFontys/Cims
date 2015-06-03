@@ -50,7 +50,7 @@ public class Client implements Runnable
         this.unit = (EmergencyUnit) in.readObject();
         System.out.println("Naam: " + unit.getNaam() + " Longitude: " + unit.getLongitude() + " Latidude: " + unit.getLatidude());
         File dir = new File("Opnames\\" + unit.getNaam());
-        Administration.EmergencyUnits.add(new Unit(unit.getNaam(), unit.getType(), unit.getLongitude(), unit.getLatidude()));
+        Administration.EmergencyUnits.add(new Unit(unit.getNaam(), unit.getType(), unit.getLatidude(), unit.getLongitude()));
         
         if(!dir.exists())
         {

@@ -40,7 +40,6 @@ public class Administration {
         incidents = new ArrayList<>();
         EmergencyUnits = new ArrayList<>();
         EmergencyUnits.add(new Unit("123", 1, 4.79278564453125, 51.888358788429095));
-        EmergencyUnits.add(new Unit("1", 2, 5.38330078125, 51.6810708788698));
         EmergencyUnits.add(new Unit("3", 3, 4.55657958984375, 51.813709018585094));
         pendingIncidents = new ArrayList<>();
         java.sql.Timestamp  sqlDate = new java.sql.Timestamp(new java.util.Date().getTime());
