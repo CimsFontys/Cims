@@ -11,6 +11,7 @@ import java.io.StringReader;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.ResourceBundle;
@@ -58,7 +59,7 @@ public class ConfiguratieController implements Initializable {
     private ComboBox<String> PersoneelCB;
     
     @FXML
-    private ListView<String> LogListView; 
+    private ListView LogListView; 
     
     @Override
     public void initialize(URL location, ResourceBundle resources)
@@ -68,8 +69,9 @@ public class ConfiguratieController implements Initializable {
         VoorzieningCB.getItems().add("Police");
         VoorzieningCB.getItems().add("Hospital");
         VoorzieningCB.getItems().add("Fire department");
-       
         
+        PersoneelCB.getItems().clear();
+        SetPeopleInCB();
     }
     
     @FXML
@@ -102,18 +104,22 @@ public class ConfiguratieController implements Initializable {
     }
     
     @FXML
-    public HashMap<Integer, String> SetPeopleInCB()
+    public void SetPeopleInCB()
     {
-           /*
-        HashMap<Integer, String> Info = new HashMap<Integer, String>();
-     
-        ArrayList<Integer> PersonID = new ArrayList<>();
-        ArrayList<String> PersonNames = new ArrayList<>();
         
-      String jsonStr = dbcon.retrieveAllPersons();
-      int personid = 0;
-      String firstname = "";
-      String lastname = "";
+     // HashMap<Integer, String>
+        HashMap<Integer, String> Info = new HashMap<Integer, String>();
+  
+        ArrayList<Integer> PersonID = new ArrayList<>();
+        ArrayList<String> Firstnames = new ArrayList<>();
+        ArrayList<String> Middlenames = new ArrayList<>();
+        ArrayList<String> Lastnames = new ArrayList<>();
+
+        String jsonStr = dbcon.retrieveAllPersons();
+        int personid = 0;
+        String firstname = "";
+        String middlename = "";
+        String lastname = "";
       
         StringReader reader = new StringReader(jsonStr);
         JsonParser parser = Json.createParser(reader);
@@ -124,22 +130,27 @@ public class ConfiguratieController implements Initializable {
                     String keyname = parser.getString();
                     event = parser.next();
                     switch (keyname) {
-                        default:
                         case "personid":
-                            personid = parser.getInt();
-                            
-                           
-
-                            break;
-                       case "personfirstname":
+                        personid = parser.getInt(); 
+                        PersonID.add(personid);
+                        break;
+                    case "firstname":
                         firstname = parser.getString();
-                            break;
-                       case "lastpersonname":
-                           lastname = parser.getString();
-                            break;
-                           
+                        Firstnames.add(firstname);
+
+                        break;
+                    case "middlename":
+                        middlename = parser.getString();
+                         Middlenames.add(middlename);
+                    case "lastname":
+                        lastname = parser.getString();
+                        Lastnames.add(lastname);
+                        break;
+                    default:
+                        break;
                     }
-                    Info.put(personid, firstname + " " + lastname);
+                    
+                   
                     event = parser.next();
                 } else {
                     event = parser.next();
@@ -148,34 +159,33 @@ public class ConfiguratieController implements Initializable {
 
             }
         
-                for(HashMap.Entry<Integer, String> key : Info.entrySet())
+                for(int i = 0; i < PersonID.size(); i++)
                 {
-                    PersoneelCB.getItems().add(key.getValue());            
+                    PersoneelCB.getItems().add(PersonID.get(i) + ". " + Firstnames.get(i) + " " + Middlenames.get(i) + Lastnames.get(i));
                 }
                 
-                */
-                return null;
+                
+               // return Info;
     }
     
     @FXML
     public void SetLogList()
     {
-        /*
-        HashMap<Integer, String> Info  = SetPeopleInCB();
-        String jsonStr = "";
+        String selectedItem = PersoneelCB.getSelectionModel().getSelectedItem();
+        int personindex = selectedItem.indexOf(".");
+        int selectedPersonID = Integer.parseInt(selectedItem.substring(0, personindex));
+        System.out.println(selectedItem.substring(0, personindex));
         
-         for(HashMap.Entry<Integer, String> key : Info.entrySet())
-                {
-                    if(key.getValue() == PersoneelCB.getSelectionModel().getSelectedItem())
-                    {
-                        jsonStr = dbcon.retrieveLogs(key.getKey());
-                    }
-                }
         
+        
+        String jsonStr = dbcon.retrieveLogs(selectedPersonID);
+        
+     
     
         String logdate = "";
         String foundlog = "";
-        ArrayList<String> Found = new ArrayList<>();
+        ArrayList<String> FoundDates = new ArrayList<>();
+        ArrayList<String> FoundLogStrings = new ArrayList<>();
         StringReader reader = new StringReader(jsonStr);
         JsonParser parser = Json.createParser(reader);
         Event event = parser.next();
@@ -184,20 +194,19 @@ public class ConfiguratieController implements Initializable {
                 if (event.equals(Event.KEY_NAME)) {
                     String keyname = parser.getString();
                     event = parser.next();
-                    switch (keyname) {
-                        default:
-                        case "logdescription":
-                            foundlog = parser.getString();
-                            
-
-                            break;
-                       case "logdate":
-                        logdate = parser.getString();
-                            break;
-                     
-                           
+                      switch (keyname) {
+                        case "logdate":
+                        logdate = parser.getString(); 
+                        FoundDates.add(logdate);
+                        break;
+                    case "description":
+                        foundlog = parser.getString();
+                        FoundLogStrings.add(foundlog);
+                        break;        
+                    default:
+                        break;
                     }
-                   Found.add(logdate + " : "  + foundlog);
+                  
                     event = parser.next();
                 } else {
                     event = parser.next();
@@ -206,11 +215,12 @@ public class ConfiguratieController implements Initializable {
 
             }
         
-        for(String S : Found)
+        for(int j = 0; j < FoundLogStrings.size(); j++)
         {
-            LogListView.getItems().add(S);
+            LogListView.getItems().add(FoundDates.get(j) + " " +  FoundLogStrings.get(j));
+          
         }
-       */
+    
     }
     
    public void btnLogOut_Click() throws IOException
