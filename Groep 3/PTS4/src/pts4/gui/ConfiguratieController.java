@@ -59,9 +59,9 @@ public class ConfiguratieController implements Initializable {
     {
       dbcon = new SQL();
       
-        VoorzieningCB.getItems().add("Politiebureau");
-        VoorzieningCB.getItems().add("Ziekenhuis");
-        VoorzieningCB.getItems().add("Brandweerkazerne");
+        VoorzieningCB.getItems().add("Police");
+        VoorzieningCB.getItems().add("Hospital");
+        VoorzieningCB.getItems().add("Fire department");
        
         
     }
@@ -70,23 +70,28 @@ public class ConfiguratieController implements Initializable {
     public void AddFaciity()
     {
         int noodtype = 0;
-        if(VoorzieningCB.getSelectionModel().getSelectedItem().toString().equals("Brandweerkazerne"))
+        String facilityType = "";
+        if(VoorzieningCB.getSelectionModel().getSelectedItem().toString().equals("Fire department"))
         {
             noodtype = 1; 
+            facilityType = "Fire department";
+            
         }
-        else if(VoorzieningCB.getSelectionModel().getSelectedItem().toString().equals("Politiebureau"))
+        else if(VoorzieningCB.getSelectionModel().getSelectedItem().toString().equals("Police"))
         {
             noodtype = 2;
+            facilityType = "Police";
         }
-        else if(VoorzieningCB.getSelectionModel().getSelectedItem().toString().equals("Ziekenhuis")) 
+        else if(VoorzieningCB.getSelectionModel().getSelectedItem().toString().equals("Hospital")) 
         {
             noodtype = 3; 
+            facilityType = "Hospital";
         }
        
              
 
             dbcon.insertLocation(VoorNaamTB.getText(), VoorLonTB.getText(), VoorLatTB.getText(), noodtype);
-            LogManager.getInstance().insertLog("insert Facility");
+            LogManager.getInstance().insertLog("Facility (" + facilityType + ") has been added: Name:" + VoorNaamTB.getText() + "Longitude: " + VoorLonTB.getText() + ", Latitude: " + VoorLatTB.getText() );
 
     }
     

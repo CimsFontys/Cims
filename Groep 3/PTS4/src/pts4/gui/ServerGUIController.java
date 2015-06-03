@@ -28,6 +28,7 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import pts4.chatserver.Server;
+import pts4.klassen.LogManager;
 
 
 /**
@@ -67,11 +68,13 @@ public class ServerGUIController extends AnchorPane implements Initializable {
             String bericht = input.getText();
             input.clear();
             server.sendMessage(new ChatMessage(bericht, "Meldkamer", communicator));
+            LogManager.getInstance().insertLog("Sent chat message: " + "" + bericht + "");
         }
         else
         {
             input.clear();
             server.sendAudioMessage(communicator);
+            LogManager.getInstance().insertLog("An audio message has been sent!");
             audiomessage = false;
         }
     }
@@ -98,12 +101,15 @@ public class ServerGUIController extends AnchorPane implements Initializable {
             btnRecordNew.setText("Klik om te stoppen met opnemen");
             server.startRecrding();
             startTimer();
+            LogManager.getInstance().insertLog("Audio recording has started");
         }
         else if(pressed)
         {
             pressed = false;
             btnRecordNew.setText("Neem nieuw audiobericht op");
             server.stopRecording();
+            LogManager.getInstance().insertLog("Audio recording has stopped");
+
             // reset de timer
             timer.purge();
             timer.cancel();
