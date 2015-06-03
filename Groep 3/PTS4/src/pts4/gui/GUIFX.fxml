@@ -169,18 +169,18 @@
             <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
               <children>
                 <Label id="lbl" layoutX="393.0" layoutY="25.0" text="Name" />
-                <Button id="btnAcceptIncident" layoutX="395.0" layoutY="727.0" mnemonicParsing="false" onAction="#acceptIncident" prefWidth="420.0" text="Accept incident" />
+                <Button id="btnAcceptIncident" fx:id="btnEndIncident" layoutX="395.0" layoutY="727.0" mnemonicParsing="false" onAction="#endIncident" prefWidth="420.0" text="Accept incident" />
                 <Label id="lblBeschrijving" layoutX="397.0" layoutY="326.0" text="Details" />
-                <TextArea id="tfAddDescription" editable="true" layoutX="397.0" layoutY="509.0" prefHeight="199.0" prefWidth="416.0" wrapText="true" />
+                <TextArea id="tfAddDescription" fx:id="tfEndSolvedBy" editable="true" layoutX="397.0" layoutY="509.0" prefHeight="199.0" prefWidth="416.0" wrapText="true" />
                 <Label id="lblBeschrijving" layoutX="399.0" layoutY="484.0" text="Solved by" />
-                <TextArea id="tfAddDescription" editable="false" layoutX="395.0" layoutY="355.0" opacity="1.0" prefHeight="122.0" prefWidth="421.0" wrapText="true" />
+                <TextArea id="tfAddDescription" fx:id="tfEndDetails" editable="false" layoutX="395.0" layoutY="355.0" opacity="1.0" prefHeight="122.0" prefWidth="421.0" wrapText="true" />
                 <Label id="lblIncoming" layoutX="14.0" layoutY="17.0" text="Active incidents" />
                 <Label id="lblIncoming" layoutX="827.0" layoutY="22.0" text="Ended incidents" />
-                <ListView id="lvIncidenten" fx:id="lvEndedIncidents" layoutX="827.0" layoutY="48.0" onMouseClicked="#endIncident" prefHeight="700.0" prefWidth="369.0" />
+                <ListView id="lvIncidenten" fx:id="lvEndedIncidents" layoutX="827.0" layoutY="48.0" onMouseClicked="#goEndedIncident" prefHeight="700.0" prefWidth="369.0" />
                 <ListView id="lvIncidenten" fx:id="lvActiveIncidents" layoutX="14.0" layoutY="48.0" onMouseClicked="#goActiveIncident" prefHeight="700.0" prefWidth="369.0" />
                 <Label id="lblBeschrijving" layoutX="392.0" layoutY="106.0" text="Description" />
-                <TextArea id="tfAddDescription" layoutX="392.0" layoutY="129.0" prefHeight="188.0" prefWidth="421.0" wrapText="true" />
-                <TextArea id="tfAddDescription" layoutX="392.0" layoutY="48.0" prefHeight="47.0" prefWidth="420.0" wrapText="true" />
+                <TextArea id="tfAddDescription" fx:id="tfEndDescription" layoutX="392.0" layoutY="129.0" prefHeight="188.0" prefWidth="421.0" wrapText="true" />
+                <TextArea id="tfAddDescription" fx:id="tfEndName" layoutX="392.0" layoutY="48.0" prefHeight="47.0" prefWidth="420.0" wrapText="true" />
               </children>
             </AnchorPane>
           </content>

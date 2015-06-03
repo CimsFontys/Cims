@@ -30,11 +30,13 @@ public class Administration {
     public static ArrayList<Incident> incidents;
     public static ArrayList<Unit> EmergencyUnits;
     public static ArrayList<Unit> ActiveUnits;
+    public static ArrayList<Incident> EndedIncidents;
     public ArrayList<Incident> pendingIncidents;
     private Server server;
     private IDatabase databaseconn;
 
     public Administration() throws MalformedURLException {
+        EndedIncidents = new ArrayList<>();
         incidents = new ArrayList<>();
         EmergencyUnits = new ArrayList<>();
         ActiveUnits = new ArrayList<>();
@@ -124,6 +126,11 @@ public class Administration {
     public ObservableList<Unit> getUnits() {
 
         return FXCollections.observableArrayList(EmergencyUnits);
+    }
+
+    public ObservableList<Incident> getEndedIncidents() {
+
+        return FXCollections.observableArrayList(EndedIncidents);
     }
 
     public ObservableList<Unit> getActiveUnits() {

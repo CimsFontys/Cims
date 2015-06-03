@@ -122,6 +122,11 @@ public class Incident {
         this.solvedBy = solvedBy;
     }
     
+    public String getSolvedBy()
+    {
+        return this.solvedBy;
+    }
+    
     @Override
     public String toString() {
         return this.name;

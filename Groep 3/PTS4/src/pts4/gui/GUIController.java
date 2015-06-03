@@ -39,6 +39,8 @@ import javafx.stage.Stage;
 import pts4.chatserver.*;
 import pts4.googlemaps.Gmaps;
 import pts4.klassen.*;
+import static pts4.klassen.Administration.EndedIncidents;
+import static pts4.klassen.Administration.incidents;
 import pts4.rssfeed.EnumProvincies;
 import se.mbaeumer.fxmessagebox.MessageBox;
 import se.mbaeumer.fxmessagebox.MessageBoxType;
@@ -56,13 +58,13 @@ public class GUIController implements Initializable, MapChangeListener<String, C
     @FXML
     ListView lvEndedIncidents;
     @FXML
-    TextField tfEndName;
+    TextArea tfEndName;
     @FXML
-    TextField tfEndDescription;
+    TextArea tfEndDescription;
     @FXML
-    TextField tfEndDetails;
+    TextArea tfEndDetails;
     @FXML
-    TextField tfEndSolvedBy;
+    TextArea tfEndSolvedBy;
     @FXML
     Button btnEndIncident;
     @FXML
@@ -180,6 +182,22 @@ public class GUIController implements Initializable, MapChangeListener<String, C
                 tfEndName.setText(a.getName());
                 tfEndDescription.setText(a.getDescription());
                 tfEndDetails.setText("Explosion: " + a.getExplosion() + ", Fire: " + a.getFire() + ", Toxicity: " + a.getToxicity() + ", Urgent: " + a.getUrgent() + ", Violent: " + a.getViolent());
+                btnEndIncident.setDisable(false);
+                tfEndSolvedBy.setText(null);
+            }
+        }
+    }
+    
+        public void goEndedIncident() {
+
+        for (Incident a : admin.getEndedIncidents()) {
+            if (a.equals(lvEndedIncidents.getSelectionModel().getSelectedItem())) {
+
+                tfEndName.setText(a.getName());
+                tfEndDescription.setText(a.getDescription());
+                tfEndDetails.setText("Explosion: " + a.getExplosion() + ", Fire: " + a.getFire() + ", Toxicity: " + a.getToxicity() + ", Urgent: " + a.getUrgent() + ", Violent: " + a.getViolent());
+                tfEndSolvedBy.setText(a.getSolvedBy());
+                btnEndIncident.setDisable(true);
             }
         }
     }
@@ -191,6 +209,9 @@ public class GUIController implements Initializable, MapChangeListener<String, C
                 if (a.equals(lvActiveIncidents.getSelectionModel().getSelectedItem())) {
 
                     a.setSolvedBy(tfEndSolvedBy.getText());
+                    EndedIncidents.add(a);
+                    incidents.remove(a);
+                    initComboboxes();
                 }
             }
         } else {
@@ -206,6 +227,8 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         cbincident.setItems(admin.getIncidents());
         lvIncidents.setItems(admin.getIncidents());
         lvIncidents2.setItems(admin.getIncidents());
+        lvActiveIncidents.setItems(admin.getIncidents());
+        lvEndedIncidents.setItems(admin.getEndedIncidents());
         lvunits.setItems(admin.getUnits());
         lvPendingIncidents.setItems(admin.getPendingIncidents());
         lvAcceptedIncidents.setItems(admin.getIncidents());
