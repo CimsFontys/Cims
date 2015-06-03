@@ -164,11 +164,12 @@ public class SQL extends DatabaseConnector implements IDatabase
         }
         finally
         {
+            super.disconnectFromDatabase();
             if(counter == 1)
             {
                 insertPerson(idpersonal_type,first_name,last_name,middle_name,username,password,SSN,email,Birthdate,phonenumber,Street,City,Postal,Region,configurator);
             }
-            super.disconnectFromDatabase();
+            
         }
     }   
    
@@ -232,11 +233,12 @@ public class SQL extends DatabaseConnector implements IDatabase
         }
         finally
         {
+            super.disconnectFromDatabase();
             if(counter == 1)
             {
                 insertCalamity(longtitude,latitude,personid,name,description,timestamp,calamitydanger,region);
             }
-            super.disconnectFromDatabase();
+            
         }
     }
 
@@ -626,11 +628,12 @@ public class SQL extends DatabaseConnector implements IDatabase
         }
         finally
         {
+            super.disconnectFromDatabase();
             if(counter == 1)
             {
                 insertLog(personid,description) ;
             }
-            super.disconnectFromDatabase();
+            
         }
     }
 
@@ -732,11 +735,12 @@ public class SQL extends DatabaseConnector implements IDatabase
             }
             finally
             {
+                super.disconnectFromDatabase();
                 if(counter == 1)
                 {
                 insertFile(name,path,extension) ;
                 }
-                super.disconnectFromDatabase();
+                
             }
             
          }
@@ -898,11 +902,12 @@ public class SQL extends DatabaseConnector implements IDatabase
             }
             finally
             {
+                super.disconnectFromDatabase();
                 if(counter == 1)
                 {
                     insertMessage(sender_id,receiver_id,message,file); 
                 }
-                super.disconnectFromDatabase();
+                
             }
         }
         else if(file == null)
@@ -949,11 +954,12 @@ public class SQL extends DatabaseConnector implements IDatabase
             }
             finally
             {
+                super.disconnectFromDatabase();
                 if(counter == 1)
                 {
                     insertMessage(sender_id,receiver_id,message,file); 
                 }
-                super.disconnectFromDatabase();
+                
             }
         }
         
@@ -1130,11 +1136,12 @@ public class SQL extends DatabaseConnector implements IDatabase
         } catch (SQLException ee) {
             return false;
         } finally {
+            super.disconnectFromDatabase();
             if(counter == 1)
                 {
                     insertInformation(id_calamity,calamitytype,calamitydescription,filepath,filename,fileextension,personid)  ;
                 }
-            super.disconnectFromDatabase();
+            
         }
     }
     
@@ -1249,11 +1256,12 @@ public class SQL extends DatabaseConnector implements IDatabase
         }
         finally
         {
+            super.disconnectFromDatabase();
             if(counter == 1)
             {
                 insertRegion(region);
             }
-            super.disconnectFromDatabase();
+            
         }
     }
     
@@ -1390,11 +1398,12 @@ public class SQL extends DatabaseConnector implements IDatabase
         }
         finally
         {
+            super.disconnectFromDatabase();
             if(counter == 1)
             {
                 insertAddress(Street,City,Postal, Region) ;
             }
-            super.disconnectFromDatabase();
+            
         }
     }
     
@@ -1490,11 +1499,12 @@ public class SQL extends DatabaseConnector implements IDatabase
         }
         finally
         {
+            super.disconnectFromDatabase();
             if(counter == 1)
             {
                 insertLocation(name,geo_long,geo_lat,locationtypeid);
             }
-            super.disconnectFromDatabase();
+            
         }
     }
     
@@ -1827,6 +1837,7 @@ public class SQL extends DatabaseConnector implements IDatabase
     
 public Boolean connectingInsert()
     {
+        updateStateDatabase();
         if(counter == 1)
         {
             updateconndatabase2 = super.connectToDatabase2();
@@ -1836,7 +1847,7 @@ public Boolean connectingInsert()
             updateconndatabase1 = super.connectToDatabase();
             counter++;
         }
-        updateStateDatabase();
+        
         return true;
         
                 
@@ -1844,12 +1855,13 @@ public Boolean connectingInsert()
     
     private void connectingSelect()
     {
+        updateStateDatabase();
         if(!super.connectToDatabase() || counter == 1)
         {   
             updateconndatabase2 = super.connectToDatabase2();
             updateconndatabase1 = false;
         }
-        updateStateDatabase();
+        
     }
     
     private void updateStateDatabase()
