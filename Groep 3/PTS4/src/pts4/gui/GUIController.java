@@ -211,6 +211,7 @@ public class GUIController implements Initializable, MapChangeListener<String, C
                     a.setSolvedBy(tfEndSolvedBy.getText());
                     EndedIncidents.add(a);
                     incidents.remove(a);
+                    g.DrawIncidents();
                     initComboboxes();
                 }
             }

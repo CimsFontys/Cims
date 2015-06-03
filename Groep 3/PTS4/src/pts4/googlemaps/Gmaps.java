@@ -203,6 +203,19 @@ public class Gmaps {
      teken();
      }*/
 
+    public void DrawIncidents() {
+         waypoints.clear();
+        for (Incident object : incidents) {
+            GeoPosition plek = new GeoPosition(Double.parseDouble(object.getLatitude()), Double.parseDouble(object.getLongitude()));
+           
+            waypoints.add(new DefaultWaypoint(plek));
+            teken();
+            
+            // Create a waypoint painter that takes all the waypoints
+        }
+        waypointPainter.setWaypoints(waypoints);
+    }
+
     public void addIncidentOnMap(Incident a) {
         GeoPosition plek = new GeoPosition(Double.parseDouble(a.getLatitude()), Double.parseDouble(a.getLongitude()));
         waypoints.add(new DefaultWaypoint(plek));
@@ -309,11 +322,11 @@ public class Gmaps {
 
     }
 
-    public void sendMessage(String message, String Sender, String Receiver)
-    {
+    public void sendMessage(String message, String Sender, String Receiver) {
         ChatMessage chat = new ChatMessage(message, Sender, Receiver);
         server.sendMessage(chat);
     }
+
     public void Combobox() {
         /*JPanel panel = new JPanel();
          panel.setLayout(new GridLayout());
