@@ -23,6 +23,7 @@ import javax.json.Json;
 import javax.json.stream.JsonParser;
 import javax.json.stream.JsonParser.Event;
 import pts4.database.SQL;
+import pts4.klassen.LogManager;
 /**
  *
  * @author Gijs
@@ -61,8 +62,7 @@ public class ConfiguratieController implements Initializable {
         VoorzieningCB.getItems().add("Politiebureau");
         VoorzieningCB.getItems().add("Ziekenhuis");
         VoorzieningCB.getItems().add("Brandweerkazerne");
-        SetPeopleInCB();
-        
+       
         
     }
     
@@ -83,15 +83,19 @@ public class ConfiguratieController implements Initializable {
             noodtype = 3; 
         }
        
+             
+
             dbcon.insertLocation(VoorNaamTB.getText(), VoorLonTB.getText(), VoorLatTB.getText(), noodtype);
-       
+            LogManager.getInstance().insertLog("insert Facility");
 
     }
     
     @FXML
     public HashMap<Integer, String> SetPeopleInCB()
     {
+           /*
         HashMap<Integer, String> Info = new HashMap<Integer, String>();
+     
         ArrayList<Integer> PersonID = new ArrayList<>();
         ArrayList<String> PersonNames = new ArrayList<>();
         
@@ -138,13 +142,14 @@ public class ConfiguratieController implements Initializable {
                     PersoneelCB.getItems().add(key.getValue());            
                 }
                 
-                
-                return Info;
+                */
+                return null;
     }
     
     @FXML
     public void SetLogList()
     {
+        /*
         HashMap<Integer, String> Info  = SetPeopleInCB();
         String jsonStr = "";
         
@@ -194,6 +199,7 @@ public class ConfiguratieController implements Initializable {
         {
             LogListView.getItems().add(S);
         }
-        
+       */
     }
+                 
 }
