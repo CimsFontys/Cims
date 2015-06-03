@@ -6,6 +6,7 @@
 package pts4.gui;
 
 import chat.EmergencyUnit;
+import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -48,6 +49,8 @@ public class GUIController implements Initializable, MapChangeListener<String, C
 
     private Administration admin;
     private Gmaps g;
+    @FXML
+    Button btnLogOut;
     @FXML
     TextField tfName;
     @FXML
@@ -347,5 +350,16 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         } else if (change.wasRemoved()) {
             cbUnits.getItems().remove(change.getValueRemoved().getNaam());
         }
+    }
+    
+    public void btnLogOut_Click() throws IOException
+    {
+        Stage currentstage = (Stage) btnLogOut.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Inloggen.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));  
+        stage.show();  
+        currentstage.close();
     }
 }
