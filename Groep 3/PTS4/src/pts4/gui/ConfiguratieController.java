@@ -6,6 +6,7 @@
 
 package pts4.gui;
 
+import java.io.IOException;
 import java.io.StringReader;
 
 import java.net.URL;
@@ -14,11 +15,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import javax.json.Json;
 import javax.json.stream.JsonParser;
 import javax.json.stream.JsonParser.Event;
@@ -31,7 +36,8 @@ import pts4.klassen.LogManager;
 public class ConfiguratieController implements Initializable {
     
     private SQL dbcon;
-
+    @FXML
+    private Button btnLogOut;
     
     @FXML
     private TextField VoorNaamTB;
@@ -206,5 +212,15 @@ public class ConfiguratieController implements Initializable {
         }
        */
     }
-                 
+    
+   public void btnLogOut_Click() throws IOException
+   {
+        Stage currentstage = (Stage) btnLogOut.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Inloggen.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.show();
+        currentstage.close();
+    }              
 }

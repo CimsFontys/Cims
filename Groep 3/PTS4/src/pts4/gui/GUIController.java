@@ -421,5 +421,6 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         stage.setScene(new Scene(root));
         stage.show();
         currentstage.close();
+        this.admin = null;
     }
 }
