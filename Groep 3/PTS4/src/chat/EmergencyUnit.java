@@ -13,10 +13,12 @@ import java.io.Serializable;
  */
 public class EmergencyUnit implements Serializable
 {
+    
     private String naam;
     private int type;
     private double longitude;
     private double latitude;
+    
     
     public EmergencyUnit(String naam, int type, double longitude, double latitude)
     {

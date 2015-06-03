@@ -37,7 +37,6 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import pts4.chatserver.*;
 import pts4.googlemaps.Gmaps;
-import pts4.googlemaps.Unit;
 import pts4.klassen.*;
 import pts4.rssfeed.EnumProvincies;
 
