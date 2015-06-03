@@ -67,10 +67,26 @@ public class DemoFXController implements Initializable, MessageListener
     @FXML private TextField textfield_personid;
     @FXML private DatePicker datepicker_birthdate;
     
+    @FXML private TextField textfield_log_personid;
+    @FXML private TextField textfield_log_text;
+    @FXML private Button button_log_insert;
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) 
     {
         commManager.addListener(this);
+    }
+    
+    public void insertLog()
+    {
+        String personidText = textfield_log_personid.getText();
+        int personid = Integer.parseInt(personidText);
+        
+        String description = textfield_log_text.getText();
+        
+        MessageBuilder mb = new MessageBuilder();
+        Message message = mb.buildInsertLog(personid, description);
+        commManager.addMessage(message);
     }
     
     public void getLogs()
@@ -80,7 +96,7 @@ public class DemoFXController implements Initializable, MessageListener
         
         MessageBuilder mb = new MessageBuilder();
         Message message = mb.buildRetrieveLogs(personid);
-        commManager.sendMessage(message);
+        commManager.addMessage(message);
     }
     
     public void login()
@@ -90,7 +106,7 @@ public class DemoFXController implements Initializable, MessageListener
         
         MessageBuilder mb = new MessageBuilder();
         Message message = mb.buildLoginMessage(username, password);
-        commManager.sendMessage(message);
+        commManager.addMessage(message);
     }
     
     public void insertPerson()
@@ -114,21 +130,20 @@ public class DemoFXController implements Initializable, MessageListener
         
         MessageBuilder mb = new MessageBuilder();
         Message message = mb.buildInsertPerson(persontype, firstname, lastname, middlename, username, password, SSN, email, birthdate, phone, street, city, postal, region, configutor);
-        commManager.sendMessage(message);
-    }   
-    
+        commManager.addMessage(message);
+    }
     public void allCalamities()
     {
         MessageBuilder mb = new MessageBuilder();
         Message message = mb.buildRetrieveAllCalamitiesMessage();
-        commManager.sendMessage(message);
+        commManager.addMessage(message);
     }
     
     public void allCalamitiesDetailed()
     {
         MessageBuilder mb = new MessageBuilder();
         Message message = mb.buildRetrieveAllCalamitiesDetailed();
-        commManager.sendMessage(message);
+        commManager.addMessage(message);
     }
 
     @Override

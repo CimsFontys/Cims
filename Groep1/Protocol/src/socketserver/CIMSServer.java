@@ -179,7 +179,7 @@ public class CIMSServer implements Runnable {
             }
             SQL retrieve = new SQL();
             String response = retrieve.getPersonInformation(personid);
-            this.addMessage(messageBuilder.buildPersonInformationReply(response));
+            this.addMessage(messageBuilder.buildRetrievePersonInformationReply(response));
         }
     }
     
@@ -192,6 +192,41 @@ public class CIMSServer implements Runnable {
             
             this.addMessage(messageBuilder.buildRetrieveLocationTypesReply(result));
         }
+    }
+    
+    private void insertLogs(Message message)
+    {
+        StringReader reader = new StringReader(message.getText());
+            JsonParser parser = Json.createParser(reader);
+            Event event = parser.next();
+            
+            int personid = 0;
+            String logdescription = "";
+            
+            while (parser.hasNext()) {
+                if (event.equals(Event.KEY_NAME)) {
+                    String keyname = parser.getString();
+                    event = parser.next();
+
+                    switch (keyname) {
+                        case "personid":
+                            personid = parser.getInt();
+                            break;
+                        case "logdescription":
+                            logdescription = parser.getString();
+                            break;
+                        default:
+                            break;
+                    }
+                    event = parser.next();
+                } else {
+                    event = parser.next();
+                }
+
+            }
+            SQL insert = new SQL();
+            boolean succes = insert.insertLog(personid, logdescription);
+            System.out.println("CIMS Server: " + "Log Added To System with PID: " + personid);
     }
     
     private void insertPerson(Message message)
@@ -461,6 +496,10 @@ public class CIMSServer implements Runnable {
                                     System.out.println("Message Requested By: " + csocket.toString());
                                     this.retrieveAllCalamitiesDetailed(message);
                                     break;
+                                case MessageBuilder.InsertLog:   
+                                    System.out.println("MessageType: Insert Log");
+                                    System.out.println("Message Requested By: " + csocket.toString());
+                                    this.insertLogs(message);
                                 default:
                                     break;
                             }

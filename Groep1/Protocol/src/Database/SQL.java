@@ -445,7 +445,7 @@ public class SQL extends DatabaseConnector implements IDatabase
         try
         {
             int count = 0;
-            String query = "SELECT * FROM person";
+            String query = "SELECT * FROM person p, region r , address a where p.addressid = a.addressid AND a.regionid = r.regionid";
             PreparedStatement prest = conn.prepareStatement(query);
             
             JsonArrayBuilder ja = Json.createArrayBuilder();
