@@ -199,6 +199,7 @@ public class GUIController implements Initializable, MapChangeListener<String, C
     {
         g.unitAanmaak = true;
         g.id = cbUnit.getSelectionModel().getSelectedItem().toString();
+        g.incidentstring = cbincident.getSelectionModel().getSelectedItem().toString();
     }
     
     public void selectIncident() {

@@ -18,7 +18,7 @@ public class Unit
     private int type;
     private double longitude;
     private double latitude;
-    private Incident incident;
+    private String incident;
     
     
     public Unit(String naam, int type, double longitude, double latitude)
@@ -59,12 +59,12 @@ public class Unit
         this.latitude = latidude;
     }
     
-    public void setIncident(Incident incident)
+    public void setIncident(String incident)
     {
         this.incident = incident;
     }
     
-    public Incident getIncident()
+    public String getIncident()
     {
         return this.incident;
     }
