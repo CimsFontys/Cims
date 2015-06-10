@@ -71,12 +71,11 @@ public class ComManager implements CommMessageListener{
     {
         this.mst.addMessage(message);
     }
-    
-    
-    
+
     public void stopService() 
     {
-        try {
+        try 
+        {
             this.mrt.stop();
             this.mst.stop();
             
@@ -92,10 +91,9 @@ public class ComManager implements CommMessageListener{
             ml.proces(message);
         }
     }
-
-    
-    
-    private static class ComManagerHolder {
+   
+    private static class ComManagerHolder 
+    {
 
         private static final ComManager INSTANCE = new ComManager();
     }

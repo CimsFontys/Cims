@@ -5,9 +5,9 @@
  */
 package socketserver;
 
+import Database.SQL;
 import Protocol.Message;
 import Protocol.MessageBuilder;
-import Database.SQL;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -17,6 +17,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.json.*;
@@ -27,7 +29,7 @@ import javax.json.stream.JsonParser.Event;
  *
  * @author Michael
  */
-public class CIMSServer implements Runnable {
+public class CIMSServer implements Runnable{
 
     int receiverID = 0;
     boolean configurator = false;
@@ -43,15 +45,10 @@ public class CIMSServer implements Runnable {
     ObjectInputStream ois = null;
     OutputStream os = null;
 
-    ArrayList<String> requestedMessages;
-    ArrayList<String> connectedClients;
-
     CIMSServer(Socket csocket) 
     {
         this.csocket = csocket;
         toSend = new ArrayList<Message>();
-        requestedMessages = new ArrayList<String>();
-        connectedClients = new ArrayList<String>();
         administration = ThreadAdministration.getInstance();
         administration.addClient(this);
         messageBuilder = new MessageBuilder();
@@ -67,10 +64,64 @@ public class CIMSServer implements Runnable {
         ServerSocket serverSocket = new ServerSocket(9000);
         System.out.println("CIMS Communication Server, Starting Up.....");
         System.out.println("Awaiting Communications");
-        while (true) {
+        while (true) 
+        {
+            ExecutorService executor = Executors.newFixedThreadPool(100);
+            for (int i = 0; i < 10; i++) {
+            //Runnable worker = new WorkerThread('' + i);
+            //executor.execute(worker);
+          }
             Socket sock = serverSocket.accept();
             System.out.println("Connecting to Client on: " + sock.getRemoteSocketAddress().toString());
-            new Thread(new CIMSServer(sock)).start();
+            new Thread(new CIMSServer(sock)).start();           
+        }
+    }
+        
+    private void insertMessage(Message message)
+    {
+        if(receiverID != 0)
+        {
+            StringReader reader = new StringReader(message.getText());
+            JsonParser parser = Json.createParser(reader);
+            Event event = parser.next();
+            
+            int personid = 0;
+            int receiverid = 0;
+            String messagetext = "";
+            
+            while (parser.hasNext()) 
+            {
+                if (event.equals(Event.KEY_NAME)) {
+                    String keyname = parser.getString();
+                    event = parser.next();
+
+                    switch (keyname) {
+                        case "personid":
+                            personid = parser.getInt();
+                            break;
+                        case "receiverid":
+                            receiverid = parser.getInt();
+                            break;
+                        case "message":
+                            messagetext = parser.getString();
+                            break;
+                        default:
+                            break;
+                    }
+                    event = parser.next();
+                } else {
+                    event = parser.next();
+                }
+            }
+            
+            CIMSServer f = administration.findClient(receiverid);
+            f.addMessage(message);
+                        
+            //MESSAGE NAAR JEZELF STUREN?
+            
+            //SQL retrieve = new SQL();
+            //boolean succes = retrieve.insertLog(personid, logdescription);
+            //System.out.println("CIMS Server: " + "Log Added To System PID: " + personid);
         }
     }
     
@@ -115,6 +166,40 @@ public class CIMSServer implements Runnable {
             String result = retrieve.retrieveRegions();
             
             this.addMessage(messageBuilder.buildRetrieveRegionsReply(result));
+        }
+    }
+    
+    private void retrieveCalamitiesWithName(Message message)
+    {
+        String calamityname = "";
+        int personid = 0;
+        
+        if (receiverID != 0) {
+            StringReader reader = new StringReader(message.getText());
+            JsonParser parser = Json.createParser(reader);
+            Event event = parser.next();
+
+            while (parser.hasNext()) {
+                if (event.equals(Event.KEY_NAME)) {
+                    String keyname = parser.getString();
+                    event = parser.next();
+
+                    switch (keyname) {
+                        case "calamityname":
+                            calamityname = parser.getString();
+                            break;
+                        default:
+                            break;
+                    }
+                    event = parser.next();
+                } else {
+                    event = parser.next();
+                }
+
+            }
+            SQL retrieve = new SQL();
+            String response = retrieve.retrieveCalamityWithName(calamityname);
+            this.addMessage(messageBuilder.buildRetrieveCalamityWithNameReply(response));
         }
     }
     
@@ -428,7 +513,8 @@ public class CIMSServer implements Runnable {
             oos = new ObjectOutputStream(csocket.getOutputStream());
             ois = new ObjectInputStream(csocket.getInputStream());
 
-            try {
+            try 
+            {
                 while (running) 
                 {
                     if(csocket == null)
@@ -466,6 +552,11 @@ public class CIMSServer implements Runnable {
                                     System.out.println("Message Requested By: " + csocket.toString());
                                     this.retrieveAllCalamities(message);
                                     break;
+                                case MessageBuilder.RetrieveCalamityWithName:
+                                    System.out.println("MessageType: Retrieve Calamity With Name");
+                                    System.out.println("Message Requested By: " + csocket.toString());
+                                    this.retrieveCalamitiesWithName(message);
+                                    break;
                                 case MessageBuilder.RetrieveAllLocations:
                                     System.out.println("MessageType: Retrieve All Locations");
                                     System.out.println("Message Requested By: " + csocket.toString());
@@ -501,6 +592,11 @@ public class CIMSServer implements Runnable {
                                     System.out.println("Message Requested By: " + csocket.toString());
                                     this.insertLog(message);
                                     break;
+                                case MessageBuilder.InsertMessage:
+                                    System.out.println("MessageType: Chat Send Message / Insert Message");
+                                    System.out.println("Message Requested By: " + csocket.toString());
+                                    this.insertMessage(message);
+                                    break;
                                 default:
                                     break;
                             }
@@ -519,10 +615,18 @@ public class CIMSServer implements Runnable {
                             toSend.remove(0);
                         }
                 }
-            } catch (ClassNotFoundException ex) {
+            } 
+            catch (ClassNotFoundException ex) 
+            {
+                administration.removeClient(this);
+                running = false;
                 Logger.getLogger(CIMSServer.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (IOException ex) {
+        } 
+        catch (IOException ex) 
+        {
+            administration.removeClient(this);
+            running = false;
         }
     }
 //    @Override

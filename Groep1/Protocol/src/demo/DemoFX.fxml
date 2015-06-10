@@ -49,5 +49,13 @@
       <Text layoutX="247.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PERSONID" />
       <Button fx:id="button_getlogs" layoutX="200.0" layoutY="99.0" mnemonicParsing="false" onAction="#getLogs" prefHeight="25.0" prefWidth="149.0" text="Get Logs" />
       <Button fx:id="button_calamitiesdetailed" layoutX="200.0" layoutY="145.0" mnemonicParsing="false" onAction="#allCalamitiesDetailed" prefHeight="25.0" prefWidth="149.0" text="Get All Calamities Detailed" />
+      <TextField fx:id="textfield_chat_message" layoutX="9.0" layoutY="329.0" />
+      <Button fx:id="button_chat_send" layoutX="9.0" layoutY="395.0" mnemonicParsing="false" onAction="#sendChat" text="Send message" />
+      <TextField fx:id="textfield_chat_receiverid" layoutX="9.0" layoutY="358.0" />
+      <Text layoutX="171.0" layoutY="350.0" strokeType="OUTSIDE" strokeWidth="0.0" text="message" />
+      <Text layoutX="171.0" layoutY="375.0" strokeType="OUTSIDE" strokeWidth="0.0" text="receiver id" />
+      <Text fx:id="text_personid" layoutX="3.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+      <TextField fx:id="textfield_calamityname_name" layoutX="200.0" layoutY="203.0" />
+      <Button fx:id="button_calamityname" layoutX="200.0" layoutY="229.0" mnemonicParsing="false" onAction="#getCalamitiesWithName" prefHeight="25.0" prefWidth="149.0" text="Calamity With Name" />
    </children>
 </AnchorPane>
