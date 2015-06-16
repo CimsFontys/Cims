@@ -9,7 +9,6 @@ import CommunicationClient.ComManager;
 import CommunicationClient.MessageListener;
 import Protocol.Message;
 import Protocol.MessageBuilder;
-import java.util.Date;
 import javafx.animation.ParallelTransitionBuilder;
 
 /**
@@ -21,21 +20,10 @@ public class LogManager implements MessageListener {
     private CommunicationClient.ComManager comManager;
     private MessageBuilder mb;
     private int personid;
-    private String calamityname;
-    
-    public String getCalamityName()
-    {
-        return this.calamityname;
-    }
     
     public void setPersonId(int personid)
     {
         this.personid = personid;
-    }
-    
-    public int getPersonId()
-    {
-        return this.personid;
     }
     
     private LogManager() {
@@ -45,6 +33,12 @@ public class LogManager implements MessageListener {
     
     public static LogManager getInstance() {
         return LogManagerHolder.INSTANCE;
+    }
+
+    @Override
+    public void proces(Message message)
+    {
+        
     }
     
     private static class LogManagerHolder {
@@ -57,33 +51,4 @@ public class LogManager implements MessageListener {
         comManager.addMessage(mb.buildInsertLog(personid, text));
     }
     
-    public void insertCalamity(String longi, String lat, int personid, String name, String description, Date timestamp, String urgent, String region)
-    {
-        comManager.addMessage(mb.buildInsertCalamity(region, lat, personid, name, description, new Date(), name, region));
-    }
-    
-    public void getCalamityWithName(String name)
-    {
-        MessageBuilder messageBuilder = new MessageBuilder();
-        Message salami = messageBuilder.buildRetrieveCalamityWithName(name);
-        comManager.addMessage(salami); 
-    }
-    
-    public void parseCalamityWithNameResponse(Message message)
-    {
-        
-    }   
-    
-    @Override
-    public void proces(Message message)
-    {
-        if(message.getType().equals("retrievecalamitywithname"))
-        {
-            System.out.println("1");
-        }
-        if(message.getType().equals("retrievecalamitywithnamereply"))
-        {
-            System.out.println("2");
-        }
-    }
 }
