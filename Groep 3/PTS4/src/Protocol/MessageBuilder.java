@@ -55,6 +55,8 @@ public class MessageBuilder
     public static final String InsertMessage = "insertmessage"; //
     public static final String RetrieveMessages = "retrievemessages"; // 
     public static final String RetrieveMessagesReply = "retrievemessagesreply"; //
+    public static final String RetrieveCalamityWithName = "retrievecalamitywithname";
+    public static final String RetrieveCalamityWithNameReply = "retrievecalamitywithnamereply";
     
     private static final String token = "-";
     
@@ -136,12 +138,11 @@ public class MessageBuilder
         return message;
     }
 
-    //FILENAME + EXTENSION
-    public Message buildInsertMessage(int senderid, int receiverid, String messageS, File file)
+    public Message buildInsertMessage(int personid, int receiverid, String messageS, File file)
     {
         JsonObjectBuilder jb = Json.createObjectBuilder();
         
-        jb.add("senderid", senderid);
+        jb.add("personid", personid);
         jb.add("receiverid", receiverid);
         jb.add("message", messageS);
                        
@@ -150,18 +151,19 @@ public class MessageBuilder
         Message message = new Message();
         message.setText(jo.toString());
         message.setType(InsertMessage);
-        byte[] bFile = new byte[(int) file.length()];
-        FileInputStream fis;
-        try {
-            fis = new FileInputStream(file);
-            fis.read(bFile);
-            fis.close();
-        }
-        catch(IOException ex)
-        {
-        }
-
-        message.setFile(bFile);
+        
+//        byte[] bFile = new byte[(int) file.length()];
+//        FileInputStream fis;
+//        try {
+//            fis = new FileInputStream(file);
+//            fis.read(bFile);
+//            fis.close();
+//        }
+//        catch(IOException ex)
+//        {
+//        }
+//
+//        message.setFile(bFile);
         
         return message;
     }
@@ -226,6 +228,29 @@ public class MessageBuilder
         Message message = new Message();
         message.setText(json);
         message.setType(RetrieveCalamityWithIDReply);
+        return message;
+    }
+    
+    public Message buildRetrieveCalamityWithName(String name)
+    {      
+        JsonObjectBuilder jb = Json.createObjectBuilder();
+        
+        jb.add("calamityname", name);
+            
+        JsonObject jo = jb.build();
+        
+        Message message = new Message();
+        message.setText(jo.toString());
+        message.setType(RetrieveCalamityWithName);
+        
+        return message;
+    }
+    
+    public Message buildRetrieveCalamityWithNameReply(String json)
+    {
+        Message message = new Message();
+        message.setText(json);
+        message.setType(RetrieveCalamityWithNameReply);
         return message;
     }
     
