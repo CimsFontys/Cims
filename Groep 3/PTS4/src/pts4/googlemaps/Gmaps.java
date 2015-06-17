@@ -14,6 +14,7 @@ import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import static java.util.Collections.list;
@@ -21,6 +22,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.animation.AnimationTimer;
 import javafx.animation.Timeline;
 import javafx.embed.swing.SwingNode;
@@ -67,6 +70,9 @@ import pts4.klassen.Incident;
 import pts4.gui.GUIController;
 import static pts4.klassen.Administration.EmergencyUnits;
 import pts4.klassen.Unit;
+import se.mbaeumer.fxmessagebox.MessageBox;
+import se.mbaeumer.fxmessagebox.MessageBoxResult;
+import se.mbaeumer.fxmessagebox.MessageBoxType;
 
 /**
  *
@@ -143,7 +149,7 @@ public class Gmaps {
             if (a.getType() == 3) {
                 color = Color.RED;
             }
-            units.add(new MyWaypoint(a.getNaam(), color, spot));
+            units.add(new MyWaypoint(a.getName(), color, spot));
             // Create a waypoint painter that takes all the waypoints
             waypointPainter2.setWaypoints(units);
             waypointPainter2.setRenderer(new FancyWaypointRenderer());
@@ -178,7 +184,7 @@ public class Gmaps {
             if (a.getType() == 3) {
                 color = Color.RED;
             }
-            units.add(new MyWaypoint(a.getNaam(), color, spot));
+            units.add(new MyWaypoint(a.getName(), color, spot));
             // Create a waypoint painter that takes all the waypoints
             waypointPainter2.setWaypoints(units);
             waypointPainter2.setRenderer(new FancyWaypointRenderer());
@@ -247,7 +253,7 @@ public class Gmaps {
 
     }
 
-    public void createStage() {
+   public void createStage() {
 
         GeoPosition Utrecht = new GeoPosition(52.0907370, 5.1214200);
         /*// Create a waypoint painter that takes all the waypoints
@@ -261,14 +267,60 @@ public class Gmaps {
         MouseInputListener mia = new PanMouseInputListener(mapViewer);
         mapViewer.addMouseListener(mia);
         mapViewer.addMouseMotionListener(mia);
-        mapViewer.addMouseListener(new CenterMapListener(mapViewer));
+        //mapViewer.addMouseListener(new CenterMapListener(mapViewer));
         mapViewer.addMouseWheelListener(new ZoomMouseWheelListenerCenter(mapViewer));
         mapViewer.addKeyListener(new PanKeyListener(mapViewer));
-
+        
         mapViewer.addMouseListener(new MouseAdapter() {
 
             @Override
             public void mouseClicked(MouseEvent me) {
+                
+                //Rechter muisknop klik
+                if (me.getButton() == MouseEvent.BUTTON3)
+                {
+                    GeoPosition mousepoint = mapViewer.convertPointToGeoPosition(me.getPoint());
+                    Double lat1 = mousepoint.getLatitude();
+                    Double lng1 = mousepoint.getLongitude();
+                    Double lat2;
+                    Double lng2;
+                    
+                    for (MyWaypoint u : units) {
+                        lat2 = u.getPosition().getLatitude();
+                        lng2 = u.getPosition().getLongitude();
+                    
+                        if (UnitControl.distFrom(lat1.floatValue(), lng1.floatValue(), lat2.floatValue(), lng2.floatValue()) < (mapViewer.getZoom() * mapViewer.getZoom() * mapViewer.getZoom() * 2)) {
+                            Platform.runLater(new Runnable() {
+
+                                @Override
+                                public void run() {
+
+                                    MessageBox msg = new MessageBox("Send message to unit " + u.getLabel() + "?", MessageBoxType.YES_NO);
+                                    msg.showAndWait();
+
+                                    if (msg.getMessageBoxResult() == MessageBoxResult.YES) {
+                                        
+                                        
+                                        try {
+                                            if (gui.messageToUnit(u.getLabel()) == false) {
+                                                MessageBox msg2 = new MessageBox("Error connecting to unit", MessageBoxType.OK_ONLY);
+                                                msg2.show();
+                                            }
+                                        } catch (IOException ex) {
+                                            Logger.getLogger(Gmaps.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
+                                        
+                                    } else {
+                                        //msg.close();
+                                    }
+                                }
+
+                            });
+                        }
+                    }
+
+                }
+                else {
                 if (createUnit == true) {
                     Color kleur = null;
                     if (type == 1) {
@@ -280,11 +332,11 @@ public class Gmaps {
                     if (type == 3) {
                         kleur = Color.RED;
                     }
-                    GeoPosition place = mapViewer.convertPointToGeoPosition(me.getPoint());
+                    GeoPosition plek = mapViewer.convertPointToGeoPosition(me.getPoint());
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            gui.setUnit(place.getLongitude(), place.getLatitude());
+                            gui.setUnit(plek.getLongitude(), plek.getLatitude());
                         }
                     });
 
@@ -293,14 +345,14 @@ public class Gmaps {
                             orders.remove(p);
                         }
                     }
-                    orders.add(new MyWaypoint(id, kleur, place));
+                    orders.add(new MyWaypoint(id, kleur, plek));
                     for (Unit a : EmergencyUnits) {
-                        if (a.getNaam().equals(id)) {
-                            GeoPosition place2 = new GeoPosition(a.getLatidude(), a.getLongitude());
+                        if (a.getName().equals(id)) {
+                            GeoPosition plek2 = new GeoPosition(a.getLatidude(), a.getLongitude());
                             ChatMessage chat = new ChatMessage(gui.getIncidentorder() + "\n" + gui.getUnitDescription(), "Meldkamer", id);
                             //server.sendMessage(chat);
                             a.setIncident(incidentstring);
-                            new Animation(place, place2, id, orders, units, Gmaps.this, waypointPainter3);
+                            new Animation(plek, plek2, id, orders, units, Gmaps.this, waypointPainter3);
                         }
                     }
                     createUnit = false;
@@ -311,21 +363,21 @@ public class Gmaps {
                 }
 
                 if (simulation == true) {
-                    Color color = null;
+                    Color kleur = null;
                     if (type == 1) {
-                        color = Color.cyan;
+                        kleur = Color.cyan;
                     }
                     if (type == 2) {
-                        color = Color.YELLOW;
+                        kleur = Color.YELLOW;
                     }
                     if (type == 3) {
-                        color = Color.RED;
+                        kleur = Color.RED;
                     }
-                    GeoPosition place = mapViewer.convertPointToGeoPosition(me.getPoint());
+                    GeoPosition plek = mapViewer.convertPointToGeoPosition(me.getPoint());
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            gui.setUnit(place.getLongitude(), place.getLatitude());
+                            gui.setUnit(plek.getLongitude(), plek.getLatitude());
                         }
                     });
 
@@ -334,14 +386,14 @@ public class Gmaps {
                             orders.remove(p);
                         }
                     }
-                    orders.add(new MyWaypoint(id, color, place));
+                    orders.add(new MyWaypoint(id, kleur, plek));
                     for (Unit a : EmergencyUnits) {
-                        if (a.getNaam().equals(id)) {
-                            GeoPosition place2 = new GeoPosition(a.getLatidude(), a.getLongitude());
+                        if (a.getName().equals(id)) {
+                            GeoPosition plek2 = new GeoPosition(a.getLatidude(), a.getLongitude());
                             //ChatMessage chat = new ChatMessage(gui.getIncidentorder() + "\n" + gui.getUnitDescription(), "Meldkamer", id);
                             //server.sendMessage(chat);
                             a.setIncident(incidentstring);
-                            new Animation(place, place2, id, orders, units, Gmaps.this, waypointPainter3);
+                            new Animation(plek, plek2, id, orders, units, Gmaps.this, waypointPainter3);
                         }
                     }
                     createUnit = false;
@@ -351,9 +403,11 @@ public class Gmaps {
                     draw();
                 }
             }
-
         }
-        ); // end MouseAdapter
+    }
+
+
+); // end MouseAdapter
 
     }
 

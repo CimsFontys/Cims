@@ -87,7 +87,7 @@ public class Animation {
                                 orders.remove(d);
                                 waypointpainter.setWaypoints(orders);
                                 for (Unit e : EmergencyUnits) {
-                                    if (e.getNaam().equals(id)) {
+                                    if (e.getName().equals(id)) {
                                         e.setLongitude(longitude);
                                         e.setLatidude(latitude);
 

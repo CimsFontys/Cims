@@ -193,6 +193,30 @@ public class GUIController implements Initializable, MapChangeListener<String, C
             }
         }
     }
+    public boolean messageToUnit(String unit) throws IOException {
+        try {
+        URL location1 = getClass().getResource("ServerGUI.fxml");
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(location1);
+        fxmlLoader.setBuilderFactory(new JavaFXBuilderFactory());
+
+        Parent root = (Parent) (Node) fxmlLoader.load(location1.openStream());
+
+        ServerGUIController ctrl1 = (ServerGUIController) fxmlLoader.getController();
+        ctrl1.setServer(admin.getServer(), unit);
+
+        Stage stage = new Stage();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+
+        //show the stage
+        stage.showAndWait();
+        return true;
+        }
+        catch (Exception ex) {
+            return false;
+        }
+    }
     
         public void goEndedIncident() {
 

@@ -19,8 +19,8 @@ public class Start extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        Parent root = FXMLLoader.load(getClass().getResource("Inloggen.fxml"));
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Inloggen.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("Login.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Login.fxml"));
         LoginController controller = new LoginController();
         loader.setController(controller);
         Scene scene = new Scene(root);     
