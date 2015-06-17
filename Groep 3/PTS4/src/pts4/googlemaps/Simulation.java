@@ -25,7 +25,7 @@ import pts4.klassen.Unit;
  *
  * @author Sander
  */
-public class Animation {
+public class Simulation {
 
     private Timer timer;
     private GeoPosition goal, unit;
@@ -36,7 +36,7 @@ public class Animation {
     private double longitude, latitude, diflongitude, diflatitude;
     private WaypointPainter<MyWaypoint> waypointpainter;
 
-    public Animation(GeoPosition goal, GeoPosition unit, String id, Set<MyWaypoint> orders, Set<MyWaypoint> units, Gmaps gmap, WaypointPainter<MyWaypoint> waypointpainter) {
+    public Simulation(GeoPosition goal, GeoPosition unit, String id, Set<MyWaypoint> orders, Set<MyWaypoint> units, Gmaps gmap, WaypointPainter<MyWaypoint> waypointpainter) {
         this.goal = goal;
         this.unit = unit;
         this.orders = orders;
@@ -120,4 +120,5 @@ public class Animation {
             }
         }
     }
+    
 }

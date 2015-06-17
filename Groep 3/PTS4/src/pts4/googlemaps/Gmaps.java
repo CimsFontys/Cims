@@ -84,6 +84,7 @@ public class Gmaps {
     private WaypointPainter<MyWaypoint> waypointPainter2, waypointPainter3;
     public RoutePainter routepainter;
     public Boolean unitAanmaak = false;
+    public Boolean simulation = false;
     public String id;
     private Incident incident;
     public String incidentstring;
@@ -204,13 +205,13 @@ public class Gmaps {
      }*/
 
     public void DrawIncidents() {
-         waypoints.clear();
+        waypoints.clear();
         for (Incident object : incidents) {
             GeoPosition plek = new GeoPosition(Double.parseDouble(object.getLatitude()), Double.parseDouble(object.getLongitude()));
-           
+
             waypoints.add(new DefaultWaypoint(plek));
             teken();
-            
+
             // Create a waypoint painter that takes all the waypoints
         }
         waypointPainter.setWaypoints(waypoints);
@@ -272,20 +273,15 @@ public class Gmaps {
                     Color kleur = null;
                     if (type == 1) {
                         kleur = Color.cyan;
-
                     }
                     if (type == 2) {
                         kleur = Color.YELLOW;
-
                     }
                     if (type == 3) {
                         kleur = Color.RED;
-
                     }
-
                     GeoPosition plek = mapViewer.convertPointToGeoPosition(me.getPoint());
                     Platform.runLater(new Runnable() {
-
                         @Override
                         public void run() {
                             gui.setUnit(plek.getLongitude(), plek.getLatitude());
@@ -302,41 +298,70 @@ public class Gmaps {
                         if (a.getNaam().equals(id)) {
                             GeoPosition plek2 = new GeoPosition(a.getLatidude(), a.getLongitude());
                             ChatMessage chat = new ChatMessage(gui.getIncidentorder() + "\n" + gui.getUnitDescription(), "Meldkamer", id);
-                            server.sendMessage(chat);
+                            //server.sendMessage(chat);
                             a.setIncident(incidentstring);
                             new Animation(plek, plek2, id, orders, units, Gmaps.this, waypointPainter3);
                         }
                     }
-
                     unitAanmaak = false;
                     // Create a waypoint painter that takes all the waypoints
-
                     waypointPainter3.setWaypoints(orders);
                     waypointPainter3.setRenderer(new FancyWaypointRenderer());
                     teken();
+                }
 
-                    //GeoPosition frankfurt = new GeoPosition(mapViewer.convertPointToGeoPosition(me.getLocationOnScreen()));
+                if (simulation == true) {
+                    Color kleur = null;
+                    if (type == 1) {
+                        kleur = Color.cyan;
+                    }
+                    if (type == 2) {
+                        kleur = Color.YELLOW;
+                    }
+                    if (type == 3) {
+                        kleur = Color.RED;
+                    }
+                    GeoPosition plek = mapViewer.convertPointToGeoPosition(me.getPoint());
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            gui.setUnit(plek.getLongitude(), plek.getLatitude());
+                        }
+                    });
+
+                    for (MyWaypoint p : orders) {
+                        if (p.getLabel().equals(id)) {
+                            orders.remove(p);
+                        }
+                    }
+                    orders.add(new MyWaypoint(id, kleur, plek));
+                    for (Unit a : EmergencyUnits) {
+                        if (a.getNaam().equals(id)) {
+                            GeoPosition plek2 = new GeoPosition(a.getLatidude(), a.getLongitude());
+                            //ChatMessage chat = new ChatMessage(gui.getIncidentorder() + "\n" + gui.getUnitDescription(), "Meldkamer", id);
+                            //server.sendMessage(chat);
+                            a.setIncident(incidentstring);
+                            new Animation(plek, plek2, id, orders, units, Gmaps.this, waypointPainter3);
+                        }
+                    }
+                    unitAanmaak = false;
+                    // Create a waypoint painter that takes all the waypoints
+                    waypointPainter3.setWaypoints(orders);
+                    waypointPainter3.setRenderer(new FancyWaypointRenderer());
+                    teken();
                 }
             }
-        }); // end MouseAdapter
+        
+    }
+
+
+); // end MouseAdapter
 
     }
 
     public void sendMessage(String message, String Sender, String Receiver) {
         ChatMessage chat = new ChatMessage(message, Sender, Receiver);
         server.sendMessage(chat);
-    }
-
-    public void Combobox() {
-        /*JPanel panel = new JPanel();
-         panel.setLayout(new GridLayout());
-         String[] labels = new String[2];
-         labels[0] = "Units";
-         labels[1] = "Calimiteiten";
-         final JComboBox combo = new JComboBox(labels);
-         combo.setSize(5, 20);
-         panel.add(combo);
-         frame.add(panel, BorderLayout.NORTH);*/
     }
 
     public JXMapViewer returnFrame() {
@@ -346,7 +371,7 @@ public class Gmaps {
     public void createSwingContent(final SwingNode swingNode) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
-            public void run() {
+        public void run() {
                 open();
                 swingNode.setContent(mapViewer);
             }

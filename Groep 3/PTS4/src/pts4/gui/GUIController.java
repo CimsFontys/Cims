@@ -54,6 +54,12 @@ public class GUIController implements Initializable, MapChangeListener<String, C
     private Administration admin;
     private Gmaps g;
     @FXML
+    ComboBox cbincidentsimulation;
+    @FXML
+    ComboBox cbunitsimulation;
+    @FXML
+    Button btnSimulation;
+    @FXML
     ListView lvActiveIncidents;
     @FXML
     ListView lvEndedIncidents;
@@ -224,6 +230,8 @@ public class GUIController implements Initializable, MapChangeListener<String, C
     public void initComboboxes() {
 
         //cbCategory.setItems(FXCollections.observableList(categorylist));
+        cbunitsimulation.setItems(admin.getUnits());
+        cbincidentsimulation.setItems(admin.getIncidents());
         cbUnit.setItems(admin.getUnits());
         cbincident.setItems(admin.getIncidents());
         lvIncidents.setItems(admin.getIncidents());
@@ -266,6 +274,13 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         g.incidentstring = cbincident.getSelectionModel().getSelectedItem().toString();
     }
 
+    public void createSimulation()
+    {
+       g.simulation = true;
+       g.id = cbunitsimulation.getSelectionModel().getSelectedItem().toString();
+       g.incidentstring = cbincidentsimulation.getSelectionModel().getSelectedItem().toString();
+    }
+    
     public void selectIncident() {
 
         for (Incident a : admin.getIncidents()) {

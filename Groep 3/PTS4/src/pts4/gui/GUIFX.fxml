@@ -96,6 +96,31 @@
                         </AnchorPane>
                       </content>
                     </Tab>
+                              <Tab text="Simulation Manager">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <ListView id="LVunits" layoutX="14.0" layoutY="-5.0" prefHeight="200.0" prefWidth="783.0" />
+                                          <ComboBox fx:id="cbincidentsimulation" layoutX="103.0" layoutY="14.0" prefWidth="150.0" />
+                                          <ComboBox fx:id="cbunitsimulation" layoutX="103.0" layoutY="49.0" prefWidth="150.0" />
+                                          <Label layoutX="26.0" layoutY="13.0" text="Incident">
+                                             <font>
+                                                <Font size="18.0" fx:id="x11" />
+                                             </font>
+                                          </Label>
+                                          <Label font="$x11" layoutX="26.0" layoutY="48.0" text="Unit" />
+                                          <TextArea fx:id="txtDescription1" layoutX="378.0" layoutY="10.0" prefHeight="165.0" prefWidth="394.0" wrapText="true" />
+                                          <Label font="$x11" layoutX="275.0" layoutY="13.0" text="Description" />
+                                          <Button fx:id="btnSimulation" layoutX="26.0" layoutY="144.0" mnemonicParsing="false" onAction="#createSimulation" prefHeight="25.0" prefWidth="125.0" text="Create Simulation" />
+                                          <Button fx:id="btnSubmit1" layoutX="220.0" layoutY="144.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="125.0" text="Submit" />
+                                          <TextField fx:id="txtlongitude1" layoutX="26.0" layoutY="104.0" prefHeight="25.0" prefWidth="127.0" />
+                                          <TextField fx:id="txtlatitude1" layoutX="220.0" layoutY="104.0" prefHeight="25.0" prefWidth="125.0" />
+                                          <Label font="$x11" layoutX="26.0" layoutY="79.0" text="Longitude" />
+                                          <Label font="$x11" layoutX="221.0" layoutY="79.0" text="Latitude" />
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                              </Tab>
                   </tabs>
                 </TabPane>
               </children>
