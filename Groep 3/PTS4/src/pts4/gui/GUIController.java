@@ -454,12 +454,13 @@ public class GUIController implements Initializable, MapChangeListener<String, C
 
     public void btnLogOut_Click() throws IOException {
         Stage currentstage = (Stage) btnLogOut.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Inloggen.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Login.fxml"));
         Parent root = (Parent) fxmlLoader.load();
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
         stage.show();
         currentstage.close();
+        this.admin.getServer().getSt().stopServer();
         this.admin = null;
     }
 }
