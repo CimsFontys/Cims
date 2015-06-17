@@ -56,14 +56,6 @@ public class Animation {
         public void run() {
             for (MyWaypoint p : units) {
                 if (p.getLabel().equals(id)) {
-                    /*
-                     Point2D pt = map.getTileFactory().geoToPixel(goal, map.getZoom());
-                     pt.setLocation(pt.getX() + 5, pt.getY() + 1);
-                     goal = map.getTileFactory().pixelToGeo(pt, map.getZoom());
-                     p.setPosition(goal);
-                     gmap.tekenRoute();
-                     */
-
                     if (longitude < goal.getLongitude()) {
                         diflongitude = goal.getLongitude() - longitude;
                     }
@@ -101,7 +93,7 @@ public class Animation {
 
                                     }
                                 }
-                                gmap.tekenRoute();
+                                gmap.drawRoute();
                             }
                         }
                         //gmap.sendMessage(id + "Is op locatie gearriveerd", id, "Meldkamer");
@@ -114,7 +106,7 @@ public class Animation {
                     gmap.routepainter = new RoutePainter(track);
                     gmap.painters.add(gmap.routepainter);
                     p.setPosition(bla);
-                    gmap.tekenRoute();
+                    gmap.drawRoute();
                     gmap.painters.remove(gmap.routepainter);
                 }
             }
