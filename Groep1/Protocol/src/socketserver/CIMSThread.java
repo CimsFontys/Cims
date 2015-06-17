@@ -15,6 +15,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StringReader;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
@@ -46,12 +47,17 @@ public class CIMSThread implements Runnable {
 
     public CIMSThread(Socket clientSocket, String serverText) 
     {
-        this.clientSocket = clientSocket;
-        this.serverText = serverText;
-        toSend = new ArrayList<Message>();
-        administration = ThreadAdministration.getInstance();
-        administration.addClient(this);
-        messageBuilder = new MessageBuilder();
+        try {
+            this.clientSocket = clientSocket;
+            this.clientSocket.setSoTimeout(1000);
+            this.serverText = serverText;
+            toSend = new ArrayList<Message>();
+            administration = ThreadAdministration.getInstance();
+            administration.addClient(this);
+            messageBuilder = new MessageBuilder();
+        } catch (SocketException ex) {
+            Logger.getLogger(CIMSThread.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public int getReceiverid()
