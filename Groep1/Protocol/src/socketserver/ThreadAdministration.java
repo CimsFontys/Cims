@@ -14,11 +14,11 @@ import java.util.ArrayList;
  */
 public class ThreadAdministration 
 {  
-    private ArrayList<CIMSServer> currentThreads;
+    private ArrayList<CIMSThread> currentThreads;
     
     private ThreadAdministration() 
     {
-        currentThreads = new ArrayList<CIMSServer>();
+        currentThreads = new ArrayList<CIMSThread>();
     }
     
     public static ThreadAdministration getInstance() 
@@ -31,22 +31,30 @@ public class ThreadAdministration
         private static final ThreadAdministration INSTANCE = new ThreadAdministration();
     }
     
-    public void addClient(CIMSServer server)
+    public void addClient(CIMSThread server)
     {
         currentThreads.add(server);
+        System.out.println("-------------------------------------------------------");
+        System.out.println("CIMSServer: CIMSThread added to threadpool, current active Threads: " + currentThreads.size());
     }
     
-    public void removeClient(CIMSServer server)
+    public void removeClient(CIMSThread server)
     {
         currentThreads.remove(server);
+        System.out.println("-------------------------------------------------------");
+        System.out.println("CIMSServer: CIMSThread removed from threadpool, current active Threads: " + currentThreads.size());
     }
     
-    public CIMSServer findClient(int personid)
+    public CIMSThread findClient(int personid)
     {
-        for(CIMSServer c : currentThreads)
+        System.out.println("-------------------------------------------------------");
+        System.out.println("CIMSServer: looking for requested Thread");
+        for(CIMSThread c : currentThreads)
         {
             if(c.receiverID == personid)
             {
+                System.out.println("-------------------------------------------------------");
+                System.out.println("CIMSServer: thread located with unique id: " + c.receiverID);
                 return c;
             }
         }
