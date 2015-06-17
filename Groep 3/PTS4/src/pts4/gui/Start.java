@@ -21,7 +21,7 @@ public class Start extends Application {
 
         Parent root = FXMLLoader.load(getClass().getResource("Inloggen.fxml"));
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Inloggen.fxml"));
-        InloggenController controller = new InloggenController();
+        LoginController controller = new LoginController();
         loader.setController(controller);
         Scene scene = new Scene(root);     
         stage.setScene(scene);

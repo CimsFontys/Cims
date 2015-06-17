@@ -16,7 +16,9 @@ import java.util.Date;
  */
 public interface IDatabase 
 {
-     public String retrieveAllPersons(); 
+    public String retrieveCalamityWithName(String naam);
+    
+    public String retrieveAllPersons(); 
     /**
      * TESTED AND WORKING -> IN MESSAGEBUILDER
      * @param username

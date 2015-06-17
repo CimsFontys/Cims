@@ -36,7 +36,7 @@ import se.mbaeumer.fxmessagebox.MessageBoxType;
  *
  * @author Gijs
  */
-public class InloggenController implements Initializable, MessageListener
+public class LoginController implements Initializable, MessageListener
 {
     @FXML TextField tbGebruikersnaam;
     @FXML PasswordField tbWachtwoord;
@@ -107,7 +107,7 @@ public class InloggenController implements Initializable, MessageListener
         
         if (response.equals(""))
         {
-            MessageBox mb = new MessageBox("Onjuiste gebruikersnaam en/of wachtwoord.",MessageBoxType.OK_ONLY);
+            MessageBox mb = new MessageBox("Wrong username and or password.",MessageBoxType.OK_ONLY);
             mb.show();
             tbGebruikersnaam.clear();
             tbWachtwoord.clear();

@@ -41,7 +41,7 @@ import pts4.googlemaps.Gmaps;
 import pts4.klassen.*;
 import static pts4.klassen.Administration.EndedIncidents;
 import static pts4.klassen.Administration.incidents;
-import pts4.rssfeed.EnumProvincies;
+import pts4.rssfeed.EnumProvinces;
 import se.mbaeumer.fxmessagebox.MessageBox;
 import se.mbaeumer.fxmessagebox.MessageBoxType;
 
@@ -53,6 +53,12 @@ public class GUIController implements Initializable, MapChangeListener<String, C
 
     private Administration admin;
     private Gmaps g;
+    @FXML
+    ComboBox cbincidentsimulation;
+    @FXML
+    ComboBox cbunitsimulation;
+    @FXML
+    Button btnSimulation;
     @FXML
     ListView lvActiveIncidents;
     @FXML
@@ -162,16 +168,16 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         cbGewelddadig.getItems().clear();
         cbSpoed.getItems().clear();
 
-        cbProvincies.getItems().setAll(EnumProvincies.values());
-        cbProvincies.setValue(EnumProvincies.Nederland);
-        cbExplosie.getItems().add("Ja");
-        cbExplosie.getItems().add("Nee");
-        cbBrand.getItems().add("Ja");
-        cbBrand.getItems().add("Nee");
-        cbGewelddadig.getItems().add("Ja");
-        cbGewelddadig.getItems().add("Nee");
-        cbSpoed.getItems().add("Ja");
-        cbSpoed.getItems().add("Nee");
+        cbProvincies.getItems().setAll(EnumProvinces.values());
+        cbProvincies.setValue(EnumProvinces.Nederland);
+        cbExplosie.getItems().add("Yes");
+        cbExplosie.getItems().add("No");
+        cbBrand.getItems().add("Yes");
+        cbBrand.getItems().add("No");
+        cbGewelddadig.getItems().add("Yes");
+        cbGewelddadig.getItems().add("No");
+        cbSpoed.getItems().add("Yes");
+        cbSpoed.getItems().add("No");
     }
 
     public void goActiveIncident() {
@@ -224,6 +230,8 @@ public class GUIController implements Initializable, MapChangeListener<String, C
     public void initComboboxes() {
 
         //cbCategory.setItems(FXCollections.observableList(categorylist));
+        cbunitsimulation.setItems(admin.getUnits());
+        cbincidentsimulation.setItems(admin.getIncidents());
         cbUnit.setItems(admin.getUnits());
         cbincident.setItems(admin.getIncidents());
         lvIncidents.setItems(admin.getIncidents());
@@ -261,11 +269,18 @@ public class GUIController implements Initializable, MapChangeListener<String, C
     }
 
     public void giveOrder() {
-        g.unitAanmaak = true;
+        g.createUnit = true;
         g.id = cbUnit.getSelectionModel().getSelectedItem().toString();
         g.incidentstring = cbincident.getSelectionModel().getSelectedItem().toString();
     }
 
+    public void createSimulation()
+    {
+       g.simulation = true;
+       g.id = cbunitsimulation.getSelectionModel().getSelectedItem().toString();
+       g.incidentstring = cbincidentsimulation.getSelectionModel().getSelectedItem().toString();
+    }
+    
     public void selectIncident() {
 
         for (Incident a : admin.getIncidents()) {

@@ -34,6 +34,7 @@ public class Administration {
     public ArrayList<Incident> pendingIncidents;
     private Server server;
     private IDatabase databaseconn;
+    private LogManager logManager = LogManager.getInstance();
 
     public Administration() throws MalformedURLException {
         EndedIncidents = new ArrayList<>();
@@ -92,9 +93,9 @@ public class Administration {
         }
     }
 
-    public void loadFromRSSFeed(String zoekTerm) throws MalformedURLException {
+    public void loadFromRSSFeed(String searchTerm) throws MalformedURLException {
         RSSReader reader = RSSReader.getInstance();
-        reader.setURL(new URL("http://rss.politie.nl/rss/nb/provincies/" + zoekTerm.replaceAll("00000", "-") + ".xml"));
+        reader.setURL(new URL("http://rss.politie.nl/rss/nb/provincies/" + searchTerm.replaceAll("00000", "-") + ".xml"));
         reader.writeFeed();
         pendingIncidents.clear();
         for (Incident i : reader.getIncidents()) {
@@ -158,6 +159,10 @@ public class Administration {
 
     public void addIncident(Incident i) {
         incidents.add(i);
+        logManager.insertCalamity(i.getLongitude(), i.getLatitude(), logManager.getPersonId(), i.getName(), i.getDescription(), i.getDate(), i.getUrgent(), "");
+        logManager.getCalamityWithName(i.getName());
+        
+        
         long yourmilliseconds = System.currentTimeMillis();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy, HH:mm");
         Date resultdate = new Date(yourmilliseconds);

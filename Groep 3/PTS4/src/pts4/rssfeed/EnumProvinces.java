@@ -9,7 +9,7 @@ package pts4.rssfeed;
  *
  * @author Systeembeheer
  */
-public enum EnumProvincies 
+public enum EnumProvinces 
 {
    Nederland,
    fryslân,

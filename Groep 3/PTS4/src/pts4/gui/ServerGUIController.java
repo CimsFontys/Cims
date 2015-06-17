@@ -52,7 +52,7 @@ public class ServerGUIController extends AnchorPane implements Initializable {
     private String communicator="";
     private boolean pressed;
     private Timer timer;
-    private int teller;
+    private int counter;
     private boolean audiomessage;
     
     @Override
@@ -65,10 +65,10 @@ public class ServerGUIController extends AnchorPane implements Initializable {
     {
         if(!audiomessage)
         {
-            String bericht = input.getText();
+            String message = input.getText();
             input.clear();
-            server.sendMessage(new ChatMessage(bericht, "Meldkamer", communicator));
-            LogManager.getInstance().insertLog("Sent chat message: " + "" + bericht + "");
+            server.sendMessage(new ChatMessage(message, "Meldkamer", communicator));
+            LogManager.getInstance().insertLog("Sent chat message: " + "" + message + "");
         }
         else
         {
@@ -98,7 +98,7 @@ public class ServerGUIController extends AnchorPane implements Initializable {
         if(!pressed)
         {
             pressed = true;
-            btnRecordNew.setText("Klik om te stoppen met opnemen");
+            btnRecordNew.setText("Click to stop recording");
             server.startRecrding();
             startTimer();
             LogManager.getInstance().insertLog("Audio recording has started");
@@ -106,16 +106,16 @@ public class ServerGUIController extends AnchorPane implements Initializable {
         else if(pressed)
         {
             pressed = false;
-            btnRecordNew.setText("Neem nieuw audiobericht op");
+            btnRecordNew.setText("Record new audiomessage");
             server.stopRecording();
             LogManager.getInstance().insertLog("Audio recording has stopped");
 
             // reset de timer
             timer.purge();
             timer.cancel();
-            teller = 0;
-            input.setText("Druk op send om het audiobericht te versturen");
-            lbTeller.setText(String.valueOf(teller));
+            counter = 0;
+            input.setText("Click send to send audiomessage");
+            lbTeller.setText(String.valueOf(counter));
             audiomessage = true;
         }
     }
@@ -133,8 +133,8 @@ public class ServerGUIController extends AnchorPane implements Initializable {
                     @Override
                     public void run() 
                     {
-                        lbTeller.setText(String.valueOf(teller));
-                        teller++;
+                        lbTeller.setText(String.valueOf(counter));
+                        counter++;
                     }
                 });
             }
