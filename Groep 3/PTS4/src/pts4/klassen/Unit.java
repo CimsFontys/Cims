@@ -11,68 +11,57 @@ import java.io.Serializable;
  *
  * @author Leo
  */
-public class Unit
-{
-    
-    private String naam;
+public class Unit {
+
+    private String name;
     private int type;
     private double longitude;
     private double latitude;
     private String incident;
-    private Boolean actief;
-    
-    
-    public Unit(String naam, int type, double longitude, double latitude)
-    {
-        this.naam = naam;
+    private Boolean active;
+
+    public Unit(String name, int type, double longitude, double latitude) {
+        this.name = name;
         this.type = type;
         this.longitude = longitude;
-        this.latitude = latitude; 
-        this.actief = false;
+        this.latitude = latitude;
+        this.active = false;
     }
 
-    public String getNaam() 
-    {
-        return naam;
+    public String getName() {
+        return name;
     }
 
-    public int getType() 
-    {
+    public int getType() {
         return type;
     }
 
-    public double getLongitude() 
-    {
+    public double getLongitude() {
         return longitude;
     }
 
-    public double getLatidude() 
-    {
+    public double getLatidude() {
         return latitude;
     }
 
-    public void setLongitude(double longitude) 
-    {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
-    public void setLatidude(double latidude) 
-    {
+    public void setLatidude(double latidude) {
         this.latitude = latidude;
     }
-    
-    public void setIncident(String incident)
-    {
+
+    public void setIncident(String incident) {
         this.incident = incident;
     }
-    
-    public String getIncident()
-    {
+
+    public String getIncident() {
         return this.incident;
     }
-    
+
     @Override
     public String toString() {
-        return this.naam;
+        return this.name;
     }
 }

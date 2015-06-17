@@ -136,7 +136,7 @@ public class RSSReader {
     private ArrayList<String> getEnumList()
     {
         ArrayList<String> enumInString = new ArrayList<String>();
-        for (EnumProvincies prov : EnumProvincies.values()) 
+        for (EnumProvinces prov : EnumProvinces.values()) 
         {
             if(prov.name().contains("00000"))
             {

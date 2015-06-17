@@ -93,9 +93,9 @@ public class Administration {
         }
     }
 
-    public void loadFromRSSFeed(String zoekTerm) throws MalformedURLException {
+    public void loadFromRSSFeed(String searchTerm) throws MalformedURLException {
         RSSReader reader = RSSReader.getInstance();
-        reader.setURL(new URL("http://rss.politie.nl/rss/nb/provincies/" + zoekTerm.replaceAll("00000", "-") + ".xml"));
+        reader.setURL(new URL("http://rss.politie.nl/rss/nb/provincies/" + searchTerm.replaceAll("00000", "-") + ".xml"));
         reader.writeFeed();
         pendingIncidents.clear();
         for (Incident i : reader.getIncidents()) {

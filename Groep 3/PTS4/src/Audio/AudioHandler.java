@@ -49,7 +49,7 @@ public class AudioHandler
         //maak correcte info voor de dataline zodat deze weet hoe en wat het moet lezen. 
         info = new DataLine.Info(TargetDataLine.class, audioFormat);
         sdfDate = new SimpleDateFormat("dd-MM-yyyy HH.mm.ss.SSS");;//dd/MM/yyyy
-        outputFile = new File("Opnames");
+        outputFile = new File("Recordings");
         if(!outputFile.exists())
         {
             outputFile.mkdir();
@@ -81,7 +81,7 @@ public class AudioHandler
     
     public void startRecording()
     {
-        path = "Opnames/opname " + getSystemTimeAsString() + ".wav";
+        path = "Recordings/record " + getSystemTimeAsString() + ".wav";
         outputFile = new File(path);
         initFile();
         recorder = new RecordingThread(targetLine, targetType, outputFile);

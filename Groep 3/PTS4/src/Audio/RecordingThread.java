@@ -47,12 +47,12 @@ public class RecordingThread implements Callable<byte[]>
         {
            // schrijf de opgenomen audio naar de meegegeven file.
             line.start();
-            System.out.println("ik begin met schrijven");
+            System.out.println("I'll begin writing");
             AudioSystem.write(audioInputStream, targetType, outputFile);
-            System.out.println("ik stop met schrijven");
-            System.out.println("Naar de byte[]");
+            System.out.println("I'll stop writing");
+            System.out.println("To the byte[]");
             audiofile = Files.readAllBytes(outputFile.toPath());
-            System.out.println("En daar voorbij");
+            System.out.println("and beyond");
                                    
         } 
         catch (IOException ex) 
