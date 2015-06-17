@@ -1760,13 +1760,15 @@ public class SQL extends DatabaseConnector implements IDatabase
                 String firstname = res.getString("personfirstname");
                 String lastname = res.getString("personlastname");
                 String middlename = res.getString("personmiddlename");
-             
+                String username = res.getString("personusername");
+                String password = res.getString("personpassword");
                 
                 jb.add("personid" , personId);
                 jb.add("firstname", firstname);
                 jb.add("lastname", lastname);
                 jb.add("middlename", middlename);
-              
+                jb.add("username", username);
+                jb.add("password", password);
                 
                 ja.add(jb);     
             }

@@ -7,53 +7,43 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="pts4.gui.ConfiguratieController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pts4.gui.ConfiguratieController">
   <children>
     <TabPane layoutX="0.0" layoutY="0.0" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
       <tabs>
-        <Tab text="Gebruikers">
+        <Tab text="Users">
           <content>
             <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
               <children>
                 <ListView layoutX="14.0" layoutY="14.0" prefHeight="341.0" prefWidth="200.00009999999747" />
                 <TextField layoutX="386.0" layoutY="14.0" prefWidth="200.0" />
                 <TextField layoutX="386.0" layoutY="50.0" prefWidth="200.0" />
-                <Label layoutX="272.0" layoutY="17.0" text="Gebruikersnaam" />
-                <Label layoutX="291.0" layoutY="53.0" text="Wachtwoord" />
-                <Button layoutX="325.0" layoutY="82.0" mnemonicParsing="false" text="Wachtwoord wijzigen" />
-                <Button layoutX="472.0" layoutY="82.0" mnemonicParsing="false" text="Nieuwe gebruiker" />
+                <Label layoutX="272.0" layoutY="17.0" text="Username" />
+                <Label layoutX="275.0" layoutY="54.0" text="Password" />
+                <Button layoutX="386.0" layoutY="82.0" mnemonicParsing="false" text="Change password" />
+                <Button layoutX="507.0" layoutY="82.0" mnemonicParsing="false" text="New User" />
                 <Button fx:id="btnLogOut" layoutX="471.0" layoutY="335.0" mnemonicParsing="false" onAction="#btnLogOut_Click" prefWidth="114.0" text="Log Out" />
               </children>
             </AnchorPane>
           </content>
         </Tab>
-        <Tab text="Meldkamer configureren">
+        <Tab text="Logs">
           <content>
             <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
               <children>
-                <ComboBox layoutX="57.0" layoutY="18.0" prefHeight="21.0" prefWidth="167.0">
-                  <items>
-                    <FXCollections fx:factory="observableArrayList">
-                      <String fx:value="Item 1" />
-                      <String fx:value="Item 2" />
-                      <String fx:value="Item 3" />
-                    </FXCollections>
-                  </items>
-                </ComboBox>
-                <Label layoutX="14.0" layoutY="18.0" text="Regio:" />
-                <Label layoutX="17.0" layoutY="82.0" text="Logs:" />
-                <Label layoutX="312.0" layoutY="46.0" text="Naam" />
+                <Label layoutX="17.0" layoutY="163.0" text="Logs:" />
+                <Label layoutX="312.0" layoutY="46.0" text="Name" />
                 <Label layoutX="312.0" layoutY="73.0" text="Longitude" />
-                <Label layoutX="312.0" layoutY="98.0" text="Lattitude" />
+                <Label layoutX="312.0" layoutY="98.0" text="Latitude" />
                 <TextField fx:id="VoorNaamTB" layoutX="382.0" layoutY="43.0" prefWidth="200.0" />
                 <TextField fx:id="VoorLonTB" layoutX="382.0" layoutY="70.0" prefWidth="200.0" />
                 <TextField fx:id="VoorLatTB" layoutX="382.0" layoutY="96.0" prefWidth="200.0" />
-                <Label layoutX="312.0" layoutY="18.0" text="Voorzieningen:" />
-                <Button fx:id="AddBT" layoutX="507.0" layoutY="168.0" mnemonicParsing="false" onAction="#AddFaciity" text="Toevoegen" />
-                <ListView fx:id="LogListView" layoutX="41.0" layoutY="121.0" prefHeight="200.0" prefWidth="200.0" />
-                <Label layoutX="311.0" layoutY="133.0" text="Type voorziening" />
+                <Label layoutX="312.0" layoutY="18.0" text="Facilities:" />
+                <Button fx:id="AddBT" layoutX="507.0" layoutY="168.0" mnemonicParsing="false" onAction="#AddFaciity" text="Add facility" />
+                <ListView fx:id="LogListView" layoutX="17.0" layoutY="204.0" prefHeight="143.0" prefWidth="556.0" />
+                <Label layoutX="311.0" layoutY="133.0" text="Facility type:" />
                 <ComboBox fx:id="VoorzieningCB" layoutX="416.0" layoutY="129.0" prefHeight="25.0" prefWidth="166.0" />
-                <ComboBox fx:id="PersoneelCB" layoutX="57.0" layoutY="86.0" onAction="#SetLogList" prefHeight="21.0" prefWidth="167.0">
+                <ComboBox fx:id="PersoneelCB" layoutX="57.0" layoutY="167.0" onAction="#SetLogList" prefHeight="21.0" prefWidth="167.0">
                   <items>
                     <FXCollections fx:factory="observableArrayList">
                       <String fx:value="Item 1" />
@@ -62,7 +52,7 @@
                     </FXCollections>
                   </items>
                 </ComboBox>
-                <Label layoutX="90.0" layoutY="65.0" text="Filter op personeel:" />
+                <Label layoutX="90.0" layoutY="146.0" text="Filter by staff" />
               </children>
             </AnchorPane>
           </content>

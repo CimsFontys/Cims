@@ -40,9 +40,13 @@ public class MessageRecieverThread implements Runnable {
         while (running) {
             try {
                 Message message = null;
-                if ((message = (Message) ois.readObject()) != null) {
+                if(ois != null)
+                
+                      if ((message = (Message) ois.readObject()) != null) {
                     listener.recieved(message);
+                
                 }
+              
             } catch (IOException ex) {
                 Logger.getLogger(MessageRecieverThread.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ClassNotFoundException ex) {
