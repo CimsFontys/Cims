@@ -49,11 +49,8 @@ public class MessageSenderThread implements Runnable {
                 try {
                     this.oos.writeObject(this.toSend.get(0));
                     this.toSend.remove(0);
-                    
-                    
                 } catch (IOException ex) {
                     Logger.getLogger(MessageSenderThread.class.getName()).log(Level.SEVERE, null, ex);
-                    ex.printStackTrace();
                 }
             }
         }

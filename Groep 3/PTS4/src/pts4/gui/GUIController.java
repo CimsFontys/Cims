@@ -210,7 +210,6 @@ public class GUIController implements Initializable, MapChangeListener<String, C
 
                     a.setSolvedBy(tfEndSolvedBy.getText());
                     EndedIncidents.add(a);
-                    LogManager.getInstance().insertLog("The incident " + tfEndName.getText() + " has ended");
                     incidents.remove(a);
                     g.DrawIncidents();
                     initComboboxes();
@@ -234,7 +233,6 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         lvunits.setItems(admin.getUnits());
         lvPendingIncidents.setItems(admin.getPendingIncidents());
         lvAcceptedIncidents.setItems(admin.getIncidents());
-      
 
     }
 
@@ -260,11 +258,9 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         }
         admin.syncAcceptedAndPending();
         lvPendingIncidents.setItems(admin.getPendingIncidents());
-       
     }
 
     public void giveOrder() {
-        LogManager.getInstance().insertLog("An order has been given to unit: " + cbUnit.getSelectionModel().getSelectedItem().toString());
         g.unitAanmaak = true;
         g.id = cbUnit.getSelectionModel().getSelectedItem().toString();
         g.incidentstring = cbincident.getSelectionModel().getSelectedItem().toString();
@@ -275,7 +271,6 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         for (Incident a : admin.getIncidents()) {
             if (a.equals(lvIncidents2.getSelectionModel().getSelectedItem())) {
                 initComboboxes();
-                
                 g.drawUnits();
                 g.goIncident(Double.parseDouble(a.getLongitude()), Double.parseDouble(a.getLatitude()));
                 tfName.setText(a.getName());
@@ -324,13 +319,11 @@ public class GUIController implements Initializable, MapChangeListener<String, C
             if (a.equals(lvPendingIncidents.getSelectionModel().getSelectedItem())) {
 
                 admin.addIncident(a);
-                LogManager.getInstance().insertLog("The incident: " + a.getName() + " has been added");
                 admin.removePendingIncident(a);
                 taPendingName.setText("");
                 taPendingDescription.setText("");
                 g.addIncidentOnMap(a);
                 this.initComboboxes();
-               
             }
         }
     }
@@ -345,7 +338,6 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         try {
             Incident incident = new Incident(longitude, latitude, name, description);
             admin.addIncident(incident);
-            LogManager.getInstance().insertLog("The incident : " + incident.getName() + " has been added");
             g.addIncidentOnMap(incident);
             this.initComboboxes();
         } catch (Exception e) {
@@ -400,7 +392,6 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         fxmlLoader.setBuilderFactory(new JavaFXBuilderFactory());
 
         Parent root = (Parent) (Node) fxmlLoader.load(location1.openStream());
-        LogManager.getInstance().insertLog("Employee has started a chat session");
 
         ServerGUIController ctrl1 = (ServerGUIController) fxmlLoader.getController();
         ctrl1.setServer(admin.getServer(), (String) cbUnits.getSelectionModel().getSelectedItem());
@@ -423,7 +414,6 @@ public class GUIController implements Initializable, MapChangeListener<String, C
     }
 
     public void btnLogOut_Click() throws IOException {
-        
         Stage currentstage = (Stage) btnLogOut.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Inloggen.fxml"));
         Parent root = (Parent) fxmlLoader.load();

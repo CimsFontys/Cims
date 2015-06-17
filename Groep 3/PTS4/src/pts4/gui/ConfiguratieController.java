@@ -97,8 +97,9 @@ public class ConfiguratieController implements Initializable {
         }
        
              
-            LogManager.getInstance().insertLog("Facility " + VoorNaamTB.getText() + "(" + facilityType + ") has been added");
+
             dbcon.insertLocation(VoorNaamTB.getText(), VoorLonTB.getText(), VoorLatTB.getText(), noodtype);
+            LogManager.getInstance().insertLog("Facility (" + facilityType + ") has been added: Name:" + VoorNaamTB.getText() + "Longitude: " + VoorLonTB.getText() + ", Latitude: " + VoorLatTB.getText() );
 
     }
     
@@ -144,14 +145,14 @@ public class ConfiguratieController implements Initializable {
                     case "lastname":
                         lastname = parser.getString();
                         Lastnames.add(lastname);
-                        break;              
+                        break;
                     default:
                         break;
                     }
                     
                    
                     event = parser.next();
-                    } else {
+                } else {
                     event = parser.next();
                 }
                 
@@ -170,14 +171,6 @@ public class ConfiguratieController implements Initializable {
     @FXML
     public void SetLogList()
     {
-       
-        if(LogListView.getItems().size() > 0)
-        {
-                    LogListView.getItems().clear();
-        }
-
-       
-    
         String selectedItem = PersoneelCB.getSelectionModel().getSelectedItem();
         int personindex = selectedItem.indexOf(".");
         int selectedPersonID = Integer.parseInt(selectedItem.substring(0, personindex));
@@ -197,24 +190,23 @@ public class ConfiguratieController implements Initializable {
         JsonParser parser = Json.createParser(reader);
         Event event = parser.next();
         
-       while (parser.hasNext()) {
+        while (parser.hasNext()) {
                 if (event.equals(Event.KEY_NAME)) {
                     String keyname = parser.getString();
                     event = parser.next();
-                    switch (keyname) {
+                      switch (keyname) {
                         case "logdate":
                         logdate = parser.getString(); 
                         FoundDates.add(logdate);
                         break;
-                    case "logdescription":
+                    case "description":
                         foundlog = parser.getString();
                         FoundLogStrings.add(foundlog);
-                        break;
+                        break;        
                     default:
                         break;
                     }
-                    
-                   
+                  
                     event = parser.next();
                 } else {
                     event = parser.next();
@@ -225,15 +217,14 @@ public class ConfiguratieController implements Initializable {
         
         for(int j = 0; j < FoundLogStrings.size(); j++)
         {
-            LogListView.getItems().add(FoundDates.get(j) + ":  " +  FoundLogStrings.get(j));
-            
+            LogListView.getItems().add(FoundDates.get(j) + " " +  FoundLogStrings.get(j));
+          
         }
     
     }
     
    public void btnLogOut_Click() throws IOException
    {
-       
         Stage currentstage = (Stage) btnLogOut.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Inloggen.fxml"));
         Parent root = (Parent) fxmlLoader.load();
