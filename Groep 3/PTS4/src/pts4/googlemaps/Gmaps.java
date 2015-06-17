@@ -83,7 +83,7 @@ public class Gmaps {
     private WaypointPainter<Waypoint> waypointPainter;
     private WaypointPainter<MyWaypoint> waypointPainter2, waypointPainter3;
     public RoutePainter routepainter;
-    public Boolean unitAanmaak = false;
+    public Boolean createUnit = false;
     public Boolean simulation = false;
     public String id;
     private Incident incident;
@@ -150,7 +150,7 @@ public class Gmaps {
             // Create a waypoint painter that takes all the waypoints
         }
         createStage();
-        teken();
+        draw();
 
         /*// Create waypoints from the geo-positions
          Set<MyWaypoint> waypoints = new HashSet<MyWaypoint>(Arrays.asList(
@@ -210,7 +210,7 @@ public class Gmaps {
             GeoPosition plek = new GeoPosition(Double.parseDouble(object.getLatitude()), Double.parseDouble(object.getLongitude()));
 
             waypoints.add(new DefaultWaypoint(plek));
-            teken();
+            draw();
 
             // Create a waypoint painter that takes all the waypoints
         }
@@ -221,11 +221,11 @@ public class Gmaps {
         GeoPosition plek = new GeoPosition(Double.parseDouble(a.getLatitude()), Double.parseDouble(a.getLongitude()));
         waypoints.add(new DefaultWaypoint(plek));
         waypointPainter.setWaypoints(waypoints);
-        teken();
+        draw();
 
     }
 
-    public void teken() {
+    public void draw() {
         // Create a compound painter that uses both the route-painter and the waypoint-painter
 
         painters.add(waypointPainter2);
@@ -236,7 +236,7 @@ public class Gmaps {
 
     }
 
-    public void tekenRoute() {
+    public void drawRoute() {
 
         // Create a compound painter that uses both the route-painter and the waypoint-painter
         painters.add(waypointPainter2);
@@ -269,7 +269,7 @@ public class Gmaps {
 
             @Override
             public void mouseClicked(MouseEvent me) {
-                if (unitAanmaak == true) {
+                if (createUnit == true) {
                     Color kleur = null;
                     if (type == 1) {
                         kleur = Color.cyan;
@@ -280,11 +280,11 @@ public class Gmaps {
                     if (type == 3) {
                         kleur = Color.RED;
                     }
-                    GeoPosition plek = mapViewer.convertPointToGeoPosition(me.getPoint());
+                    GeoPosition place = mapViewer.convertPointToGeoPosition(me.getPoint());
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            gui.setUnit(plek.getLongitude(), plek.getLatitude());
+                            gui.setUnit(place.getLongitude(), place.getLatitude());
                         }
                     });
 
@@ -293,39 +293,39 @@ public class Gmaps {
                             orders.remove(p);
                         }
                     }
-                    orders.add(new MyWaypoint(id, kleur, plek));
+                    orders.add(new MyWaypoint(id, kleur, place));
                     for (Unit a : EmergencyUnits) {
                         if (a.getNaam().equals(id)) {
-                            GeoPosition plek2 = new GeoPosition(a.getLatidude(), a.getLongitude());
+                            GeoPosition place2 = new GeoPosition(a.getLatidude(), a.getLongitude());
                             ChatMessage chat = new ChatMessage(gui.getIncidentorder() + "\n" + gui.getUnitDescription(), "Meldkamer", id);
                             //server.sendMessage(chat);
                             a.setIncident(incidentstring);
-                            new Animation(plek, plek2, id, orders, units, Gmaps.this, waypointPainter3);
+                            new Animation(place, place2, id, orders, units, Gmaps.this, waypointPainter3);
                         }
                     }
-                    unitAanmaak = false;
+                    createUnit = false;
                     // Create a waypoint painter that takes all the waypoints
                     waypointPainter3.setWaypoints(orders);
                     waypointPainter3.setRenderer(new FancyWaypointRenderer());
-                    teken();
+                    draw();
                 }
 
                 if (simulation == true) {
-                    Color kleur = null;
+                    Color color = null;
                     if (type == 1) {
-                        kleur = Color.cyan;
+                        color = Color.cyan;
                     }
                     if (type == 2) {
-                        kleur = Color.YELLOW;
+                        color = Color.YELLOW;
                     }
                     if (type == 3) {
-                        kleur = Color.RED;
+                        color = Color.RED;
                     }
-                    GeoPosition plek = mapViewer.convertPointToGeoPosition(me.getPoint());
+                    GeoPosition place = mapViewer.convertPointToGeoPosition(me.getPoint());
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            gui.setUnit(plek.getLongitude(), plek.getLatitude());
+                            gui.setUnit(place.getLongitude(), place.getLatitude());
                         }
                     });
 
@@ -334,28 +334,26 @@ public class Gmaps {
                             orders.remove(p);
                         }
                     }
-                    orders.add(new MyWaypoint(id, kleur, plek));
+                    orders.add(new MyWaypoint(id, color, place));
                     for (Unit a : EmergencyUnits) {
                         if (a.getNaam().equals(id)) {
-                            GeoPosition plek2 = new GeoPosition(a.getLatidude(), a.getLongitude());
+                            GeoPosition place2 = new GeoPosition(a.getLatidude(), a.getLongitude());
                             //ChatMessage chat = new ChatMessage(gui.getIncidentorder() + "\n" + gui.getUnitDescription(), "Meldkamer", id);
                             //server.sendMessage(chat);
                             a.setIncident(incidentstring);
-                            new Animation(plek, plek2, id, orders, units, Gmaps.this, waypointPainter3);
+                            new Animation(place, place2, id, orders, units, Gmaps.this, waypointPainter3);
                         }
                     }
-                    unitAanmaak = false;
+                    createUnit = false;
                     // Create a waypoint painter that takes all the waypoints
                     waypointPainter3.setWaypoints(orders);
                     waypointPainter3.setRenderer(new FancyWaypointRenderer());
-                    teken();
+                    draw();
                 }
             }
-        
-    }
 
-
-); // end MouseAdapter
+        }
+        ); // end MouseAdapter
 
     }
 
@@ -371,7 +369,7 @@ public class Gmaps {
     public void createSwingContent(final SwingNode swingNode) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
-        public void run() {
+            public void run() {
                 open();
                 swingNode.setContent(mapViewer);
             }

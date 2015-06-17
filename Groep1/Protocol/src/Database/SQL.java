@@ -303,6 +303,71 @@ public class SQL extends DatabaseConnector implements IDatabase
     }
     
     @Override
+    public String retrieveCalamityWithName(String naam)
+    {        
+        try
+        {
+            this.connectingSelect();
+        }
+        catch (Exception e)
+        {
+            return null;     
+        }
+        
+        try
+        {
+            JsonObjectBuilder jb = Json.createObjectBuilder();
+            JsonArrayBuilder ja = Json.createArrayBuilder();
+            String query = "SELECT * FROM calamity WHERE calamityname = ?";
+            PreparedStatement prest = conn.prepareStatement(query);
+            prest.setString(1, naam);
+            
+            prest.execute();
+            
+            ResultSet res = prest.getResultSet();
+            
+            while(res.next())
+            {                
+                int id_calamity = res.getInt("calamityid");
+                String geo_long = res.getString("calamitylongtitude");
+                String geo_lat = res.getString("calamitylatitude");
+                String name = res.getString("calamityname");
+                String description = res.getString("calamitydescription");
+                Date date = res.getDate("calamitydate");
+                String calamitydanger = res.getString("calamitydanger");
+                String personid = res.getString("personid");
+                int regionid = res.getInt("regionid");
+                                
+                jb.add("calamityid" , id_calamity);
+                jb.add("calamitylongtitude" , geo_long);
+                jb.add("calamitylatitude" , geo_lat);
+                jb.add("calamityname" , name);
+                jb.add("calamitydescription" , description);
+                jb.add("calamitydate" , date.toString());
+                jb.add("calamitydanger" , calamitydanger);
+                jb.add("regionid", regionid);
+                jb.add("personid", personid);
+                
+                ja.add(jb);
+                JsonArray array = ja.build();
+                
+                return array.toString();
+            }
+            
+        }
+        catch(SQLException ee)
+        {
+            return "";
+        }
+        finally
+        {
+            super.disconnectFromDatabase();
+        }
+        
+        return "";
+    }
+    
+    @Override
     public String retrieveCalamityWithID(int id)
     {        
         try

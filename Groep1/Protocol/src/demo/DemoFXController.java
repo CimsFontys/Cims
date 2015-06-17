@@ -10,6 +10,7 @@ import CommunicationClient.ComManager;
 import CommunicationClient.MessageListener;
 import Protocol.Message;
 import Protocol.MessageBuilder;
+import java.io.StringReader;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -27,7 +28,10 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javax.json.Json;
+import javax.json.stream.JsonParser;
 
 /**
  *
@@ -66,6 +70,20 @@ public class DemoFXController implements Initializable, MessageListener
     @FXML private TextField textfield_register_configurator;
     @FXML private TextField textfield_personid;
     @FXML private DatePicker datepicker_birthdate;
+    
+    @FXML private TextField textfield_calamityname_name;
+    @FXML private Button button_calamityname;
+    
+    @FXML private Text text_personid;
+    
+    @FXML private TextField textfield_chat_message;
+    @FXML private TextField textfield_chat_receiverid;
+    @FXML private Button button_chat_send;
+    
+    int personid = 0;
+    int    persontypeid = 0;
+    boolean    configurator = false;
+    boolean found;
     
     @Override
     public void initialize(URL location, ResourceBundle resources) 
@@ -124,17 +142,86 @@ public class DemoFXController implements Initializable, MessageListener
         commManager.addMessage(message);
     }
     
+    public void getCalamitiesWithName()
+    {
+        String calamityname = textfield_calamityname_name.getText();
+        
+        MessageBuilder mb = new MessageBuilder();
+        Message message = mb.buildRetrieveCalamityWithName(calamityname);
+        commManager.addMessage(message);
+    }
+    
     public void allCalamitiesDetailed()
     {
         MessageBuilder mb = new MessageBuilder();
         Message message = mb.buildRetrieveAllCalamitiesDetailed();
         commManager.addMessage(message);
     }
+    
+    public void sendChat()
+    {
+        String message = textfield_chat_message.getText();
+        String receiverid = textfield_chat_receiverid.getText();
+        int Receiverid = Integer.parseInt(receiverid);
+        
+        MessageBuilder mb = new MessageBuilder();
+        Message message2 = mb.buildInsertMessage(personid, 8, message, null);
+        commManager.addMessage(message2);  
+    }
 
     @Override
     public void proces(Message message) 
     {
+        if(message.getType().equals("loginreply"))
+        {
+            readLoginResponse(message);
+            System.out.println("Personid: " + personid);
+        }
+        
         System.out.println("MessageType: " + message.getType());
         System.out.println("ServerReply: " + message.getText());
-    }    
+    }  
+    
+    private void readLoginResponse(Message message)
+    {
+        personid = 0;
+        persontypeid = 0;
+        configurator = false;
+
+        StringReader reader = new StringReader(message.getText());
+        JsonParser parser = Json.createParser(reader);
+        JsonParser.Event event = parser.next();
+
+        while (parser.hasNext()) {
+            if (event.equals(JsonParser.Event.KEY_NAME)) {
+                String keyname = parser.getString();
+                event = parser.next();
+
+                switch (keyname) 
+                {
+                    case "personid":
+                        personid = parser.getInt();
+                        break;
+                    case "persontypeid":
+                        persontypeid = parser.getInt();
+                        break;
+                    case "personconfigurator":
+                        if (parser.getString() == "YES") {
+                            configurator = true;
+                        } else {
+                            configurator = false;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                event = parser.next();
+            } else {
+                event = parser.next();
+            }
+        }
+        found = true;
+        //hier de code met bovenstaande variabelen
+
+    }
 }

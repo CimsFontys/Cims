@@ -28,7 +28,7 @@ public class ComManager implements CommMessageListener{
     private MessageRecieverThread mrt;
     private MessageSenderThread mst;
     
-    private static final String host = "localhost";
+    private static final String host = "145.144.240.80";
     private static final int portNumber = 9000;
     private Socket socket;
     
@@ -71,12 +71,11 @@ public class ComManager implements CommMessageListener{
     {
         this.mst.addMessage(message);
     }
-    
-    
-    
+
     public void stopService() 
     {
-        try {
+        try 
+        {
             this.mrt.stop();
             this.mst.stop();
             
@@ -92,10 +91,9 @@ public class ComManager implements CommMessageListener{
             ml.proces(message);
         }
     }
-
-    
-    
-    private static class ComManagerHolder {
+   
+    private static class ComManagerHolder 
+    {
 
         private static final ComManager INSTANCE = new ComManager();
     }
