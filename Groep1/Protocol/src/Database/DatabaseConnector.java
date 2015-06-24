@@ -28,7 +28,7 @@ public class DatabaseConnector
     public DatabaseConnector() 
     {
         this.connectToDatabase();
-        this.connectToDatabase2();
+        //this.connectToDatabase2();
     }
        /**
         * Connecting to the MYSQL Database
@@ -78,7 +78,7 @@ public class DatabaseConnector
     {
         //IP ADRES FROM DATABASE
         //String url = "jdbc:mysql://localhost:3306/";
-        String url = "jdbc:mysql://localhost:3306/";
+        String url = "jdbc:mysql://localhost/";
         //DATABASE NAME
         String dbName = "cimsdb";
         //String dbName = "collectit";
@@ -121,15 +121,15 @@ public class DatabaseConnector
      */
     protected void disconnectFromDatabase() 
     {
-        try 
-        {
-            conn.close();
-            conn = null;
-        } 
-        catch (SQLException ex) 
-        {
-            System.err.println(ex.getMessage());
-        }
+//        try 
+//        {
+//            conn.close();
+//            conn = null;
+//        } 
+//        catch (SQLException ex) 
+//        {
+//            System.err.println(ex.getMessage());
+//        }
     }
     
     /**

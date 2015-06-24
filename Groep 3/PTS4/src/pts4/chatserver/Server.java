@@ -117,4 +117,10 @@ public class Server
     {
         return clients.get(naam);
     }
+
+    public ServerThread getSt() {
+        return st;
+    }
+    
+    
 }

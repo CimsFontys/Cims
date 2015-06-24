@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package pts4.gui;
 
 import java.io.IOException;
@@ -30,83 +29,87 @@ import javax.json.stream.JsonParser;
 import javax.json.stream.JsonParser.Event;
 import pts4.database.SQL;
 import pts4.klassen.LogManager;
+
 /**
+ * FXML Controller class
  *
- * @author Gijs
+ * @author Oomis
  */
 public class ConfigurationController implements Initializable {
     
+    
     private SQL dbcon;
     @FXML
-    private Button btnLogOut;
+    private TextField tbFacilityName;
+    @FXML
+    private TextField tbFacilityLongitude;
+    @FXML
+    private TextField tbFacilityLatitude;
+    @FXML
+    private Button btnAddFacility;
+    @FXML
+    private ListView<String> lvLogs;
+    @FXML
+    private ComboBox<String> cbFacility;
+    @FXML
+    private ComboBox<String> cbLogNames;
     
     @FXML
-    private TextField VoorNaamTB;
-    
-    @FXML
-    private TextField VoorLatTB;
-    
-    @FXML
-    private TextField VoorLonTB;
-    
-    @FXML
-    private Button AddBT;
-    
-    @FXML
-    private ComboBox<String> VoorzieningCB;
-        
-    @FXML 
-    private ComboBox<String> PersoneelCB;
-    
-    @FXML
-    private ListView LogListView; 
-    
+    private Button btn_LogOut;
+
+    /**
+     * Initializes the controller class.
+     */
     @Override
-    public void initialize(URL location, ResourceBundle resources)
+    public void initialize(URL url, ResourceBundle rb) 
     {
-      dbcon = new SQL();
+        dbcon = new SQL();
       
-        VoorzieningCB.getItems().add("Police");
-        VoorzieningCB.getItems().add("Hospital");
-        VoorzieningCB.getItems().add("Fire department");
+        cbFacility.getItems().add("Police");
+        cbFacility.getItems().add("Hospital");
+        cbFacility.getItems().add("Fire department");
         
-        PersoneelCB.getItems().clear();
-        SetPeopleInCB();
+        cbLogNames.getItems().clear();
+        SetPeopleInCB(cbLogNames);
     }
     
-    @FXML
-    public void AddFaciity()
+     @FXML
+    public void AddFacility()
     {
-        int emergencytype = 0;
+        int facilitynumber = 0;
         String facilityType = "";
-        if(VoorzieningCB.getSelectionModel().getSelectedItem().toString().equals("Fire department"))
+        if(cbFacility.getSelectionModel().getSelectedItem().toString().equals("Fire department"))
         {
-            emergencytype = 1; 
+            facilitynumber = 1; 
             facilityType = "Fire department";
             
         }
-        else if(VoorzieningCB.getSelectionModel().getSelectedItem().toString().equals("Police"))
+        else if(cbFacility.getSelectionModel().getSelectedItem().toString().equals("Police"))
         {
-            emergencytype = 2;
+            facilitynumber = 2;
             facilityType = "Police";
         }
-        else if(VoorzieningCB.getSelectionModel().getSelectedItem().toString().equals("Hospital")) 
+        else if(cbFacility.getSelectionModel().getSelectedItem().toString().equals("Hospital")) 
         {
-            emergencytype = 3; 
+            facilitynumber = 3; 
             facilityType = "Hospital";
         }
+        
+      
        
-             
-
-            dbcon.insertLocation(VoorNaamTB.getText(), VoorLonTB.getText(), VoorLatTB.getText(), emergencytype);
-            LogManager.getInstance().insertLog("Facility (" + facilityType + ") has been added: Name:" + VoorNaamTB.getText() + "Longitude: " + VoorLonTB.getText() + ", Latitude: " + VoorLatTB.getText() );
+            LogManager.getInstance().insertLocation(tbFacilityName.getText(), tbFacilityLongitude.getText(), tbFacilityLatitude.getText(), facilitynumber);
+            //dbcon.insertLocation(VoorNaamTB.getText(), VoorLonTB.getText(), VoorLatTB.getText(), noodtype);
+            LogManager.getInstance().insertLog("Facility (" + facilityType + "): '" + tbFacilityName.getText() + "' has been added!");
 
     }
     
+    /**
+     * Fills the chosen ComboBox with all users. 
+     * @param userComboBox the ComboBox that needs to be filled.
+     */
     @FXML
-    public void SetPeopleInCB()
-    {
-        
+    public void SetPeopleInCB(ComboBox<String> userComboBox)
+    {       
      // HashMap<Integer, String>
         HashMap<Integer, String> Info = new HashMap<Integer, String>();
   
@@ -161,17 +164,20 @@ public class ConfigurationController implements Initializable {
         
                 for(int i = 0; i < PersonID.size(); i++)
                 {
-                    PersoneelCB.getItems().add(PersonID.get(i) + ". " + Firstnames.get(i) + " " + Middlenames.get(i) + Lastnames.get(i));
+                    userComboBox.getItems().add(PersonID.get(i) + ". " + Firstnames.get(i) + " " + Middlenames.get(i) + Lastnames.get(i));
                 }
                 
                 
                // return Info;
     }
     
+    /**
+     * Fills the listView lvLogs with logs, based on the selected user. 
+     */
     @FXML
-    public void SetLogList()
+    public void SetLogListView()
     {
-        String selectedItem = PersoneelCB.getSelectionModel().getSelectedItem();
+        String selectedItem = cbLogNames.getSelectionModel().getSelectedItem();
         int personindex = selectedItem.indexOf(".");
         int selectedPersonID = Integer.parseInt(selectedItem.substring(0, personindex));
         System.out.println(selectedItem.substring(0, personindex));
@@ -199,7 +205,7 @@ public class ConfigurationController implements Initializable {
                         logdate = parser.getString(); 
                         FoundDates.add(logdate);
                         break;
-                    case "description":
+                    case "logdescription":
                         foundlog = parser.getString();
                         FoundLogStrings.add(foundlog);
                         break;        
@@ -217,20 +223,27 @@ public class ConfigurationController implements Initializable {
         
         for(int j = 0; j < FoundLogStrings.size(); j++)
         {
-            LogListView.getItems().add(FoundDates.get(j) + " " +  FoundLogStrings.get(j));
+            lvLogs.getItems().add(FoundDates.get(j) + " " +  FoundLogStrings.get(j));
           
         }
     
     }
     
+    /**
+     * Logs out the currently logged in user.
+     * @throws IOException 
+     */
+   @FXML
    public void btnLogOut_Click() throws IOException
    {
-        Stage currentstage = (Stage) btnLogOut.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Inloggen.fxml"));
+        Stage currentstage = (Stage) btn_LogOut.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Login.fxml"));
+        LogManager.getInstance().insertLog("User has logged out");
         Parent root = (Parent) fxmlLoader.load();
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
         stage.show();
         currentstage.close();
-    }              
+    }   
+    
 }

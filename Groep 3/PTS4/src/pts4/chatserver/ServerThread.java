@@ -22,6 +22,7 @@ public class ServerThread implements Runnable
     
     private Server server;
     private ArrayList<String> clients;
+    private ServerSocket s;
     
     public ServerThread(Server server)
     {
@@ -33,8 +34,8 @@ public class ServerThread implements Runnable
     {
         try
         {
-            ServerSocket s = new ServerSocket(8189);
-            while(true)
+            s = new ServerSocket(8189);
+            while(!Thread.currentThread().isInterrupted())
             {
                 // establish server socket
                 // wait for client connection         
@@ -48,11 +49,17 @@ public class ServerThread implements Runnable
         }
         catch (IOException e)
         {  
-           e.printStackTrace();
+           s = null;
         } 
         catch (ClassNotFoundException ex) 
         {
             Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public void stopServer() throws IOException
+    {
+        this.s.close();
+        this.s = null;
     }
 }

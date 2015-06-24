@@ -38,6 +38,54 @@ public class SQL extends DatabaseConnector implements IDatabase
         super();
     }
 
+    @Override
+    public String getPersonIdFromName(String name)
+    {
+        String query = "SELECT * FROM person WHERE personusername = ?";
+        
+        try
+        {
+            this.connectingSelect();
+        }
+        catch (Exception e)
+        {
+            return "";
+        }
+        
+        try
+        {
+            PreparedStatement prest = conn.prepareStatement(query);
+            prest.setString(1, name);
+            
+            prest.execute();
+            
+            ResultSet res = prest.getResultSet();
+            
+            while(res.next())
+            {
+                int personId = res.getInt("personid");
+                
+                JsonArrayBuilder ja = Json.createArrayBuilder();
+                JsonObjectBuilder jb = Json.createObjectBuilder();
+                jb.add("personid" , personId);
+                
+                ja.add(jb);
+                JsonArray array = ja.build();
+                
+                return array.toString();
+            }
+        }
+        catch(SQLException ee)
+        {
+            
+        }
+        finally
+        {
+            super.disconnectFromDatabase();
+        }
+        
+        return "";
+    }
     /**
      * TESTED AND WORKING
      */

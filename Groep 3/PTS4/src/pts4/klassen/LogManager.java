@@ -86,4 +86,15 @@ public class LogManager implements MessageListener {
             System.out.println("2");
         }
     }
+    
+    public void insertLocation(String name, String longtitude, String latitude, int locationtypeid)
+    {
+        comManager.addMessage(mb.buildInsertLocation(name, longtitude, latitude, locationtypeid));
+        System.out.println("Location Inserted");
+    }
+    
+    public void login(String username, String password)
+    {
+        comManager.addMessage(mb.buildLoginMessage(username, password));
+    }
 }

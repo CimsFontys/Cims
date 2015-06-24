@@ -26,6 +26,7 @@ import javafx.stage.Stage;
 import javax.json.Json;
 import javax.json.stream.JsonParser;
 import javax.json.stream.JsonParser.Event;
+import javax.json.stream.JsonParsingException;
 import pts4.database.IDatabase;
 import pts4.database.SQL;
 import pts4.klassen.LogManager;
@@ -38,8 +39,8 @@ import se.mbaeumer.fxmessagebox.MessageBoxType;
  */
 public class LoginController implements Initializable, MessageListener
 {
-    @FXML TextField tbGebruikersnaam;
-    @FXML PasswordField tbWachtwoord;
+    @FXML TextField tbUsername;
+    @FXML PasswordField tbPassword;
     
     private IDatabase dbcon;
     
@@ -49,37 +50,61 @@ public class LoginController implements Initializable, MessageListener
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
+        try
+        {
           dbcon = new SQL();
           logManager = LogManager.getInstance();
           comManager = ComManager.getInstance();
           comManager.addListener(this);
+        }
+        catch (Exception ex)
+        {
+            new MessageBox("Something went wrong.", MessageBoxType.OK_ONLY).show();
+        }
     }
     
+    /**
+     * 
+     * @param event
+     * @throws IOException 
+     * This handler makes logging in possible. It checks the response it gets from the database and loops over the parameters to check if the account is a configurator or not.
+     */
     public void btnInloggen_Click(ActionEvent event) throws IOException
     {
-        Stage currentstage = (Stage) tbGebruikersnaam.getScene().getWindow();
-        String response = dbcon.loginPerson(tbGebruikersnaam.getText(), tbWachtwoord.getText());
-        System.out.println(response);
+        //LogManager.getInstance().login(tbUsername.getText(), tbPassword.getText());
+        Stage currentstage = (Stage) tbUsername.getScene().getWindow();
+        String response = dbcon.loginPerson(tbUsername.getText(), tbPassword.getText());
+        //System.out.println(response);
         
         MessageBuilder messageBuilder = new MessageBuilder();
-        Message inlog = messageBuilder.buildLoginMessage(tbGebruikersnaam.getText(), tbWachtwoord.getText());
+        Message inlog = messageBuilder.buildLoginMessage(tbUsername.getText(), tbPassword.getText());
         comManager.addMessage(inlog);
-        
         StringReader reader = new StringReader(response);
         JsonParser parser = Json.createParser(reader);
-        Event event2 = parser.next();
+        Event event2 = null;
+        try
+        {
+            event2 = parser.next();
+        }
+        catch (JsonParsingException ex)
+        {
+            MessageBox mb = new MessageBox("Wrong username and/or password",MessageBoxType.OK_ONLY);
+            mb.show();
+            tbUsername.setText("");
+            tbPassword.setText("");
+            return;
+        }
         
         int personid = 0;
         int persontypeid = 0;
         String configurator = "";
-        
         while(parser.hasNext())
         {
             if(event2.equals(Event.KEY_NAME))
             {
                 String keyname = parser.getString();
                 event2 = parser.next();
-                
+
                 switch(keyname)
                 {
                     case "personid":
@@ -96,7 +121,7 @@ public class LoginController implements Initializable, MessageListener
                     default:
                         break;
                 }
-                
+
                 event2 = parser.next();
             }
             else
@@ -107,17 +132,16 @@ public class LoginController implements Initializable, MessageListener
         
         if (response.equals(""))
         {
-            MessageBox mb = new MessageBox("Wrong username and or password.",MessageBoxType.OK_ONLY);
+            MessageBox mb = new MessageBox("Wrong username and/or password.",MessageBoxType.OK_ONLY);
             mb.show();
-            tbGebruikersnaam.clear();
-            tbWachtwoord.clear();
+            tbUsername.clear();
+            tbPassword.clear();
         }
         else
-        {
-            int index = response.indexOf("configurator");
-            String conf = response.substring(index);          
-            if (!conf.contains("YES"))
+        {        
+            if (!response.substring(response.indexOf("configurator")).contains("YES"))
             {
+                LogManager.getInstance().insertLog("User has logged in, will be directed to the main application");
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("GUIFX.fxml"));
                 Parent root = (Parent) fxmlLoader.load();
                 Stage stage = new Stage();
@@ -126,8 +150,10 @@ public class LoginController implements Initializable, MessageListener
                 currentstage.close();
             }
             else
+
             {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Configuratie.fxml"));
+                LogManager.getInstance().insertLog("User has logged in, will be directed to the configuration screen");
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Configuration.fxml"));
                 Parent root = (Parent) fxmlLoader.load();
                 Stage stage = new Stage();
                 stage.setScene(new Scene(root));  

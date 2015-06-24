@@ -148,6 +148,7 @@ public class GUIController implements Initializable, MapChangeListener<String, C
     @FXML
     Button btnincident;
 
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
@@ -180,6 +181,9 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         cbSpoed.getItems().add("No");
     }
 
+    /**
+     * Occurs once an active incident is selected.
+     */
     public void goActiveIncident() {
 
         for (Incident a : admin.getIncidents()) {
@@ -193,6 +197,13 @@ public class GUIController implements Initializable, MapChangeListener<String, C
             }
         }
     }
+    
+    /**
+     * Checks if it's possible to start a chat session with the chosen unit. 
+     * @param unit the unit to send a message to. 
+     * @return if the chat screen been opened correctly it will return true, if not, false 
+     * @throws IOException 
+     */
     public boolean messageToUnit(String unit) throws IOException {
         try {
         URL location1 = getClass().getResource("ServerGUI.fxml");
@@ -201,7 +212,8 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         fxmlLoader.setBuilderFactory(new JavaFXBuilderFactory());
 
         Parent root = (Parent) (Node) fxmlLoader.load(location1.openStream());
-
+                LogManager.getInstance().insertLog("A chat to communicate with Unit: " + unit + " has opened");
+         
         ServerGUIController ctrl1 = (ServerGUIController) fxmlLoader.getController();
         ctrl1.setServer(admin.getServer(), unit);
 
@@ -218,6 +230,9 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         }
     }
     
+    /**
+     * Occurs once an incident is selected in the listView lvEndedIncidents 
+     */
         public void goEndedIncident() {
 
         for (Incident a : admin.getEndedIncidents()) {
@@ -232,6 +247,9 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         }
     }
 
+    /**
+     * Occurs once the incident has been accepted as solved. 
+     */
     public void endIncident() {
 
         if (!tfEndSolvedBy.getText().isEmpty()) {
@@ -239,6 +257,7 @@ public class GUIController implements Initializable, MapChangeListener<String, C
                 if (a.equals(lvActiveIncidents.getSelectionModel().getSelectedItem())) {
 
                     a.setSolvedBy(tfEndSolvedBy.getText());
+                    LogManager.getInstance().insertLog("Incident '" + a.getName() + "' has been solved by '" + a.getSolvedBy() + "'");
                     EndedIncidents.add(a);
                     incidents.remove(a);
                     g.DrawIncidents();
@@ -251,6 +270,9 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         }
     }
 
+    /**
+     * Fills every ComboBox in this controller with the needed information.
+     */
     public void initComboboxes() {
 
         //cbCategory.setItems(FXCollections.observableList(categorylist));
@@ -268,6 +290,9 @@ public class GUIController implements Initializable, MapChangeListener<String, C
 
     }
 
+    /**
+     * Occurs when an incident is selected in the listView lvIncidents.
+     */
     public void goIncident() {
         for (Incident a : admin.getIncidents()) {
             if (a.equals(lvIncidents.getSelectionModel().getSelectedItem())) {
@@ -283,28 +308,41 @@ public class GUIController implements Initializable, MapChangeListener<String, C
     public void setProvincie() throws MalformedURLException {
 
         String selected = cbProvincies.getValue().toString();
-        if (selected.equalsIgnoreCase("Nederland")) {
+        if (selected.equalsIgnoreCase("Nederland")) 
+        {
+            LogManager.getInstance().insertLog("User has loaded pending incidents from the whole country");
             admin.loadFromRSSFeed();
         } else {
+            LogManager.getInstance().insertLog("User has loaded pending incidents from the province: " + selected);
             admin.loadFromRSSFeed(selected);
         }
         admin.syncAcceptedAndPending();
         lvPendingIncidents.setItems(admin.getPendingIncidents());
     }
 
+    /**
+     * Gives an order to the selected unit in the ComboBox cbUnit.
+     */
     public void giveOrder() {
         g.createUnit = true;
         g.id = cbUnit.getSelectionModel().getSelectedItem().toString();
         g.incidentstring = cbincident.getSelectionModel().getSelectedItem().toString();
     }
 
+    /**
+     * Creates a simulation with input from the user.
+     */
     public void createSimulation()
     {
        g.simulation = true;
+       LogManager.getInstance().insertLog("Employee has started a simulation");
        g.id = cbunitsimulation.getSelectionModel().getSelectedItem().toString();
        g.incidentstring = cbincidentsimulation.getSelectionModel().getSelectedItem().toString();
     }
     
+    /**
+     * Occurs once an incident is selected in the listView lvIncidents2
+     */
     public void selectIncident() {
 
         for (Incident a : admin.getIncidents()) {
@@ -328,6 +366,9 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         }
     }
 
+    /**
+     * Occurs once an incident is selected in the listView lvPendingIncidents
+     */
     public void goPendingIncident() {
 
         for (Incident a : admin.getPendingIncidents()) {
@@ -339,25 +380,42 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         }
     }
 
+    /**
+     * Gets text from the TextArea txtDescription
+     * @return a String containing the text from the TextArea txtDescription
+     */
     public String getUnitDescription() {
         return txtDescription.getText();
     }
 
+    /**
+     * Gets text from the current selection at the ComboBox cbIncident
+     * @return a String containing the text from the selected item in the cbIncident
+     */
     public String getIncidentorder() {
         return cbincident.getSelectionModel().getSelectedItem().toString();
     }
 
+   /**
+    * Sets the long- and latitude for Units for using them in the GoogleMap
+    * @param Longitude the longitude which needs to be set.
+    * @param Latitude the latitude which needs to be set.
+    */
     public void setUnit(double Longitude, double Latitude) {
         txtlongitude.setText(Double.toString(Longitude));
         txtlatitude.setText(Double.toString(Latitude));
     }
 
+    /**
+     * Accepts a pending incident so it can be used further in the application
+     */
     public void acceptIncident() {
 
         for (Incident a : admin.getPendingIncidents()) {
             if (a.equals(lvPendingIncidents.getSelectionModel().getSelectedItem())) {
 
                 admin.addIncident(a);
+                LogManager.getInstance().insertLog("The incident: " + "'" +  a.getName() + "'" + " has been accepted");
                 admin.removePendingIncident(a);
                 taPendingName.setText("");
                 taPendingDescription.setText("");
@@ -367,6 +425,9 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         }
     }
 
+    /**
+     * Adds a new incident with information from user input.
+     */
     public void addIncident() {
 
         String name = tfAddName.getText();
@@ -377,6 +438,8 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         try {
             Incident incident = new Incident(longitude, latitude, name, description);
             admin.addIncident(incident);
+            LogManager.getInstance().insertLog("The incident: " + "'" + incident.getName() + "'" + " has been added");
+
             g.addIncidentOnMap(incident);
             this.initComboboxes();
         } catch (Exception e) {
@@ -389,6 +452,14 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         tfAddLatitude.setText("");
     }
 
+    /**
+     * Occurs once a unit has been selected in the cbUnits ComboBox.
+     * Starts a chatting session.
+     * @throws MalformedURLException
+     * @throws URISyntaxException
+     * @throws InterruptedException
+     * @throws IOException 
+     */
     @FXML
     public void itemSelected() throws MalformedURLException, URISyntaxException, InterruptedException, IOException {
 //        try{
@@ -429,7 +500,7 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(location1);
         fxmlLoader.setBuilderFactory(new JavaFXBuilderFactory());
-
+        LogManager.getInstance().insertLog("The chat screen has been opened");
         Parent root = (Parent) (Node) fxmlLoader.load(location1.openStream());
 
         ServerGUIController ctrl1 = (ServerGUIController) fxmlLoader.getController();
@@ -443,6 +514,10 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         stage.showAndWait();
     }
 
+    /**
+     * Occurs once the amount of units in cbUnits has changed.
+     * @param change 
+     */
     @Override
     public void onChanged(Change<? extends String, ? extends Client> change) {
         if (change.wasAdded()) {
@@ -454,12 +529,14 @@ public class GUIController implements Initializable, MapChangeListener<String, C
 
     public void btnLogOut_Click() throws IOException {
         Stage currentstage = (Stage) btnLogOut.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Inloggen.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Login.fxml"));
+        LogManager.getInstance().insertLog("User has logged out");
         Parent root = (Parent) fxmlLoader.load();
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
         stage.show();
         currentstage.close();
+        this.admin.getServer().getSt().stopServer();
         this.admin = null;
     }
 }
