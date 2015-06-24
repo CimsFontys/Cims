@@ -75,7 +75,7 @@ public class ConfiguratieController implements Initializable {
     }
     
     @FXML
-    public void AddFaciity()
+    public void AddFacility()
     {
         int noodtype = 0;
         String facilityType = "";
@@ -97,8 +97,8 @@ public class ConfiguratieController implements Initializable {
         }
         
        
-         
-            dbcon.insertLocation(VoorNaamTB.getText(), VoorLonTB.getText(), VoorLatTB.getText(), noodtype);
+            LogManager.getInstance().insertLocation(VoorNaamTB.getText(), VoorLonTB.getText(), VoorLatTB.getText(), noodtype);
+            //dbcon.insertLocation(VoorNaamTB.getText(), VoorLonTB.getText(), VoorLatTB.getText(), noodtype);
             LogManager.getInstance().insertLog("Facility (" + facilityType + "): '" + VoorNaamTB.getText() + "' has been added!");
 
     }

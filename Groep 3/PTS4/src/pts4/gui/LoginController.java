@@ -63,6 +63,7 @@ public class LoginController implements Initializable, MessageListener
      */
     public void btnInloggen_Click(ActionEvent event) throws IOException
     {
+        //LogManager.getInstance().login(tbUsername.getText(), tbPassword.getText());
         Stage currentstage = (Stage) tbUsername.getScene().getWindow();
         String response = dbcon.loginPerson(tbUsername.getText(), tbPassword.getText());
         System.out.println(response);
@@ -133,10 +134,7 @@ public class LoginController implements Initializable, MessageListener
             else
 
             {
-<<<<<<< HEAD
-=======
                 LogManager.getInstance().insertLog("User has logged in, will be directed to the configuration screen");
->>>>>>> 40feaf2b9165e24439660b11fa09c0635b749df4
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Configuration.fxml"));
                 Parent root = (Parent) fxmlLoader.load();
                 Stage stage = new Stage();
