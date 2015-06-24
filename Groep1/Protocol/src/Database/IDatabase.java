@@ -16,6 +16,8 @@ import java.util.Date;
  */
 public interface IDatabase 
 {
+    public String getPersonIdFromName(String name);
+    
     public String retrieveCalamityWithName(String naam);
     
     public String retrieveAllPersons(); 
