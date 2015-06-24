@@ -74,12 +74,11 @@ public class LoginController implements Initializable, MessageListener
         //LogManager.getInstance().login(tbUsername.getText(), tbPassword.getText());
         Stage currentstage = (Stage) tbUsername.getScene().getWindow();
         String response = dbcon.loginPerson(tbUsername.getText(), tbPassword.getText());
-        System.out.println(response);
+        //System.out.println(response);
         
         MessageBuilder messageBuilder = new MessageBuilder();
         Message inlog = messageBuilder.buildLoginMessage(tbUsername.getText(), tbPassword.getText());
         comManager.addMessage(inlog);
-        
         StringReader reader = new StringReader(response);
         JsonParser parser = Json.createParser(reader);
         Event event2 = null;

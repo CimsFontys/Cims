@@ -50,7 +50,7 @@ public class WriteFileThread implements Runnable
             String tijd = getSystemTimeAsString();
             System.out.println(tijd);
             // Het is misschien handig om het schrijven naar een file door een aparte thread te laten doen.
-            String path = "Opnames\\" + message.getAfzender() + "\\" + "opname " + message.getAfzender() + " " + tijd + ".wav";
+            String path = "Recordings\\" + message.getAfzender() + "\\" + "recording " + message.getAfzender() + " " + tijd + ".wav";
             fos = new FileOutputStream(new File(path));
             bos = new BufferedOutputStream(fos);
             bos.write(message.getAudiofile());
