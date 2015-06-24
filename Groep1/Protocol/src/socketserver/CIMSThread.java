@@ -8,11 +8,12 @@ package socketserver;
 import Database.SQL;
 import Protocol.Message;
 import Protocol.MessageBuilder;
-import java.io.InputStream;
-import java.io.OutputStream;
+import Protocol.Salt;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.StringReader;
 import java.net.Socket;
 import java.net.SocketException;
@@ -32,12 +33,14 @@ public class CIMSThread implements Runnable {
     protected Socket clientSocket = null;
     protected String serverText = null;
     
+    Salt salt = Salt.getInstance();
+    
     int receiverID = 0;
     boolean configurator = false;
     int persontype = 0;
     boolean running = true;
     MessageBuilder messageBuilder;
-    Message message;
+    byte[] message;
     ArrayList<Message> toSend;
     ThreadAdministration administration;
 
@@ -90,25 +93,31 @@ public class CIMSThread implements Runnable {
                         break;
                     }
                     
-                    while ((message = (Message) ois.readObject()) != null && clientSocket != null) 
+                    while ((message = (byte[]) ois.readObject()) != null && clientSocket != null) 
                     {
+                        System.out.println("-------------------------------------------------------");
+                        System.out.println("CIMSServer: Message Received: Encrypted");
+                        System.out.println(message);
+                        Message decrypted = (Message)salt.decryptObject(message);
+                        
                         if (receiverID == 0) 
                         {
-                            switch (message.getType()) 
+                            
+                            switch (decrypted.getType()) 
                             {
                                 case MessageBuilder.Login:
                                     System.out.println("-------------------------------------------------------");
                                     System.out.println("CIMSServer: Message Request by: " + clientSocket.getInetAddress().toString());
                                     System.out.println("MessageType: Login");
                                     System.out.println("Message Requested By: " + clientSocket.toString());
-                                    this.login(message);
+                                    this.login(decrypted);
                                     break;
                                 case MessageBuilder.InsertPerson:
                                     System.out.println("-------------------------------------------------------");
                                     System.out.println("CIMSServer: Message Request by: " + clientSocket.getInetAddress().toString());
                                     System.out.println("MessageType: Insert Person");
                                     System.out.println("Message Requested By: " + clientSocket.toString());
-                                    this.insertPerson(message);
+                                    this.insertPerson(decrypted);
                                     break;
                                 default:
                                     break;
@@ -117,91 +126,91 @@ public class CIMSThread implements Runnable {
                         else 
                         {
                             //ALLE RETRIEVES
-                            switch(message.getType())
+                            switch(decrypted.getType())
                             {
                                 case MessageBuilder.RetrievePersonIdFromName:
                                     System.out.println("-------------------------------------------------------");
                                     System.out.println("CIMSServer: Message Request by: " + clientSocket.getInetAddress().toString());
                                     System.out.println("MessageType: Retrieve Person ID From Name");
                                     System.out.println("Message Requested By: " + clientSocket.toString());
-                                    this.retrievePersonIdWithName(message);
+                                    this.retrievePersonIdWithName(decrypted);
                                     break;
                                 case MessageBuilder.RetrieveAllCalamities:
                                     System.out.println("-------------------------------------------------------");
                                     System.out.println("CIMSServer: Message Request by: " + clientSocket.getInetAddress().toString());
                                     System.out.println("MessageType: Retrieve All Calamities");
                                     System.out.println("Message Requested By: " + clientSocket.toString());
-                                    this.retrieveAllCalamities(message);
+                                    this.retrieveAllCalamities(decrypted);
                                     break;
                                 case MessageBuilder.RetrieveCalamityWithName:
                                     System.out.println("-------------------------------------------------------");
                                     System.out.println("CIMSServer: Message Request by: " + clientSocket.getInetAddress().toString());
                                     System.out.println("MessageType: Retrieve Calamity With Name");
                                     System.out.println("Message Requested By: " + clientSocket.toString());
-                                    this.retrieveCalamitiesWithName(message);
+                                    this.retrieveCalamitiesWithName(decrypted);
                                     break;
                                 case MessageBuilder.RetrieveAllLocations:
                                     System.out.println("-------------------------------------------------------");
                                     System.out.println("CIMSServer: Message Request by: " + clientSocket.getInetAddress().toString());
                                     System.out.println("MessageType: Retrieve All Locations");
                                     System.out.println("Message Requested By: " + clientSocket.toString());
-                                    this.retrieveAllLocations(message);
+                                    this.retrieveAllLocations(decrypted);
                                     break;
                                 case MessageBuilder.RetrieveAllRegions:
                                     System.out.println("-------------------------------------------------------");
                                     System.out.println("CIMSServer: Message Request by: " + clientSocket.getInetAddress().toString());
                                     System.out.println("MessageType: Retrieve All Regions");
                                     System.out.println("Message Requested By: " + clientSocket.toString());
-                                    this.retrieveAllRegions(message);
+                                    this.retrieveAllRegions(decrypted);
                                     break;
                                 case MessageBuilder.RetrieveLogs:
                                     System.out.println("-------------------------------------------------------");
                                     System.out.println("CIMSServer: Message Request by: " + clientSocket.getInetAddress().toString());
                                     System.out.println("MessageType: Retrieve All Logs");
                                     System.out.println("Message Requested By: " + clientSocket.toString());
-                                    this.retrieveLogs(message);
+                                    this.retrieveLogs(decrypted);
                                     break;
                                 case MessageBuilder.RetrieveAllLocationTypes:
                                     System.out.println("-------------------------------------------------------");
                                     System.out.println("CIMSServer: Message Request by: " + clientSocket.getInetAddress().toString());
                                     System.out.println("MessageType: Retrieve Location Types");
                                     System.out.println("Message Requested By: " + clientSocket.toString());
-                                    this.retrieveAllLocationTypes(message);
+                                    this.retrieveAllLocationTypes(decrypted);
                                     break;
                                 case MessageBuilder.RetrievePersonInformation:
                                     System.out.println("-------------------------------------------------------");
                                     System.out.println("CIMSServer: Message Request by: " + clientSocket.getInetAddress().toString());
                                     System.out.println("MessageType: Retrieve Person Information");
                                     System.out.println("Message Requested By: " + clientSocket.toString());
-                                    this.retrievePersonInformation(message);
+                                    this.retrievePersonInformation(decrypted);
                                     break;
                                 case MessageBuilder.RetrieveAllCalamitiesDetailed:
                                     System.out.println("-------------------------------------------------------");
                                     System.out.println("CIMSServer: Message Request by: " + clientSocket.getInetAddress().toString());
                                     System.out.println("MessageType: Retrieve All Calamities Detailed");
                                     System.out.println("Message Requested By: " + clientSocket.toString());
-                                    this.retrieveAllCalamitiesDetailed(message);
+                                    this.retrieveAllCalamitiesDetailed(decrypted);
                                     break;
                                 case MessageBuilder.InsertLog:
                                     System.out.println("-------------------------------------------------------");
                                     System.out.println("CIMSServer: Message Request by: " + clientSocket.getInetAddress().toString());
                                     System.out.println("MessageType: Insert Log");
                                     System.out.println("Message Requested By: " + clientSocket.toString());
-                                    this.insertLog(message);
+                                    this.insertLog(decrypted);
                                     break;
                                 case MessageBuilder.InsertMessage:
                                     System.out.println("-------------------------------------------------------");
                                     System.out.println("CIMSServer: Message Request by: " + clientSocket.getInetAddress().toString());
                                     System.out.println("MessageType: Chat Send Message / Insert Message");
                                     System.out.println("Message Requested By: " + clientSocket.toString());
-                                    this.insertMessage(message);
+                                    this.insertMessage(decrypted);
                                     break;
                                 case MessageBuilder.InsertCalamity:
                                     System.out.println("-------------------------------------------------------");
                                     System.out.println("CIMSServer: Message Request by: " + clientSocket.getInetAddress().toString());
                                     System.out.println("MessageType: Insert Calamity");
                                     System.out.println("Message Requested By: " + clientSocket.toString());
-                                    this.insertCalamity(message);
+                                    this.insertCalamity(decrypted);
                                     break;
                                 default:
                                     break;
@@ -209,15 +218,14 @@ public class CIMSThread implements Runnable {
                         }
                         if(toSend.size() > 0)
                         {
-                            oos.writeObject(toSend.get(0));
-                            toSend.remove(0);
-                            
+                            oos.writeObject(salt.encryptObject(toSend.get(0)));
+                            toSend.remove(0);       
                         }
                     }
                     
                      if(toSend.size() > 0)
                         {
-                            oos.writeObject(toSend.get(0));
+                            oos.writeObject(salt.encryptObject(toSend.get(0)));
                             toSend.remove(0);
                         }
                 }
@@ -719,7 +727,8 @@ public class CIMSThread implements Runnable {
                         String keyname = parser2.getString();
                         event2 = parser2.next();
 
-                        switch (keyname) {
+                        switch (keyname) 
+                        {
                             case "personid":
                                 personid = parser2.getInt();
                                 break;
