@@ -148,6 +148,7 @@ public class GUIController implements Initializable, MapChangeListener<String, C
     @FXML
     Button btnincident;
 
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
@@ -180,6 +181,9 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         cbSpoed.getItems().add("No");
     }
 
+    /**
+     * Occurs once an active incident is selected.
+     */
     public void goActiveIncident() {
 
         for (Incident a : admin.getIncidents()) {
@@ -193,6 +197,13 @@ public class GUIController implements Initializable, MapChangeListener<String, C
             }
         }
     }
+    
+    /**
+     * Checks if it's possible to start a chat session with the chosen unit. 
+     * @param unit the unit to send a message to. 
+     * @return if the chat screen been opened correctly it will return true, if not, false 
+     * @throws IOException 
+     */
     public boolean messageToUnit(String unit) throws IOException {
         try {
         URL location1 = getClass().getResource("ServerGUI.fxml");
@@ -219,6 +230,9 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         }
     }
     
+    /**
+     * Occurs once an incident is selected in the listView lvEndedIncidents 
+     */
         public void goEndedIncident() {
 
         for (Incident a : admin.getEndedIncidents()) {
@@ -233,6 +247,9 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         }
     }
 
+    /**
+     * Occurs once the incident has been accepted as solved. 
+     */
     public void endIncident() {
 
         if (!tfEndSolvedBy.getText().isEmpty()) {
@@ -253,6 +270,9 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         }
     }
 
+    /**
+     * Fills every ComboBox in this controller with the needed information.
+     */
     public void initComboboxes() {
 
         //cbCategory.setItems(FXCollections.observableList(categorylist));
@@ -270,6 +290,9 @@ public class GUIController implements Initializable, MapChangeListener<String, C
 
     }
 
+    /**
+     * Occurs when an incident is selected in the listView lvIncidents.
+     */
     public void goIncident() {
         for (Incident a : admin.getIncidents()) {
             if (a.equals(lvIncidents.getSelectionModel().getSelectedItem())) {
@@ -297,12 +320,18 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         lvPendingIncidents.setItems(admin.getPendingIncidents());
     }
 
+    /**
+     * Gives an order to the selected unit in the ComboBox cbUnit.
+     */
     public void giveOrder() {
         g.createUnit = true;
         g.id = cbUnit.getSelectionModel().getSelectedItem().toString();
         g.incidentstring = cbincident.getSelectionModel().getSelectedItem().toString();
     }
 
+    /**
+     * Creates a simulation with input from the user.
+     */
     public void createSimulation()
     {
        g.simulation = true;
@@ -311,6 +340,9 @@ public class GUIController implements Initializable, MapChangeListener<String, C
        g.incidentstring = cbincidentsimulation.getSelectionModel().getSelectedItem().toString();
     }
     
+    /**
+     * Occurs once an incident is selected in the listView lvIncidents2
+     */
     public void selectIncident() {
 
         for (Incident a : admin.getIncidents()) {
@@ -334,6 +366,9 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         }
     }
 
+    /**
+     * Occurs once an incident is selected in the listView lvPendingIncidents
+     */
     public void goPendingIncident() {
 
         for (Incident a : admin.getPendingIncidents()) {
@@ -345,19 +380,35 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         }
     }
 
+    /**
+     * Gets text from the TextArea txtDescription
+     * @return a String containing the text from the TextArea txtDescription
+     */
     public String getUnitDescription() {
         return txtDescription.getText();
     }
 
+    /**
+     * Gets text from the current selection at the ComboBox cbIncident
+     * @return a String containing the text from the selected item in the cbIncident
+     */
     public String getIncidentorder() {
         return cbincident.getSelectionModel().getSelectedItem().toString();
     }
 
+   /**
+    * Sets the long- and latitude for Units for using them in the GoogleMap
+    * @param Longitude the longitude which needs to be set.
+    * @param Latitude the latitude which needs to be set.
+    */
     public void setUnit(double Longitude, double Latitude) {
         txtlongitude.setText(Double.toString(Longitude));
         txtlatitude.setText(Double.toString(Latitude));
     }
 
+    /**
+     * Accepts a pending incident so it can be used further in the application
+     */
     public void acceptIncident() {
 
         for (Incident a : admin.getPendingIncidents()) {
@@ -374,6 +425,9 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         }
     }
 
+    /**
+     * Adds a new incident with information from user input.
+     */
     public void addIncident() {
 
         String name = tfAddName.getText();
@@ -398,6 +452,14 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         tfAddLatitude.setText("");
     }
 
+    /**
+     * Occurs once a unit has been selected in the cbUnits ComboBox.
+     * Starts a chatting session.
+     * @throws MalformedURLException
+     * @throws URISyntaxException
+     * @throws InterruptedException
+     * @throws IOException 
+     */
     @FXML
     public void itemSelected() throws MalformedURLException, URISyntaxException, InterruptedException, IOException {
 //        try{
@@ -452,6 +514,10 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         stage.showAndWait();
     }
 
+    /**
+     * Occurs once the amount of units in cbUnits has changed.
+     * @param change 
+     */
     @Override
     public void onChanged(Change<? extends String, ? extends Client> change) {
         if (change.wasAdded()) {
