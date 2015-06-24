@@ -26,6 +26,7 @@ import javafx.stage.Stage;
 import javax.json.Json;
 import javax.json.stream.JsonParser;
 import javax.json.stream.JsonParser.Event;
+import javax.json.stream.JsonParsingException;
 import pts4.database.IDatabase;
 import pts4.database.SQL;
 import pts4.klassen.LogManager;
@@ -49,17 +50,24 @@ public class LoginController implements Initializable, MessageListener
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
+        try
+        {
           dbcon = new SQL();
           logManager = LogManager.getInstance();
           comManager = ComManager.getInstance();
           comManager.addListener(this);
+        }
+        catch (Exception ex)
+        {
+            new MessageBox("Something went wrong.", MessageBoxType.OK_ONLY).show();
+        }
     }
     
     /**
      * 
      * @param event
      * @throws IOException 
-     * Tis handler makes logging in possible. It checks the response it gets from the database and loops over the parameters to check if the account is a configurator or not.
+     * This handler makes logging in possible. It checks the response it gets from the database and loops over the parameters to check if the account is a configurator or not.
      */
     public void btnInloggen_Click(ActionEvent event) throws IOException
     {
@@ -74,19 +82,30 @@ public class LoginController implements Initializable, MessageListener
         
         StringReader reader = new StringReader(response);
         JsonParser parser = Json.createParser(reader);
-        Event event2 = parser.next();
+        Event event2 = null;
+        try
+        {
+            event2 = parser.next();
+        }
+        catch (JsonParsingException ex)
+        {
+            MessageBox mb = new MessageBox("Wrong username and/or password",MessageBoxType.OK_ONLY);
+            mb.show();
+            tbUsername.setText("");
+            tbPassword.setText("");
+            return;
+        }
         
         int personid = 0;
         int persontypeid = 0;
         String configurator = "";
-        
         while(parser.hasNext())
         {
             if(event2.equals(Event.KEY_NAME))
             {
                 String keyname = parser.getString();
                 event2 = parser.next();
-                
+
                 switch(keyname)
                 {
                     case "personid":
@@ -103,7 +122,7 @@ public class LoginController implements Initializable, MessageListener
                     default:
                         break;
                 }
-                
+
                 event2 = parser.next();
             }
             else
@@ -121,7 +140,7 @@ public class LoginController implements Initializable, MessageListener
         }
         else
         {        
-            if (configurator.equals("YES"))
+            if (!response.substring(response.indexOf("configurator")).contains("YES"))
             {
                 LogManager.getInstance().insertLog("User has logged in, will be directed to the main application");
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("GUIFX.fxml"));

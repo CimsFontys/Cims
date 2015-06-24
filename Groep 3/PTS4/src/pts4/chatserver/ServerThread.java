@@ -49,7 +49,7 @@ public class ServerThread implements Runnable
         }
         catch (IOException e)
         {  
-           e.printStackTrace();
+           s = null;
         } 
         catch (ClassNotFoundException ex) 
         {
