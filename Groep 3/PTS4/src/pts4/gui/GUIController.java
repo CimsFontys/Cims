@@ -305,6 +305,10 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         }
     }
 
+    /**
+     * Occurs when a selection is made in the cbProvincies ComboBox.
+     * @throws MalformedURLException 
+     */
     public void setProvincie() throws MalformedURLException {
 
         String selected = cbProvincies.getValue().toString();
@@ -358,6 +362,9 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         }
     }
 
+    /**
+     * Occurs when a unit is selected on the Map.
+     */
     public void selectUnit() {
         for (Unit a : admin.getUnits()) {
             if (a.equals(lvunits.getSelectionModel().getSelectedItem())) {
@@ -526,7 +533,12 @@ public class GUIController implements Initializable, MapChangeListener<String, C
             cbUnits.getItems().remove(change.getValueRemoved().getNaam());
         }
     }
-
+    
+    
+  /**
+     * Logs out the currently logged in user.
+     * @throws IOException 
+     */
     public void btnLogOut_Click() throws IOException {
         Stage currentstage = (Stage) btnLogOut.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Login.fxml"));
@@ -538,5 +550,7 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         currentstage.close();
         this.admin.getServer().getSt().stopServer();
         this.admin = null;
+        
+    
     }
 }
