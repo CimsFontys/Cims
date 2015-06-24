@@ -5,6 +5,9 @@
  */
 package pts4.gui;
 
+import CommunicationClient.ComManager;
+import CommunicationClient.MessageListener;
+import Protocol.Message;
 import java.io.IOException;
 import java.io.StringReader;
 
@@ -35,7 +38,7 @@ import pts4.klassen.LogManager;
  *
  * @author Oomis
  */
-public class ConfigurationController implements Initializable {
+public class ConfigurationController implements Initializable, MessageListener {
     
     
     private SQL dbcon;
@@ -56,6 +59,9 @@ public class ConfigurationController implements Initializable {
     
     @FXML
     private Button btn_LogOut;
+    
+    private LogManager manager = LogManager.getInstance();
+    private ComManager comManager = ComManager.getInstance();
 
     /**
      * Initializes the controller class.
@@ -64,6 +70,8 @@ public class ConfigurationController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) 
     {
         dbcon = new SQL();
+        
+        comManager.addListener(this);
       
         cbFacility.getItems().add("Police");
         cbFacility.getItems().add("Hospital");
@@ -171,20 +179,28 @@ public class ConfigurationController implements Initializable {
                // return Info;
     }
     
-    /**
-     * Fills the listView lvLogs with logs, based on the selected user. 
-     */
     @FXML
-    public void SetLogListView()
+    public void getLogs()
     {
         String selectedItem = cbLogNames.getSelectionModel().getSelectedItem();
         int personindex = selectedItem.indexOf(".");
         int selectedPersonID = Integer.parseInt(selectedItem.substring(0, personindex));
         System.out.println(selectedItem.substring(0, personindex));
+        manager.getLogs(selectedPersonID);
+    }
+    /**
+     * Fills the listView lvLogs with logs, based on the selected user. 
+     */
+    public void SetLogListView(String jsonStr)
+    {
+        //String selectedItem = cbLogNames.getSelectionModel().getSelectedItem();
+        //int personindex = selectedItem.indexOf(".");
+        //int selectedPersonID = Integer.parseInt(selectedItem.substring(0, personindex));
+        //System.out.println(selectedItem.substring(0, personindex));
         
         
         
-        String jsonStr = dbcon.retrieveLogs(selectedPersonID);
+        //String jsonStr = dbcon.retrieveLogs(selectedPersonID);
         
      
     
@@ -245,5 +261,18 @@ public class ConfigurationController implements Initializable {
         stage.show();
         currentstage.close();
     }   
+
+    @Override
+    public void proces(Message message)
+    {
+     
+        if(message.getType().equals("retrievelogsreply"))
+        {
+            
+            SetLogListView(message.getText());
+        }
+      
+        
+    }
     
 }

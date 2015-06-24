@@ -5,19 +5,20 @@
  */
 package pts4.gui;
 
-import chat.EmergencyUnit;
-import java.awt.event.ActionEvent;
+import CommunicationClient.ComManager;
+import CommunicationClient.MessageListener;
+import Protocol.Message;
 import java.io.IOException;
+import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
-import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -36,6 +37,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javax.json.Json;
+import javax.json.stream.JsonParser;
+import javax.json.stream.JsonParser.Event;
 import pts4.chatserver.*;
 import pts4.googlemaps.Gmaps;
 import pts4.klassen.*;
@@ -49,7 +53,7 @@ import se.mbaeumer.fxmessagebox.MessageBoxType;
  *
  * @author Max
  */
-public class GUIController implements Initializable, MapChangeListener<String, Client> {
+public class GUIController implements MessageListener, Initializable, MapChangeListener<String, Client> {
 
     private Administration admin;
     private Gmaps g;
@@ -148,6 +152,8 @@ public class GUIController implements Initializable, MapChangeListener<String, C
     @FXML
     Button btnincident;
 
+    private LogManager logmanager = LogManager.getInstance();
+    private ComManager commanager = ComManager.getInstance();
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -179,6 +185,96 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         cbGewelddadig.getItems().add("No");
         cbSpoed.getItems().add("Yes");
         cbSpoed.getItems().add("No");
+        
+        try {
+            commanager.addListener(this);
+            logmanager.getAllCalamities();
+        } catch (Exception e) {
+        }
+        
+        
+    }
+    
+    public void parseCalamityObjects(String Jsona)
+    {
+        String jsonStr = Jsona;
+        StringReader reader = new StringReader(jsonStr);
+        JsonParser parser = Json.createParser(reader);
+        Event event = parser.next();
+        int calamityid = 0;
+        String calamityLongtitude = "";
+        String calamityLatitude = "";
+        String calamityName = "";
+        String calamityDescription = "";
+        String calamityDate = "";
+        String calamityDanger = "";
+        int regionid = 0;
+        int personid = 0;
+        
+        while (parser.hasNext()) 
+        {
+                if (event.equals(Event.KEY_NAME)) {
+                    String keyname = parser.getString();
+                    event = parser.next();
+                      switch (keyname) 
+                      {
+                        case "calamityid":
+                        calamityid = parser.getInt(); 
+                        break;
+                    case "calamitylongtitude":
+                        calamityLongtitude = parser.getString();
+                        break;   
+                    case "calamitylatitude":
+                        calamityLatitude = parser.getString();
+                        break;
+                    case "calamityname":
+                        calamityName = parser.getString();
+                        break;
+                     case "calamitydescription":
+                        calamityDescription = parser.getString();
+                        break;
+                      case "calamitydate":
+                        calamityDate = parser.getString();
+                        break;
+                      case "calamitydanger":
+                        calamityDanger = parser.getString();
+                        break;
+                      case "regionid":
+                        regionid = parser.getInt();
+                        break;     
+                      case "personid":
+                        personid = parser.getInt();
+                        break;  
+                    default:
+                        break;
+                    }
+                  
+                    event = parser.next();
+                } 
+                else if(event == Event.END_OBJECT)
+                {
+                    Incident newIncident = new Incident();
+                newIncident.setName(calamityName);
+                newIncident.setId(calamityid);
+                newIncident.setLatitude(calamityLatitude);
+                newIncident.setLongitude(calamityLongtitude);
+                newIncident.setDate(new Date());
+                newIncident.setDescription(calamityDescription);
+                newIncident.setExplosiondanger(calamityDanger);
+                
+                this.admin.getIncidents().add(newIncident); 
+                
+                   event = parser.next();
+                }
+                else 
+                {
+                    event = parser.next();
+                }
+ 
+            }  
+        
+        lvIncidents2.setItems(this.admin.getIncidents());
+
     }
 
     /**
@@ -552,5 +648,22 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         this.admin = null;
         
     
+    }
+
+    @Override
+    public void proces(Message message) 
+    {
+        System.out.println("VOOR IF ");
+        if(message.getType().equals("retrieveallcalamitiesreply"))
+        {
+            System.out.println("IN IF ");
+            this.parseCalamityObjects(message.getText());
+        }
+        else
+        {
+            System.out.println("NA IF ");
+            
+        }
+        
     }
 }

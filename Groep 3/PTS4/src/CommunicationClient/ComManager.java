@@ -88,7 +88,8 @@ public class ComManager implements CommMessageListener{
 
     @Override
     public void recieved(Message message) {
-        for (MessageListener ml : this.listeners) {
+        for (MessageListener ml : this.listeners) 
+        {
             ml.proces(message);
         }
     }

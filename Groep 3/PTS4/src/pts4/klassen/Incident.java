@@ -15,6 +15,66 @@ import java.util.Date;
 public class Incident {
     
     private String name;
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setFire(String fire) {
+        this.fire = fire;
+    }
+
+    public void setViolent(String violent) {
+        this.violent = violent;
+    }
+
+    public void setUrgent(String urgent) {
+        this.urgent = urgent;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public String getToxicsubstances() {
+        return toxicsubstances;
+    }
+
+    public void setToxicsubstances(String toxicsubstances) {
+        this.toxicsubstances = toxicsubstances;
+    }
+
+    public String getExplosiondanger() {
+        return explosiondanger;
+    }
+
+    public void setExplosiondanger(String explosiondanger) {
+        this.explosiondanger = explosiondanger;
+    }
+
+    public String getNumbercasualties() {
+        return numbercasualties;
+    }
+
+    public void setNumbercasualties(String numbercasualties) {
+        this.numbercasualties = numbercasualties;
+    }
     private String description;
     private String longitude;
     private String latitude;
@@ -35,6 +95,8 @@ public class Incident {
         this.name = name;
         this.description = description;
     }
+    
+
     
     public Incident(String longitude, String latitude, String name, String description, String toxicSubstances, String explosionDanger, String fire, String numberCasualties, String violent, String urgent, int id, Date date)
     {
@@ -61,6 +123,10 @@ public class Incident {
         this.latitude = latitude;
         this.id = Id;
         this.date = date;
+    }
+    
+    public Incident()
+    {
     }
     
     public String getName() {

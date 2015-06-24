@@ -69,10 +69,19 @@ public class LogManager implements MessageListener {
         comManager.addMessage(salami); 
     }
     
-    public void parseCalamityWithNameResponse(Message message)
+    public void getAllCalamities()
     {
-        
-    }   
+        MessageBuilder messageBuilder = new MessageBuilder();
+        Message salami = messageBuilder.buildRetrieveAllCalamitiesMessage();
+        comManager.addMessage(salami);
+    }
+    
+    public void getLogs(int personid)
+    {
+        MessageBuilder messageBuilder = new MessageBuilder();
+        Message salami = messageBuilder.buildRetrieveLogs(personid);
+        comManager.addMessage(salami); 
+    }  
     
     @Override
     public void proces(Message message)
@@ -85,6 +94,7 @@ public class LogManager implements MessageListener {
         {
             System.out.println("2");
         }
+
     }
     
     public void insertLocation(String name, String longtitude, String latitude, int locationtypeid)
