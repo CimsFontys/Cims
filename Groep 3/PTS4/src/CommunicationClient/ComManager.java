@@ -28,7 +28,7 @@ public class ComManager implements CommMessageListener{
     private MessageRecieverThread mrt;
     private MessageSenderThread mst;
     
-    private static final String host = "145.144.241.206";
+    private static final String host = "145.144.240.224";
     private static final int portNumber = 9000;
     private Socket socket;
     

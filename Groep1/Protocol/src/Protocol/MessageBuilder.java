@@ -57,6 +57,8 @@ public class MessageBuilder
     public static final String RetrieveMessagesReply = "retrievemessagesreply"; //
     public static final String RetrieveCalamityWithName = "retrievecalamitywithname";
     public static final String RetrieveCalamityWithNameReply = "retrievecalamitywithnamereply";
+    public static final String RetrievePersonIdFromName = "retrievepersonidfromname";
+    public static final String RetrievePersonIdFromNameReply = "'retrievepersonidfromnamereply";
     
     private static final String token = "-";
     
@@ -73,6 +75,30 @@ public class MessageBuilder
     {
         
     }  
+    
+    public Message buildRetrievePersonIdFromName(String name)
+    {
+        JsonObjectBuilder jb = Json.createObjectBuilder();
+        
+        jb.add("username", name);
+            
+        JsonObject jo = jb.build();
+        
+        Message message = new Message();
+        message.setText(jo.toString());
+        message.setType(RetrievePersonIdFromName);
+        
+        return message;
+    }
+    
+    public Message buildRetrievePersonIdFromNameReply(String json)
+    {
+        Message message = new Message();
+        message.setText(json);
+        message.setType(RetrievePersonIdFromNameReply);
+        
+        return message;
+    }
     
     public Message buildRetrieveCalamityInformation(int calamityid)
     {

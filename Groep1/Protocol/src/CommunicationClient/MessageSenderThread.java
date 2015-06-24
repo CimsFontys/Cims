@@ -7,6 +7,7 @@
 package CommunicationClient;
 
 import Protocol.Message;
+import Protocol.Salt;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -24,6 +25,8 @@ public class MessageSenderThread implements Runnable {
     private ObjectOutputStream oos;
     private boolean running = true;
     
+        private Salt salt = Salt.getInstance();
+    
     private List<Message> toSend;
     
     public MessageSenderThread(ObjectOutputStream oos) {
@@ -33,6 +36,7 @@ public class MessageSenderThread implements Runnable {
     
     public void addMessage(Message message)
     {
+        
         this.toSend.add(message);
     }
     
@@ -46,10 +50,12 @@ public class MessageSenderThread implements Runnable {
         while(running){
             if (toSend.size() > 0)
             { 
-                try {
-                    this.oos.writeObject(this.toSend.get(0));
+                try 
+                {
+                    this.oos.writeObject(salt.encryptObject(this.toSend.get(0)));
                     this.toSend.remove(0);
-                } catch (IOException ex) {
+                } 
+                catch (IOException ex) {
                     Logger.getLogger(MessageSenderThread.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }

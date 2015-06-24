@@ -56,7 +56,7 @@ public class ConfigurationController implements Initializable {
     private ComboBox<String> VoorzieningCB;
         
     @FXML 
-    private ComboBox<String> PersoneelCB;
+    private ComboBox<String> cbLogNames;
     
     @FXML
     private ListView LogListView; 
@@ -70,7 +70,7 @@ public class ConfigurationController implements Initializable {
         VoorzieningCB.getItems().add("Hospital");
         VoorzieningCB.getItems().add("Fire department");
         
-        PersoneelCB.getItems().clear();
+        cbLogNames.getItems().clear();
         SetPeopleInCB();
     }
     
@@ -97,9 +97,9 @@ public class ConfigurationController implements Initializable {
         }
        
              
-
+           
             dbcon.insertLocation(VoorNaamTB.getText(), VoorLonTB.getText(), VoorLatTB.getText(), emergencytype);
-            LogManager.getInstance().insertLog("Facility (" + facilityType + ") has been added: Name:" + VoorNaamTB.getText() + "Longitude: " + VoorLonTB.getText() + ", Latitude: " + VoorLatTB.getText() );
+            LogManager.getInstance().insertLog("Facility (" + facilityType + "): '" + VoorNaamTB.getText() + "' has been added!");
 
     }
     
@@ -161,7 +161,7 @@ public class ConfigurationController implements Initializable {
         
                 for(int i = 0; i < PersonID.size(); i++)
                 {
-                    PersoneelCB.getItems().add(PersonID.get(i) + ". " + Firstnames.get(i) + " " + Middlenames.get(i) + Lastnames.get(i));
+                    cbLogNames.getItems().add(PersonID.get(i) + ". " + Firstnames.get(i) + " " + Middlenames.get(i) + Lastnames.get(i));
                 }
                 
                 
@@ -171,7 +171,7 @@ public class ConfigurationController implements Initializable {
     @FXML
     public void SetLogList()
     {
-        String selectedItem = PersoneelCB.getSelectionModel().getSelectedItem();
+        String selectedItem = cbLogNames.getSelectionModel().getSelectedItem();
         int personindex = selectedItem.indexOf(".");
         int selectedPersonID = Integer.parseInt(selectedItem.substring(0, personindex));
         System.out.println(selectedItem.substring(0, personindex));
@@ -199,7 +199,7 @@ public class ConfigurationController implements Initializable {
                         logdate = parser.getString(); 
                         FoundDates.add(logdate);
                         break;
-                    case "description":
+                    case "logdescription":
                         foundlog = parser.getString();
                         FoundLogStrings.add(foundlog);
                         break;        
@@ -226,7 +226,8 @@ public class ConfigurationController implements Initializable {
    public void btnLogOut_Click() throws IOException
    {
         Stage currentstage = (Stage) btnLogOut.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Inloggen.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Login.fxml"));
+        LogManager.getInstance().insertLog("User has logged out");
         Parent root = (Parent) fxmlLoader.load();
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
