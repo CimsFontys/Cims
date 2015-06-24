@@ -13,6 +13,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -101,6 +102,7 @@ public class Gmaps {
     private Integer i = 0;
     public List<Painter<JXMapViewer>> painters;
     private Server server;
+    public Simulation simulations;
 
     public Gmaps(GUIController gui, Server server) {
         this.gui = gui;
@@ -233,7 +235,10 @@ public class Gmaps {
 
     public void draw() {
         // Create a compound painter that uses both the route-painter and the waypoint-painter
-
+        if (simulations != null)
+        {
+        painters.add(simulations);
+        }
         painters.add(waypointPainter2);
         painters.add(waypointPainter);
         painters.add(waypointPainter3);
@@ -253,7 +258,7 @@ public class Gmaps {
 
     }
 
-   public void createStage() {
+    public void createStage() {
 
         GeoPosition Utrecht = new GeoPosition(52.0907370, 5.1214200);
         /*// Create a waypoint painter that takes all the waypoints
@@ -270,25 +275,24 @@ public class Gmaps {
         //mapViewer.addMouseListener(new CenterMapListener(mapViewer));
         mapViewer.addMouseWheelListener(new ZoomMouseWheelListenerCenter(mapViewer));
         mapViewer.addKeyListener(new PanKeyListener(mapViewer));
-        
+
         mapViewer.addMouseListener(new MouseAdapter() {
 
             @Override
             public void mouseClicked(MouseEvent me) {
-                
+
                 //Rechter muisknop klik
-                if (me.getButton() == MouseEvent.BUTTON3)
-                {
+                if (me.getButton() == MouseEvent.BUTTON3) {
                     GeoPosition mousepoint = mapViewer.convertPointToGeoPosition(me.getPoint());
                     Double lat1 = mousepoint.getLatitude();
                     Double lng1 = mousepoint.getLongitude();
                     Double lat2;
                     Double lng2;
-                    
+
                     for (MyWaypoint u : units) {
                         lat2 = u.getPosition().getLatitude();
                         lng2 = u.getPosition().getLongitude();
-                    
+
                         if (UnitControl.distFrom(lat1.floatValue(), lng1.floatValue(), lat2.floatValue(), lng2.floatValue()) < (mapViewer.getZoom() * mapViewer.getZoom() * mapViewer.getZoom() * 2)) {
                             Platform.runLater(new Runnable() {
 
@@ -299,8 +303,7 @@ public class Gmaps {
                                     msg.showAndWait();
 
                                     if (msg.getMessageBoxResult() == MessageBoxResult.YES) {
-                                        
-                                        
+
                                         try {
                                             if (gui.messageToUnit(u.getLabel()) == false) {
                                                 MessageBox msg2 = new MessageBox("Error connecting to unit", MessageBoxType.OK_ONLY);
@@ -309,7 +312,7 @@ public class Gmaps {
                                         } catch (IOException ex) {
                                             Logger.getLogger(Gmaps.class.getName()).log(Level.SEVERE, null, ex);
                                         }
-                                        
+
                                     } else {
                                         //msg.close();
                                     }
@@ -319,95 +322,102 @@ public class Gmaps {
                         }
                     }
 
-                }
-                else {
-                if (createUnit == true) {
-                    Color kleur = null;
-                    if (type == 1) {
-                        kleur = Color.cyan;
-                    }
-                    if (type == 2) {
-                        kleur = Color.YELLOW;
-                    }
-                    if (type == 3) {
-                        kleur = Color.RED;
-                    }
-                    GeoPosition plek = mapViewer.convertPointToGeoPosition(me.getPoint());
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            gui.setUnit(plek.getLongitude(), plek.getLatitude());
+                } else {
+                    if (createUnit == true) {
+                        Color kleur = null;
+                        if (type == 1) {
+                            kleur = Color.cyan;
                         }
-                    });
+                        if (type == 2) {
+                            kleur = Color.YELLOW;
+                        }
+                        if (type == 3) {
+                            kleur = Color.RED;
+                        }
+                        GeoPosition plek = mapViewer.convertPointToGeoPosition(me.getPoint());
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                gui.setUnit(plek.getLongitude(), plek.getLatitude());
+                            }
+                        });
 
-                    for (MyWaypoint p : orders) {
-                        if (p.getLabel().equals(id)) {
-                            orders.remove(p);
+                        for (MyWaypoint p : orders) {
+                            if (p.getLabel().equals(id)) {
+                                orders.remove(p);
+                            }
                         }
-                    }
-                    orders.add(new MyWaypoint(id, kleur, plek));
-                    for (Unit a : EmergencyUnits) {
-                        if (a.getName().equals(id)) {
-                            GeoPosition plek2 = new GeoPosition(a.getLatidude(), a.getLongitude());
-                            ChatMessage chat = new ChatMessage(gui.getIncidentorder() + "\n" + gui.getUnitDescription(), "Meldkamer", id);
-                            //server.sendMessage(chat);
-                            a.setIncident(incidentstring);
-                            new Animation(plek, plek2, id, orders, units, Gmaps.this, waypointPainter3);
+                        orders.add(new MyWaypoint(id, kleur, plek));
+                        for (Unit a : EmergencyUnits) {
+                            if (a.getName().equals(id)) {
+                                GeoPosition plek2 = new GeoPosition(a.getLatidude(), a.getLongitude());
+                                ChatMessage chat = new ChatMessage(gui.getIncidentorder() + "\n" + gui.getUnitDescription(), "Meldkamer", id);
+                                //server.sendMessage(chat);
+                                a.setIncident(incidentstring);
+                                new Animation(plek, plek2, id, orders, units, Gmaps.this, waypointPainter3);
+                            }
                         }
+                        createUnit = false;
+                        // Create a waypoint painter that takes all the waypoints
+                        waypointPainter3.setWaypoints(orders);
+                        waypointPainter3.setRenderer(new FancyWaypointRenderer());
+                        draw();
                     }
-                    createUnit = false;
-                    // Create a waypoint painter that takes all the waypoints
-                    waypointPainter3.setWaypoints(orders);
-                    waypointPainter3.setRenderer(new FancyWaypointRenderer());
-                    draw();
-                }
 
-                if (simulation == true) {
-                    Color kleur = null;
-                    if (type == 1) {
-                        kleur = Color.cyan;
-                    }
-                    if (type == 2) {
-                        kleur = Color.YELLOW;
-                    }
-                    if (type == 3) {
-                        kleur = Color.RED;
-                    }
-                    GeoPosition plek = mapViewer.convertPointToGeoPosition(me.getPoint());
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            gui.setUnit(plek.getLongitude(), plek.getLatitude());
+                    if (simulation == true) {
+                        Color kleur = null;
+                        if (type == 1) {
+                            kleur = Color.cyan;
                         }
-                    });
+                        if (type == 2) {
+                            kleur = Color.YELLOW;
+                        }
+                        if (type == 3) {
+                            kleur = Color.RED;
+                        }
+                        GeoPosition plek = mapViewer.convertPointToGeoPosition(me.getPoint());
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                gui.setUnit(plek.getLongitude(), plek.getLatitude());
+                            }
+                        });
 
-                    for (MyWaypoint p : orders) {
-                        if (p.getLabel().equals(id)) {
-                            orders.remove(p);
+                        for (MyWaypoint p : orders) {
+                            if (p.getLabel().equals(id)) {
+                                orders.remove(p);
+                            }
                         }
-                    }
-                    orders.add(new MyWaypoint(id, kleur, plek));
-                    for (Unit a : EmergencyUnits) {
-                        if (a.getName().equals(id)) {
-                            GeoPosition plek2 = new GeoPosition(a.getLatidude(), a.getLongitude());
-                            //ChatMessage chat = new ChatMessage(gui.getIncidentorder() + "\n" + gui.getUnitDescription(), "Meldkamer", id);
-                            //server.sendMessage(chat);
-                            a.setIncident(incidentstring);
-                            new Animation(plek, plek2, id, orders, units, Gmaps.this, waypointPainter3);
+                        orders.add(new MyWaypoint(id, kleur, plek));
+                        for (Unit a : EmergencyUnits) {
+                            if (a.getName().equals(id)) {
+                                GeoPosition plek2 = new GeoPosition(a.getLatidude(), a.getLongitude());
+                                //ChatMessage chat = new ChatMessage(gui.getIncidentorder() + "\n" + gui.getUnitDescription(), "Meldkamer", id);
+                                //server.sendMessage(chat);
+                                a.setIncident(incidentstring);
+                                Point2D fire = mapViewer.getTileFactory().geoToPixel(plek, mapViewer.getZoom());
+                                simulations = new Simulation(plek, plek2, id, orders, units, Gmaps.this, waypointPainter3);
+                                new SimulationAnimation(simulations, plek, plek2, id, orders, units, Gmaps.this, waypointPainter3);
+                                
+                            }
                         }
+                        createUnit = false;
+                        // Create a waypoint painter that takes all the waypoints
+                        waypointPainter3.setWaypoints(orders);
+                        waypointPainter3.setRenderer(new FancyWaypointRenderer());
+                        /*
+                         List<Painter<JXMapViewer>> painters = new ArrayList<Painter<JXMapViewer>>();
+                         painters.add(simulations);
+                         CompoundPainter<JXMapViewer> painter = new CompoundPainter<JXMapViewer>(painters);
+                                
+                         mapViewer.setOverlayPainter(painter);*/
+                        draw();
+                        simulation = false;
                     }
-                    createUnit = false;
-                    // Create a waypoint painter that takes all the waypoints
-                    waypointPainter3.setWaypoints(orders);
-                    waypointPainter3.setRenderer(new FancyWaypointRenderer());
-                    draw();
                 }
             }
         }
-    }
-
-
-); // end MouseAdapter
+        ); // end MouseAdapter
 
     }
 

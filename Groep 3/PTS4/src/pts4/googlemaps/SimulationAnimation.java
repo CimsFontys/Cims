@@ -25,7 +25,7 @@ import pts4.klassen.Unit;
  *
  * @author Sander
  */
-public class Animation {
+public class SimulationAnimation {
 
     private Timer timer;
     private GeoPosition goal, unit;
@@ -35,8 +35,9 @@ public class Animation {
     private JXMapViewer map;
     private double longitude, latitude, diflongitude, diflatitude;
     private WaypointPainter<MyWaypoint> waypointpainter;
+    private Simulation simulation;
 
-    public Animation(GeoPosition goal, GeoPosition unit, String id, Set<MyWaypoint> orders, Set<MyWaypoint> units, Gmaps gmap, WaypointPainter<MyWaypoint> waypointpainter) {
+    public SimulationAnimation(Simulation simulation, GeoPosition goal, GeoPosition unit, String id, Set<MyWaypoint> orders, Set<MyWaypoint> units, Gmaps gmap, WaypointPainter<MyWaypoint> waypointpainter) {
         this.goal = goal;
         this.unit = unit;
         this.orders = orders;
@@ -46,6 +47,8 @@ public class Animation {
         this.longitude = unit.getLongitude();
         this.latitude = unit.getLatitude();
         this.waypointpainter = waypointpainter;
+        this.simulation = simulation;
+        
         timer = new Timer();
         timer.schedule(new CrunchifyReminder(), 0, // initial delay
                 1 * 1000); // subsequent rate
@@ -97,7 +100,7 @@ public class Animation {
                             }
                         }
                         //gmap.sendMessage(id + "Is op locatie gearriveerd", id, "Meldkamer");
-                       
+                       simulation.unitArrived();
                         timer.cancel();
                     }
 
