@@ -103,6 +103,8 @@ public class GUIController implements MessageListener, Initializable, MapChangeL
     TextArea txtDescription;
 
     @FXML
+    Button btnweather;
+    @FXML
     ListView lvunitsactief;
     @FXML
     Button btnLocation;
@@ -440,6 +442,10 @@ public class GUIController implements MessageListener, Initializable, MapChangeL
        g.incidentstring = cbincidentsimulation.getSelectionModel().getSelectedItem().toString();
     }
     
+    public void selectWeather()
+    {
+        g.weather = true;
+    }
     /**
      * Occurs once an incident is selected in the listView lvIncidents2
      */
