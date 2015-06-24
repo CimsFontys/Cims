@@ -47,14 +47,13 @@ public class Weather {
         summary = jsoneind.getString("summary");
         Platform.runLater(new Runnable() {
 
-                                @Override
-                                public void run() {
+            @Override
+            public void run() {
 
-                                    MessageBox msg = new MessageBox((int) temprature + "dgrees and " + summary, MessageBoxType.OK_ONLY);
-                                    msg.showAndWait();
-                                }
+                MessageBox msg = new MessageBox((int) temprature + "dgrees and " + summary, MessageBoxType.OK_ONLY);
+                msg.showAndWait();
+            }
         });
-                
 
     }
 
