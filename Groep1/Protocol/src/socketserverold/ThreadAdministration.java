@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package socketserver;
+package socketserverold;
 
 import java.util.ArrayList;
 
