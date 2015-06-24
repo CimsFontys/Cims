@@ -201,7 +201,8 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         fxmlLoader.setBuilderFactory(new JavaFXBuilderFactory());
 
         Parent root = (Parent) (Node) fxmlLoader.load(location1.openStream());
-
+                LogManager.getInstance().insertLog("A chat to communicate with Unit: " + unit + " has opened");
+         
         ServerGUIController ctrl1 = (ServerGUIController) fxmlLoader.getController();
         ctrl1.setServer(admin.getServer(), unit);
 
@@ -239,6 +240,7 @@ public class GUIController implements Initializable, MapChangeListener<String, C
                 if (a.equals(lvActiveIncidents.getSelectionModel().getSelectedItem())) {
 
                     a.setSolvedBy(tfEndSolvedBy.getText());
+                    LogManager.getInstance().insertLog("Incident '" + a.getName() + "' has been solved by '" + a.getSolvedBy() + "'");
                     EndedIncidents.add(a);
                     incidents.remove(a);
                     g.DrawIncidents();
@@ -283,9 +285,12 @@ public class GUIController implements Initializable, MapChangeListener<String, C
     public void setProvincie() throws MalformedURLException {
 
         String selected = cbProvincies.getValue().toString();
-        if (selected.equalsIgnoreCase("Nederland")) {
+        if (selected.equalsIgnoreCase("Nederland")) 
+        {
+            LogManager.getInstance().insertLog("User has loaded pending incidents from the whole country");
             admin.loadFromRSSFeed();
         } else {
+            LogManager.getInstance().insertLog("User has loaded pending incidents from the province: " + selected);
             admin.loadFromRSSFeed(selected);
         }
         admin.syncAcceptedAndPending();
@@ -301,6 +306,7 @@ public class GUIController implements Initializable, MapChangeListener<String, C
     public void createSimulation()
     {
        g.simulation = true;
+       LogManager.getInstance().insertLog("Employee has started a simulation");
        g.id = cbunitsimulation.getSelectionModel().getSelectedItem().toString();
        g.incidentstring = cbincidentsimulation.getSelectionModel().getSelectedItem().toString();
     }
@@ -358,6 +364,7 @@ public class GUIController implements Initializable, MapChangeListener<String, C
             if (a.equals(lvPendingIncidents.getSelectionModel().getSelectedItem())) {
 
                 admin.addIncident(a);
+                LogManager.getInstance().insertLog("The incident: " + "'" +  a.getName() + "'" + " has been accepted");
                 admin.removePendingIncident(a);
                 taPendingName.setText("");
                 taPendingDescription.setText("");
@@ -377,6 +384,8 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         try {
             Incident incident = new Incident(longitude, latitude, name, description);
             admin.addIncident(incident);
+            LogManager.getInstance().insertLog("The incident: " + "'" + incident.getName() + "'" + " has been added");
+
             g.addIncidentOnMap(incident);
             this.initComboboxes();
         } catch (Exception e) {
@@ -429,7 +438,7 @@ public class GUIController implements Initializable, MapChangeListener<String, C
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(location1);
         fxmlLoader.setBuilderFactory(new JavaFXBuilderFactory());
-
+        LogManager.getInstance().insertLog("The chat screen has been opened");
         Parent root = (Parent) (Node) fxmlLoader.load(location1.openStream());
 
         ServerGUIController ctrl1 = (ServerGUIController) fxmlLoader.getController();
@@ -455,6 +464,7 @@ public class GUIController implements Initializable, MapChangeListener<String, C
     public void btnLogOut_Click() throws IOException {
         Stage currentstage = (Stage) btnLogOut.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Inloggen.fxml"));
+        LogManager.getInstance().insertLog("User has logged out");
         Parent root = (Parent) fxmlLoader.load();
         Stage stage = new Stage();
         stage.setScene(new Scene(root));

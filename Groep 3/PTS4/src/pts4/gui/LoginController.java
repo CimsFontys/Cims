@@ -118,6 +118,7 @@ public class LoginController implements Initializable, MessageListener
             String conf = response.substring(index);          
             if (!conf.contains("YES"))
             {
+                LogManager.getInstance().insertLog("User has logged in, will be directed to the main application");
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("GUIFX.fxml"));
                 Parent root = (Parent) fxmlLoader.load();
                 Stage stage = new Stage();
@@ -126,8 +127,10 @@ public class LoginController implements Initializable, MessageListener
                 currentstage.close();
             }
             else
+
             {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Configuratie.fxml"));
+                LogManager.getInstance().insertLog("User has logged in, will be directed to the configuration screen");
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Configuration.fxml"));
                 Parent root = (Parent) fxmlLoader.load();
                 Stage stage = new Stage();
                 stage.setScene(new Scene(root));  
