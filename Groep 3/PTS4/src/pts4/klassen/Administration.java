@@ -4,8 +4,10 @@ import chat.EmergencyUnit;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Date;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
@@ -166,6 +168,7 @@ public class Administration {
         long yourmilliseconds = System.currentTimeMillis();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy, HH:mm");
         Date resultdate = new Date(yourmilliseconds);
+        LogManager.getInstance().insertCalamity(i.getLongitude(), i.getLatitude(), i.getId(), i.getName(), i.getDescription(), new java.util.Date(), i.getUrgent(), "");
         //databaseconn.insertCalamity(i.getLongitude(), i.getLatitude(), i.getId(), i.getName(), i.getDescription(), i.getDate(), i.getExplosion(), i.getFire(), i.getToxicity(), i.getUrgent(), i.getViolent());
     }
 
