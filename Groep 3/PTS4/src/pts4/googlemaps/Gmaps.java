@@ -103,6 +103,8 @@ public class Gmaps {
     public List<Painter<JXMapViewer>> painters;
     private Server server;
     public Simulation simulations;
+    private SelectionAdapter sa;
+    private SelectionPainter sp;
 
     public Gmaps(GUIController gui, Server server) {
         this.gui = gui;
@@ -124,6 +126,8 @@ public class Gmaps {
         mapViewer.setTileFactory(tileFactory);
 
         //Calimiteiten toevoegen.
+        sa = new SelectionAdapter(mapViewer);
+        sp = new SelectionPainter(sa);
         waypointPainter = new WaypointPainter<Waypoint>();
         waypointPainter2 = new WaypointPainter<MyWaypoint>();
         waypointPainter3 = new WaypointPainter<MyWaypoint>();
@@ -137,7 +141,9 @@ public class Gmaps {
             waypoints.add(new DefaultWaypoint(plek));
             // Create a waypoint painter that takes all the waypoints
         }
+
         waypointPainter.setWaypoints(waypoints);
+
         mapViewer.setOverlayPainter(waypointPainter);
         for (Unit a : EmergencyUnits) {
             GeoPosition spot = new GeoPosition(a.getLatidude(), a.getLongitude());
@@ -157,7 +163,9 @@ public class Gmaps {
             waypointPainter2.setRenderer(new FancyWaypointRenderer());
             // Create a waypoint painter that takes all the waypoints
         }
+
         createStage();
+
         draw();
 
         /*// Create waypoints from the geo-positions
@@ -170,7 +178,7 @@ public class Gmaps {
          waypointPainter.setRenderer(new FancyWaypointRenderer());
 
          mapViewer.setOverlayPainter(waypointPainter);*/
-        // Display the viewer in a JFrame
+    // Display the viewer in a JFrame
     }
 
     public void drawUnits() {
@@ -235,9 +243,8 @@ public class Gmaps {
 
     public void draw() {
         // Create a compound painter that uses both the route-painter and the waypoint-painter
-        if (simulations != null)
-        {
-        painters.add(simulations);
+        if (simulations != null) {
+            painters.add(simulations);
         }
         painters.add(waypointPainter2);
         painters.add(waypointPainter);
@@ -270,6 +277,10 @@ public class Gmaps {
 
         // Add interactions
         MouseInputListener mia = new PanMouseInputListener(mapViewer);
+
+        mapViewer.addMouseListener(sa);
+        mapViewer.addMouseMotionListener(sa);
+        mapViewer.setOverlayPainter(sp);
         mapViewer.addMouseListener(mia);
         mapViewer.addMouseMotionListener(mia);
         //mapViewer.addMouseListener(new CenterMapListener(mapViewer));
@@ -308,9 +319,11 @@ public class Gmaps {
                                             if (gui.messageToUnit(u.getLabel()) == false) {
                                                 MessageBox msg2 = new MessageBox("Error connecting to unit", MessageBoxType.OK_ONLY);
                                                 msg2.show();
+
                                             }
                                         } catch (IOException ex) {
-                                            Logger.getLogger(Gmaps.class.getName()).log(Level.SEVERE, null, ex);
+                                            Logger.getLogger(Gmaps.class
+                                                    .getName()).log(Level.SEVERE, null, ex);
                                         }
 
                                     } else {
@@ -398,7 +411,7 @@ public class Gmaps {
                                 Point2D fire = mapViewer.getTileFactory().geoToPixel(plek, mapViewer.getZoom());
                                 simulations = new Simulation(plek, plek2, id, orders, units, Gmaps.this, waypointPainter3);
                                 new SimulationAnimation(simulations, plek, plek2, id, orders, units, Gmaps.this, waypointPainter3);
-                                
+
                             }
                         }
                         createUnit = false;

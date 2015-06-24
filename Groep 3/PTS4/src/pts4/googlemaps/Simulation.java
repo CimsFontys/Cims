@@ -41,7 +41,6 @@ public class Simulation implements Painter<JXMapViewer> {
     private JXMapViewer map;
     private double longitude, latitude, diflongitude, diflatitude;
     private WaypointPainter<MyWaypoint> waypointpainter;
-    private Circle g;
     private boolean bla = false;
     private boolean antiAlias = true;
     private int lenght;
