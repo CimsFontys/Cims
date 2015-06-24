@@ -34,4 +34,9 @@ public class AudioMessage extends ChatMessage
     {
         this.audiopath = audiopath;
     }
+    
+    public void setAudiofile(byte[] audiofile) 
+    {
+        this.audiofile = audiofile;
+    }
 }
