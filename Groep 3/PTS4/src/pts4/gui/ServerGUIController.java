@@ -60,6 +60,9 @@ public class ServerGUIController extends AnchorPane implements Initializable {
         
     }
     
+    /**
+     * Occurs once the btnChat button is pressed. Will send a message depending on it's type. 
+     */
     @FXML
     public void btnChat_Click()
     {
@@ -79,6 +82,13 @@ public class ServerGUIController extends AnchorPane implements Initializable {
         }
     }
     
+    /**
+     * Opens an audio clip if the selected chat message is one. 
+     * @param arg0
+     * @throws LineUnavailableException
+     * @throws IOException
+     * @throws UnsupportedAudioFileException 
+     */
     @FXML
     public void outputItem_Click(MouseEvent arg0) throws LineUnavailableException, IOException, UnsupportedAudioFileException
     {
@@ -93,6 +103,9 @@ public class ServerGUIController extends AnchorPane implements Initializable {
         }        
     }
     
+    /**
+     * Starts the timer to for recording a new audio message
+     */
     public void btnRecordNew_Click()
     {
         if(!pressed)
@@ -120,6 +133,9 @@ public class ServerGUIController extends AnchorPane implements Initializable {
         }
     }
     
+    /**
+     * Timer for audio messages.
+     */
     private void startTimer()
     {
         timer = new Timer();
@@ -142,6 +158,10 @@ public class ServerGUIController extends AnchorPane implements Initializable {
         timer.schedule(task, 0 , 1000);
     }
     
+    /**
+     * Adds an item(chat message) to the output listView
+     * @param item a text- or audio message that has been received.
+     */
     public void AddItemListview(String item)
     {
         Platform.runLater(new Runnable() {
@@ -154,6 +174,11 @@ public class ServerGUIController extends AnchorPane implements Initializable {
         });
     }
     
+    /**
+     * Serves as configuration for chatting with units.
+     * @param s the server used for communications.
+     * @param communicator the unit which the server wants to communicate with.
+     */
     public void setServer(Server s, String communicator)
     {
         this.server = s;
