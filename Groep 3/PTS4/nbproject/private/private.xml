@@ -6,6 +6,8 @@
             <file>file:/C:/Users/Sander/Documents/NetBeansProjects/Cims/Groep%203/PTS4/src/pts4/chatserver/ServerThread.java</file>
             <file>file:/C:/Users/Sander/Documents/NetBeansProjects/Cims/Groep%203/PTS4/src/pts4/googlemaps/RoutePainter.java</file>
             <file>file:/C:/Users/Sander/Documents/NetBeansProjects/Cims/Groep%203/PTS4/src/pts4/klassen/Unit.java</file>
+            <file>file:/C:/Users/Sander/Documents/NetBeansProjects/Cims/Groep%203/PTS4/src/pts4/googlemaps/MyWaypoint.java</file>
+            <file>file:/C:/Users/Sander/Documents/NetBeansProjects/Cims/Groep%203/PTS4/src/pts4/googlemaps/SelectionAdapter.java</file>
             <file>file:/C:/Users/Sander/Documents/NetBeansProjects/Cims/Groep%203/PTS4/src/CommunicationClient/ComManager.java</file>
             <file>file:/C:/Users/Sander/Documents/NetBeansProjects/Cims/Groep%203/PTS4/src/chat/EmergencyUnit.java</file>
             <file>file:/C:/Users/Sander/Documents/NetBeansProjects/Cims/Groep%203/PTS4/src/pts4/chatserver/Server.java</file>
@@ -15,13 +17,14 @@
             <file>file:/C:/Users/Sander/Documents/NetBeansProjects/Cims/Groep%203/PTS4/src/pts4/gui/Login.fxml</file>
             <file>file:/C:/Users/Sander/Documents/NetBeansProjects/Cims/Groep%203/PTS4/src/pts4/klassen/Administration.java</file>
             <file>file:/C:/Users/Sander/Documents/NetBeansProjects/Cims/Groep%203/PTS4/src/pts4/googlemaps/Simulation.java</file>
-            <file>file:/C:/Users/Sander/Documents/NetBeansProjects/Cims/Groep%203/PTS4/src/pts4/gui/ConfiguratieController.java</file>
             <file>file:/C:/Users/Sander/Documents/NetBeansProjects/Cims/Groep%203/PTS4/src/pts4/googlemaps/Gmaps.java</file>
             <file>file:/C:/Users/Sander/Documents/NetBeansProjects/Cims/Groep%203/PTS4/src/pts4/googlemaps/Animation.java</file>
             <file>file:/C:/Users/Sander/Documents/NetBeansProjects/Cims/Groep%203/PTS4/src/chat/ChatMessage.java</file>
             <file>file:/C:/Users/Sander/Documents/NetBeansProjects/Cims/Groep%203/PTS4/src/pts4/gui/GUIController.java</file>
             <file>file:/C:/Users/Sander/Documents/NetBeansProjects/Cims/Groep%203/PTS4/src/pts4/klassen/Incident.java</file>
             <file>file:/C:/Users/Sander/Documents/NetBeansProjects/Cims/Groep%203/PTS4/src/pts4/database/DatabaseConnector.java</file>
+            <file>file:/C:/Users/Sander/Documents/NetBeansProjects/Cims/Groep%203/PTS4/src/pts4/googlemaps/SimulationAnimation.java</file>
+            <file>file:/C:/Users/Sander/Documents/NetBeansProjects/Cims/Groep%203/PTS4/src/pts4/googlemaps/SelectionPainter.java</file>
             <file>file:/C:/Users/Sander/Documents/NetBeansProjects/Cims/Groep%203/PTS4/src/pts4/chatserver/Client.java</file>
             <file>file:/C:/Users/Sander/Documents/NetBeansProjects/Cims/Groep%203/PTS4/src/pts4/gui/GUIFX.fxml</file>
         </group>

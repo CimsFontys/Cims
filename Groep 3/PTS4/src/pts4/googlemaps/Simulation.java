@@ -46,7 +46,7 @@ public class Simulation implements Painter<JXMapViewer> {
     private int lenght;
     private int height;
     private Color color;
-    private Boolean arrived;
+    private Boolean arrived = false;
 
     public Simulation(GeoPosition fire, GeoPosition unit, String id, Set<MyWaypoint> orders, Set<MyWaypoint> units, Gmaps gmap, WaypointPainter<MyWaypoint> waypointpainter) {
         this.fire = fire;
@@ -91,12 +91,13 @@ public class Simulation implements Painter<JXMapViewer> {
 
                         @Override
                         public void run() {
-                            if (!arrived) {
-                                lenght = (int) (lenght + 0.5);
-                                height = (int) (height + 0.5);
-                            } else {
-                                lenght = (int) (lenght - 3);
-                                height = (int) (height - 3);
+                            if (arrived == false) {
+                                lenght = (int) (lenght + 1);
+                                height = (int) (height + 1);
+                            } 
+                            if (arrived == true)    {
+                                lenght = (int) (lenght - 1);
+                                height = (int) (height - 1);
                             }
                             if (lenght <= 0)
                             {                               
@@ -109,16 +110,16 @@ public class Simulation implements Painter<JXMapViewer> {
                 }
             }, 2000, 2000);
         }
-        if(!arrived)
-        {
+
         int X;
         int Y;
         Point2D pt = map.getTileFactory().geoToPixel(fire, map.getZoom());
         X = (int) pt.getX();
         Y = (int) pt.getY();
         gd.fillOval(X - (lenght / 2), Y - (lenght / 2), lenght, height);
-        }
         gd.dispose();
+        
+        
         
     }
 

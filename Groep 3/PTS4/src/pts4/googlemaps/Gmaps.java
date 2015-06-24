@@ -48,6 +48,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import org.json.JSONException;
 
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.VirtualEarthTileFactoryInfo;
@@ -92,6 +93,7 @@ public class Gmaps {
     public RoutePainter routepainter;
     public Boolean createUnit = false;
     public Boolean simulation = false;
+    public Boolean weather = false;
     public String id;
     private Incident incident;
     public String incidentstring;
@@ -178,7 +180,7 @@ public class Gmaps {
          waypointPainter.setRenderer(new FancyWaypointRenderer());
 
          mapViewer.setOverlayPainter(waypointPainter);*/
-    // Display the viewer in a JFrame
+        // Display the viewer in a JFrame
     }
 
     public void drawUnits() {
@@ -426,6 +428,19 @@ public class Gmaps {
                          mapViewer.setOverlayPainter(painter);*/
                         draw();
                         simulation = false;
+                    }
+
+                    if (weather == true) {
+                        GeoPosition mousepoint = mapViewer.convertPointToGeoPosition(me.getPoint());
+                        Double lat1 = mousepoint.getLatitude();
+                        Double lng1 = mousepoint.getLongitude();
+                        try {
+                            new Weather(lng1, lat1);
+                        } catch (IOException ex) {
+                            Logger.getLogger(Gmaps.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (JSONException ex) {
+                            Logger.getLogger(Gmaps.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                 }
             }

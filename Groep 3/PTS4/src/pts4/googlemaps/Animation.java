@@ -35,7 +35,7 @@ public class Animation {
     private JXMapViewer map;
     private double longitude, latitude, diflongitude, diflatitude;
     private WaypointPainter<MyWaypoint> waypointpainter;
-
+    private Simulation simulation;
     public Animation(GeoPosition goal, GeoPosition unit, String id, Set<MyWaypoint> orders, Set<MyWaypoint> units, Gmaps gmap, WaypointPainter<MyWaypoint> waypointpainter) {
         this.goal = goal;
         this.unit = unit;
