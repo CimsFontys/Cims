@@ -3,3 +3,6 @@
 /Groep 3/PTS4/dist/
 Groep 3/PTS4/build/classes/pts4/gui/Configuration.fxml
 Groep 3/PTS4/build/classes/pts4/chatserver/serverThread.class
+*.xml
+Groep 3/PTS4/build/classes/pts4/googlemaps/Gmaps.class
+*.class
