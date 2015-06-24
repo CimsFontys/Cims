@@ -96,7 +96,7 @@ public class Animation {
                                 gmap.drawRoute();
                             }
                         }
-                        //gmap.sendMessage(id + "Is op locatie gearriveerd", id, "Meldkamer");
+                        gmap.sendMessage(id + "Is op locatie gearriveerd", id, "Meldkamer");
                        
                         timer.cancel();
                     }

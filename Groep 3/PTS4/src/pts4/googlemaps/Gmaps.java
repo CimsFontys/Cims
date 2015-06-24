@@ -367,7 +367,7 @@ public class Gmaps {
                             if (a.getName().equals(id)) {
                                 GeoPosition plek2 = new GeoPosition(a.getLatidude(), a.getLongitude());
                                 ChatMessage chat = new ChatMessage(gui.getIncidentorder() + "\n" + gui.getUnitDescription(), "Meldkamer", id);
-                                //server.sendMessage(chat);
+                                server.sendMessage(chat);
                                 a.setIncident(incidentstring);
                                 new Animation(plek, plek2, id, orders, units, Gmaps.this, waypointPainter3);
                             }
@@ -407,8 +407,8 @@ public class Gmaps {
                         for (Unit a : EmergencyUnits) {
                             if (a.getName().equals(id)) {
                                 GeoPosition plek2 = new GeoPosition(a.getLatidude(), a.getLongitude());
-                                //ChatMessage chat = new ChatMessage(gui.getIncidentorder() + "\n" + gui.getUnitDescription(), "Meldkamer", id);
-                                //server.sendMessage(chat);
+                                ChatMessage chat = new ChatMessage(gui.getIncidentorder() + "\n" + gui.getUnitDescription(), "Meldkamer", id);
+                                server.sendMessage(chat);
                                 a.setIncident(incidentstring);
                                 Point2D fire = mapViewer.getTileFactory().geoToPixel(plek, mapViewer.getZoom());
                                 simulations = new Simulation(plek, plek2, id, orders, units, Gmaps.this, waypointPainter3);
