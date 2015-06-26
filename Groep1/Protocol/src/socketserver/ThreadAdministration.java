@@ -10,12 +10,18 @@ import java.util.ArrayList;
 
 /**
  *
- * @author Michael
+ * @author Michael & Merijn
  */
 public class ThreadAdministration 
 {  
+    /**
+     * LIST OF ALL THE CURRENTLY CONNECTED THREADS ON THE CIMS SERVER
+     */
     private ArrayList<CIMSThread> currentThreads;
     
+    /**
+     * SINGLETON CLASS FOR ADMINISTRATION
+     */
     private ThreadAdministration() 
     {
         currentThreads = new ArrayList<CIMSThread>();
@@ -31,6 +37,10 @@ public class ThreadAdministration
         private static final ThreadAdministration INSTANCE = new ThreadAdministration();
     }
     
+    /**
+     * ADDS A NEW THREAD TO THE CLIENT POOL
+     * @param server 
+     */
     public void addClient(CIMSThread server)
     {
         currentThreads.add(server);
@@ -38,6 +48,10 @@ public class ThreadAdministration
         System.out.println("CIMSServer: CIMSThread added to threadpool, current active Threads: " + currentThreads.size());
     }
     
+    /**
+     * REMOVES A LEAVING THREAD FROM THE CLIENT POOL
+     * @param server 
+     */
     public void removeClient(CIMSThread server)
     {
         currentThreads.remove(server);
@@ -45,6 +59,12 @@ public class ThreadAdministration
         System.out.println("CIMSServer: CIMSThread removed from threadpool, current active Threads: " + currentThreads.size());
     }
     
+    /**
+     * THIS METHOD IS USED TO FIND A LOGGED IN PERSON HIS THREAD IN THE CURRENT THREAD POOL 
+     * THIS IS USED FOR CHATTING, MESSAGING AND DELIVERING OTHER INFROMATION TO THIS PERSON
+     * @param personid
+     * @return 
+     */
     public CIMSThread findClient(int personid)
     {
         System.out.println("-------------------------------------------------------");

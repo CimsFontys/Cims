@@ -21,10 +21,17 @@ public class CIMSServer implements Runnable {
     protected boolean isStopped = false;
     protected Thread runningThread = null;
 
+    /**
+     * CREATES NEW CIMS SERVER WITH PORT
+     * @param port 
+     */
     public CIMSServer(int port) {
         this.serverPort = port;
     }
 
+    /**
+     * RUN METHOD OF THE CIMS SERVER, CHECKING AND ACCEPTING INCOMING SOCKETS
+     */
     public void run() {
         synchronized (this) {
             this.runningThread = Thread.currentThread();
@@ -50,10 +57,14 @@ public class CIMSServer implements Runnable {
         System.out.println("Server Stopped.");
     }
 
+    
     private synchronized boolean isStopped() {
         return this.isStopped;
     }
 
+    /**
+     * STOPS THE CIMS SERVER AND ALL IT'S CONNECTIONS
+     */
     public synchronized void stop() {
         this.isStopped = true;
         try {
@@ -62,7 +73,10 @@ public class CIMSServer implements Runnable {
             throw new RuntimeException("Error closing server", e);
         }
     }
-
+    
+    /**
+     * OPENS A SERVER SOCKET
+     */
     private void openServerSocket() {
         try {
             this.serverSocket = new ServerSocket(this.serverPort);

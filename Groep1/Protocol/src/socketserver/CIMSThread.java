@@ -48,20 +48,19 @@ public class CIMSThread implements Runnable {
     ObjectInputStream ois = null;
     OutputStream os = null;
 
+    /**
+     * CIMS THREAD CLASS, EVERY CONNECTION HAS IT'S OWN THREAD ON THE SERVER AND IT'S IDENTIFIED BY THE LOGGED IN PERSON
+     * @param clientSocket
+     * @param serverText 
+     */
     public CIMSThread(Socket clientSocket, String serverText) 
     {
-
-        //try {
             this.clientSocket = clientSocket;
-            //this.clientSocket.setSoTimeout(1000);
             this.serverText = serverText;
             toSend = new ArrayList<Message>();
             administration = ThreadAdministration.getInstance();
             administration.addClient(this);
             messageBuilder = new MessageBuilder();
-        //} catch (SocketException ex) {
-            
-        //}
     }
     
     public int getReceiverid()
@@ -74,6 +73,10 @@ public class CIMSThread implements Runnable {
         this.toSend.add(message);
     }
 
+    /**
+     * THIS IS THE MOST IMPORTANT PART OF THE CLASS
+     * THE RUN METHOD CHECKS FOR INCOMING AND OUTCOMING CONNECTIONS FROM THE INPUT AND OUPUT STREAM
+     */
     public void run() 
     {        
         synchronized(this)
@@ -93,6 +96,9 @@ public class CIMSThread implements Runnable {
                         break;
                     }
                     
+                    /**
+                     * READS THE ENCRYPTED FILE AND SHOWS THE OUTPUT FOR DEMO PURPOSES
+                     */
                     while ((message = (byte[]) ois.readObject()) != null && clientSocket != null) 
                     {
                         System.out.println("-------------------------------------------------------");
@@ -102,7 +108,9 @@ public class CIMSThread implements Runnable {
                         
                         if (receiverID == 0) 
                         {
-                            
+                            /**
+                             * READS THE TYPE OF THE DECRYPTED MESSAGE
+                             */
                             switch (decrypted.getType()) 
                             {
                                 case MessageBuilder.Login:
@@ -125,7 +133,9 @@ public class CIMSThread implements Runnable {
                         } 
                         else 
                         {
-                            //ALLE RETRIEVES
+                            /**
+                             * ALL MESSAGE TYPES PROVIDED BY THE CIMS PROTOCOL
+                             */
                             switch(decrypted.getType())
                             {
                                 case MessageBuilder.RetrievePersonIdFromName:
@@ -246,6 +256,13 @@ public class CIMSThread implements Runnable {
         }
     }
     
+    /**
+     * THIS METHOD IS USED FOR CHATTING BETWEEN 2 LOGGED IN INDIVIDUALS
+     * IT READS THE MESSAGE AND PARSES IT WITH JSON
+     * THEN THE REPLY IS SEND TO THE RECEIVER THAT IS IDENTIFIED BY HIS UNIQUE THREAD
+     * THE RECEIVER GETS A PUSH FROM THE SERVER KNOWING SOMEONE SENT HIM A TEXT/FILE MESSAGE
+     * @param message 
+     */
      private void insertMessage(Message message)
     {
         if(receiverID != 0)
@@ -294,6 +311,10 @@ public class CIMSThread implements Runnable {
         }
     }
     
+    /**
+     * METHOD USED TO RETRIEVE ALL THE CALAMITIES FROM THE DATABASE AND PUSHES IT TO THE REQUESTER.
+     * @param message 
+     */
     private void retrieveAllCalamities(Message message)
     {
         if(receiverID != 0)
@@ -305,6 +326,10 @@ public class CIMSThread implements Runnable {
         }
     }
     
+    /**
+     * RETRIEVES ALL THE CALAMITIES WITH ALL POSTED CALAMITY MESSAGES
+     * @param message 
+     */
     private void retrieveAllCalamitiesDetailed(Message message)
     {
         if(receiverID != 0)
@@ -316,6 +341,10 @@ public class CIMSThread implements Runnable {
         }
     }
     
+    /**
+     * RETRIEVES ALL THE LOCATIONS FROM THE DATABASE (FIREDEPARTMENT, HOSPITAL ETC...)
+     * @param message 
+     */
     private void retrieveAllLocations(Message message)
     {
         if(receiverID != 0)
@@ -327,6 +356,10 @@ public class CIMSThread implements Runnable {
         }
     }
     
+    /**
+     * RETRIEVES ALL THE REGIONS FROM THE DATABASE (NOORD-BRABANT, ZUID-HOLLAND ETC...)
+     * @param message 
+     */
     private void retrieveAllRegions(Message message)
     {
         if(receiverID != 0)
@@ -338,6 +371,10 @@ public class CIMSThread implements Runnable {
         }
     }
     
+    /**
+     * RETRIEVE A CALAMITY FROM THE DATABASE WITH A NAME
+     * @param message 
+     */
     private void retrieveCalamitiesWithName(Message message)
     {
         String calamityname = "";
@@ -372,6 +409,10 @@ public class CIMSThread implements Runnable {
         }
     }
     
+    /**
+     * RETRIEVES ALL THE PERSON INFROMATION WITH A PERSONID
+     * @param message 
+     */
     private void retrievePersonIdWithName(Message message)
     {
         String username = "";
@@ -406,6 +447,10 @@ public class CIMSThread implements Runnable {
         }
     }
     
+    /**
+     * RETRIEVES ALL THE LOGS POSTED BY A USER IDENTIFIED WITH PERSONID
+     * @param message 
+     */
     private void retrieveLogs(Message message)
     {
         int personid = 0;
@@ -439,6 +484,10 @@ public class CIMSThread implements Runnable {
         }
     }
     
+    /**
+     * RETRIEVES ALL THE INFORMATION FROM A PERSON
+     * @param message 
+     */
     private void retrievePersonInformation(Message message)
     {
         int personid = 0;
@@ -471,6 +520,10 @@ public class CIMSThread implements Runnable {
         }
     }
     
+    /**
+     * RETRIEVES ALL DIFFERENT LOCATION TYPES
+     * @param message 
+     */
     private void retrieveAllLocationTypes(Message message)
     {
         if(receiverID != 0)
@@ -482,6 +535,10 @@ public class CIMSThread implements Runnable {
         }
     }
     
+    /**
+     * INSERT A LOG INTO THE DATABASE FOR THE CIMS LOGGING
+     * @param message 
+     */
     private void insertLog(Message message)
     {
             StringReader reader = new StringReader(message.getText());
@@ -516,21 +573,11 @@ public class CIMSThread implements Runnable {
             boolean succes = retrieve.insertLog(personid, logdescription);
             System.out.println("CIMS Server: " + "Log Added To System PID: " + personid);
     }
-    
-//    public void insertCalamity(String longi, String lat, int personid, String name, String description, Date timestamp, String urgent, String region)
-//    {
-//        comManager.addMessage(mb.buildInsertCalamity(region, lat, personid, name, description, new Date(), name, region));
-//    
-//    jb.add("calamitylongtitude", geo_long);
-//        jb.add("calamitylatitude", geo_lat);
-//        jb.add("personid", personid);
-//        jb.add("calamityname", name);
-//        jb.add("calamitydescription", description);
-//        jb.add("calamitydate", timestamp.toString());
-//        jb.add("calamitydanger", calamitydanger);
-//        jb.add("region", region);
-//    }
-    
+
+    /**
+     * INSERTS A NEW CALAMITY IN THE DATABASE
+     * @param message 
+     */
     private void insertCalamity(Message message)
     {
             StringReader reader = new StringReader(message.getText());
@@ -590,6 +637,10 @@ public class CIMSThread implements Runnable {
             System.out.println("CIMS Server: " + "Log Added To System PID: " + personid);
     }
     
+    /**
+     * INSERTS A NEW PERSON IN THE DATABASE
+     * @param message 
+     */
     private void insertPerson(Message message)
     {
             StringReader reader = new StringReader(message.getText());
@@ -678,6 +729,10 @@ public class CIMSThread implements Runnable {
             System.out.println("CIMS Server: " + "Person Added To System: " + username);
     }
 
+    /**
+     * LOGS IN A USER AND RETURNS CONFIGURATOR INFORMATION
+     * @param message 
+     */
     private synchronized void login(Message message) 
     {        
         StringReader reader = new StringReader(message.getText());
