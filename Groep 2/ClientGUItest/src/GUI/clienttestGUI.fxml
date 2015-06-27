@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="298.0" prefWidth="363.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.ClienttestGUIController">
+   <children>
+      <TextArea fx:id="input" layoutX="9.0" layoutY="230.0" prefHeight="25.0" prefWidth="291.0" />
+      <Button layoutX="309.0" layoutY="230.0" mnemonicParsing="false" onAction="#btnSend_Click" prefHeight="25.0" prefWidth="44.0" text="Send" />
+      <ListView fx:id="output" layoutX="8.0" layoutY="69.0" onMouseClicked="#outputItem_Click" prefHeight="153.0" prefWidth="346.0" />
+      <Label layoutX="13.0" layoutY="41.0" text="Communiceer met:" />
+      <ComboBox fx:id="cbBeschikbareUnits" layoutX="122.0" layoutY="37.0" onAction="#selectUnit" prefHeight="25.0" prefWidth="233.0" />
+      <Label layoutX="13.0" layoutY="14.0" text="Ingelogd als:" />
+      <Label fx:id="lbGebruikersnaam" layoutX="85.0" layoutY="14.0" text="&lt;gebruikersnaam&gt;" />
+      <Button fx:id="btnRecord" layoutX="8.0" layoutY="259.0" mnemonicParsing="false" onAction="#btnRecording_Click" prefHeight="25.0" prefWidth="291.0" text="Neem nieuw audiobericht op" />
+      <Label fx:id="lbRecordTimer" layoutX="309.0" layoutY="263.0" prefHeight="17.0" prefWidth="44.0" text="0" textFill="RED" />
+   </children>
+</Pane>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.UnitsLoginScreenController">
+   <children>
+      <Label layoutX="173.0" layoutY="155.0" text="Gebruikersnaam:" />
+      <Label layoutX="173.0" layoutY="193.0" text="Wachtwoord:" />
+      <TextField fx:id="tfGebruikersnaam" layoutX="278.0" layoutY="151.0" />
+      <TextField fx:id="tfWachtwoord" layoutX="278.0" layoutY="189.0" />
+      <Button fx:id="btnLogin" layoutX="277.0" layoutY="221.0" mnemonicParsing="false" onAction="#btnLogin_onClick" text="Login" />
+      <Label layoutX="253.0" layoutY="60.0" text="Login">
+         <font>
+            <Font name="System Bold" size="36.0" />
+         </font>
+      </Label>
+      <Label fx:id="lbError" layoutX="334.0" layoutY="273.0" prefHeight="17.0" prefWidth="172.0" textFill="RED" />
+   </children>
+</AnchorPane>

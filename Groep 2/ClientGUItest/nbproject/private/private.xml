@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/C:/Users/Leo/Documents/GitHub/pts4/serverJava/ClientGUItest/src/CommunicationClient/CommMessageListener.java</file>
+            <file>file:/C:/Users/Leo/Documents/GitHub/pts4/serverJava/ClientGUItest/src/ClientApp/ChatClient.java</file>
+            <file>file:/C:/Users/Leo/Documents/GitHub/pts4/serverJava/ClientGUItest/src/CommunicationClient/MessageRecieverThread.java</file>
+            <file>file:/C:/Users/Leo/Documents/GitHub/pts4/serverJava/ClientGUItest/src/ClientApp/ClientThread.java</file>
+            <file>file:/C:/Users/Leo/Documents/GitHub/pts4/serverJava/ClientGUItest/src/CommunicationClient/ComManager.java</file>
+            <file>file:/C:/Users/Leo/Documents/GitHub/pts4/serverJava/ClientGUItest/src/GUI/UnitsLoginScreenController.java</file>
+            <file>file:/C:/Users/Leo/Documents/GitHub/pts4/serverJava/ClientGUItest/src/chat/AudioMessage.java</file>
+            <file>file:/C:/Users/Leo/Documents/GitHub/pts4/serverJava/ClientGUItest/src/ClientApp/WriteFileThread.java</file>
+            <file>file:/C:/Users/Leo/Documents/GitHub/pts4/serverJava/ClientGUItest/src/chat/EmergencyUnit.java</file>
+            <file>file:/C:/Users/Leo/Documents/GitHub/pts4/serverJava/ClientGUItest/src/Audio/AudioHandler.java</file>
+            <file>file:/C:/Users/Leo/Documents/GitHub/pts4/serverJava/ClientGUItest/src/ClientApp/Administratie.java</file>
+            <file>file:/C:/Users/Leo/Documents/GitHub/pts4/serverJava/ClientGUItest/src/GUI/ClienttestGUIController.java</file>
+            <file>file:/C:/Users/Leo/Documents/GitHub/pts4/serverJava/ClientGUItest/src/GUI/ClientGUItest.java</file>
+            <file>file:/C:/Users/Leo/Documents/GitHub/pts4/serverJava/ClientGUItest/src/chat/ChatMessage.java</file>
+            <file>file:/C:/Users/Leo/Documents/GitHub/pts4/serverJava/ClientGUItest/src/Audio/RecordingThread.java</file>
+        </group>
+    </open-files>
+</project-private>
